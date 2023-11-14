@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "target": "es5",
+    "moduleResolution": "node"
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "extends": "@tsconfig/next/tsconfig.json"
+}

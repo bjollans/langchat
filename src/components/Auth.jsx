@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import FormAlert from "components/FormAlert";
 import AuthForm from "components/AuthForm";
 import AuthSocial from "components/AuthSocial";
+import { FormAlertData } from "types/divjoy";
 
 function Auth(props) {
   const router = useRouter();

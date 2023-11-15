@@ -8,7 +8,7 @@
     "moduleResolution": "node"
   },
   "include": [
-    "src/**/*"
+    "src/**/*.ts*"
 , "src/types/language.ts"  ],
   "extends": "@tsconfig/next/tsconfig.json"
 }

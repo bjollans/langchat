@@ -28,6 +28,20 @@ function AuthSection(props) {
       showFooter: true,
       signupAction: "Create an account",
       signupPath: "/auth/signup",
+      forgotPassAction: "Forgot Password?",
+      forgotPassPath: "/auth/forgotpass",
+    },
+    forgotpass: {
+      title: "Get a new password",
+      buttonAction: "Reset password",
+      showFooter: true,
+      signinText: "Remember it after all?",
+      signinAction: "Sign in",
+      signinPath: "/auth/signin",
+    },
+    changepass: {
+      title: "Choose a new password",
+      buttonAction: "Change password",
     },
   };
 

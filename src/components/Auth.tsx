@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import FormAlert from "components/FormAlert";
+import AuthForm from "components/AuthForm";
 import AuthSocial from "components/AuthSocial";
 
 function Auth(props) {
@@ -22,6 +23,13 @@ function Auth(props) {
           <FormAlert type={formAlert.type} message={formAlert.message} />
         </div>
       )}
+
+      <AuthForm
+        type={props.type}
+        buttonAction={props.buttonAction}
+        onAuth={handleAuth}
+        onFormAlert={handleFormAlert}
+      />
 
       {["signup", "signin"].includes(props.type) && (
         <>

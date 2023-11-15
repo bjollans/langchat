@@ -6,7 +6,7 @@ function Chat() {
     return (
         <>
             <ChatHeader title="Japanese Tutor" />
-            <ChatHistory messages={[{type: "User", createdAt: new Date(), content: "asd"}]}/>
+            <ChatHistory />
             <ChatInput />
         </>
     );

@@ -1,8 +1,8 @@
 import { Language } from "../types/language";
 
 export interface Message {
-    type: "User" | "Bot";
+    type: "user" | "bot";
     content: string;
     createdAt: Date;
-    conversationId?: string;
+    conversationId: string;
 }

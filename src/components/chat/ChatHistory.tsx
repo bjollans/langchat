@@ -2,21 +2,16 @@ import { useAuth } from "util/auth";
 import { Message } from "../../model/message";
 import MessageBox from "./MessageBox";
 import { useConversationsByUser, useMessagesForConversation } from "util/db";
-import { Conversation } from "model/conversation";
 
 interface ChatHistoryProps {
-    messages: Array<Message>;
-}
+    conversationId: string;
+};
 
-export default function ChatHistory(): JSX.Element {
-    const auth = useAuth();
-    const {data: conversation, status: conversationStatus} = useConversationsByUser(auth?.user?.id);
-    const {data: messages, status: messagesStatus} = useMessagesForConversation(conversation?.id);
+export default function ChatHistory(props: ChatHistoryProps): JSX.Element {
+    const { data: messages } = useMessagesForConversation(props.conversationId);
     return (
-        <>
-        <p>{messagesStatus}</p>
-        <p>{conversationStatus}</p>
+        <div className="">
             {messages?.map((message: Message) => MessageBox(message))}
-        </>
+        </div>
     );
 }

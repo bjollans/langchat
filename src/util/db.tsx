@@ -8,6 +8,7 @@ import {
 import supabase from "./supabase";
 import { Conversation } from "model/conversation";
 import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
+import { Message } from "model/message";
 
 // React Query client
 const client = new QueryClient();
@@ -76,8 +77,8 @@ export function useMessagesForConversation(conversationId: string) {
       supabase
         .from("messages")
         .select()
-        .eq("conversation_id", conversationId)
-        .order("created_at", { ascending: true })
+        .eq("conversationId", conversationId)
+        .order("createdAt", { ascending: true })
         .then(handle),
     { enabled: !!conversationId }
   );
@@ -90,16 +91,22 @@ export function useConversationsByUser(uid: string): UseQueryResult<any> {
       supabase
         .from("conversations")
         .select()
-        .eq("user_id", uid)
+        .eq("userId", uid)
         .single()
         .then(handle),
     { enabled: !!uid }
   );
 }
 
+export async function sendMessage(message: Message) {
+  const response = await supabase.from("messages").insert([message]).then(handle);
+  await client.invalidateQueries(["messages"]);
+  return response;
+}
+
 export async function createConversation(data: Conversation) {
-  const response = await supabase.from("items").insert([data]).then(handle);
-  await client.invalidateQueries(["items"]);
+  const response = await supabase.from("conversations").insert([data]).then(handle);
+  await client.invalidateQueries(["conversations"]);
   return response;
 }
 

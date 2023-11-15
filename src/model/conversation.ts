@@ -3,7 +3,7 @@ import { Language } from "../types/language";
 export interface Conversation {
     id?: string;
     userId: string;
-    translationLanguage: Language;
+    translationLang: Language;
     createdAt: Date;
-    targetLanguage: Language;
+    targetLang: Language;
 }

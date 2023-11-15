@@ -1,23 +1,16 @@
 import React from "react";
 import Meta from "components/Meta";
-import AuthSection from "components/AuthSection";
+import { useAuth, requireAuth } from "util/auth";
+import Chat from "./chat";
 
-function IndexPage(props) {
+function IndexPage() {
   return (
     <>
       <Meta />
-      <AuthSection
-        size="md"
-        bgColor="bg-white"
-        bgImage=""
-        bgImageOpacity={1}
-        textColor=""
-        type="signup"
-        providers={["google", "facebook", "twitter"]}
-        afterAuthPath="/dashboard"
-      />
+      
+    <Chat />
     </>
   );
 }
 
-export default IndexPage;
+export default requireAuth(IndexPage);

@@ -9,7 +9,7 @@ import queryString from "query-string";
 import supabase from "./supabase";
 import { useUser, updateUser } from "./db";
 import router from "next/router";
-import PageLoader from "./../components/PageLoader";
+import PageLoader from "../components/PageLoader";
 import { getFriendlyPlanId } from "./prices";
 import analytics from "./analytics";
 
@@ -21,12 +21,12 @@ const ANALYTICS_IDENTIFY = true;
 
 // Create a `useAuth` hook and `AuthProvider` that enables
 // any component to subscribe to auth and re-render when it changes.
-const authContext = createContext();
+const authContext = createContext(null as any);
 export const useAuth = () => useContext(authContext);
 // This should wrap the app in `src/pages/_app.js`
-export function AuthProvider({ children }) {
+export function AuthProvider({ children }): JSX.Element {
   const auth = useAuthProvider();
-  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+  return (<authContext.Provider value={auth}>{children}</authContext.Provider>);
 }
 
 // Hook that creates the `auth` object and handles state
@@ -86,7 +86,7 @@ function useAuthProvider() {
         .signInWithOAuth({
           provider: name,
           options: {
-            redirectTo: `${window.location.origin}/dashboard`,
+            redirectTo: `${window.location.origin}`,
           },
         })
         .then(handleError)

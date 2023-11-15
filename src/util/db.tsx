@@ -2,8 +2,12 @@ import {
   useQuery,
   QueryClient,
   QueryClientProvider as QueryClientProviderBase,
+  QueryClientProviderProps,
+  UseQueryResult,
 } from "react-query";
 import supabase from "./supabase";
+import { Conversation } from "model/conversation";
+import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
 
 // React Query client
 const client = new QueryClient();
@@ -12,7 +16,7 @@ const client = new QueryClient();
 
 // Fetch user data
 // Note: This is called automatically in `auth.js` and data is merged into `auth.user`
-export function useUser(uid) {
+export function useUser(uid: string) {
   // Manage data fetching with React Query: https://react-query.tanstack.com/overview
   return useQuery(
     // Unique query key: https://react-query.tanstack.com/guides/query-keys
@@ -32,7 +36,7 @@ export function useUser(uid) {
 
 // Fetch user data (non-hook)
 // Useful if you need to fetch data from outside of a component
-export function getUser(uid) {
+export function getUser(uid: string) {
   return supabase
     .from("users")
     .select(`*, customers ( * )`)
@@ -42,7 +46,7 @@ export function getUser(uid) {
 }
 
 // Update an existing user
-export async function updateUser(uid, data) {
+export async function updateUser(uid: string, data: LinguinUser) {
   const response = await supabase
     .from("users")
     .update(data)
@@ -57,7 +61,7 @@ export async function updateUser(uid, data) {
 /* Example query functions (modify to your needs) */
 
 // Fetch item data
-export function useItem(id) {
+export function useItem(id: string) {
   return useQuery(
     ["item", { id }],
     () => supabase.from("items").select().eq("id", id).single().then(handle),
@@ -65,71 +69,49 @@ export function useItem(id) {
   );
 }
 
-// Fetch all items by owner
-export function useItemsByOwner(owner) {
+export function useMessagesForConversation(conversationId: string) {
   return useQuery(
-    ["items", { owner }],
+    ["messages", { conversationId }],
     () =>
       supabase
-        .from("items")
+        .from("messages")
         .select()
-        .eq("owner", owner)
-        .order("createdAt", { ascending: false })
+        .eq("conversation_id", conversationId)
+        .order("created_at", { ascending: true })
         .then(handle),
-    { enabled: !!owner }
+    { enabled: !!conversationId }
   );
 }
 
-// Create a new item
-export async function createItem(data) {
+export function useConversationsByUser(uid: string): UseQueryResult<any> {
+  return useQuery(
+    ["items", { uid }],
+    () =>
+      supabase
+        .from("conversations")
+        .select()
+        .eq("user_id", uid)
+        .single()
+        .then(handle),
+    { enabled: !!uid }
+  );
+}
+
+export async function createConversation(data: Conversation) {
   const response = await supabase.from("items").insert([data]).then(handle);
-  // Invalidate and refetch queries that could have old data
   await client.invalidateQueries(["items"]);
   return response;
 }
 
-// Update an item
-export async function updateItem(id, data) {
-  const response = await supabase
-    .from("items")
-    .update(data)
-    .eq("id", id)
-    .then(handle);
-  // Invalidate and refetch queries that could have old data
-  await Promise.all([
-    client.invalidateQueries(["item", { id }]),
-    client.invalidateQueries(["items"]),
-  ]);
-  return response;
-}
-
-// Delete an item
-export async function deleteItem(id) {
-  const response = await supabase
-    .from("items")
-    .delete()
-    .eq("id", id)
-    .then(handle);
-  // Invalidate and refetch queries that could have old data
-  await Promise.all([
-    client.invalidateQueries(["item", { id }]),
-    client.invalidateQueries(["items"]),
-  ]);
-  return response;
-}
-
 /**** HELPERS ****/
-
-// Get response data or throw error if there is one
-function handle(response) {
+function handle(response: PostgrestResponse<any> | PostgrestSingleResponse<any>): any {
   if (response.error) throw response.error;
   return response.data;
 }
 
-// React Query context provider that wraps our app
-export function QueryClientProvider(props) {
+export function QueryClientProvider(props: QueryClientProviderProps): JSX.Element {
   return (
-    <QueryClientProviderBase client={client}>
+    <QueryClientProviderBase client={client} >
       {props.children}
     </QueryClientProviderBase>
   );

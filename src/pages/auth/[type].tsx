@@ -17,7 +17,7 @@ function AuthPage() {
         textColor=""
         type={router.query.type}
         providers={["google"]}
-        afterAuthPath="/chat"
+        afterAuthPath={router?.query?.next?.includes("/")? router.query.next : "/"}
       />
     </>
   );

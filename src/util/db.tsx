@@ -6,7 +6,7 @@ import {
   UseQueryResult,
 } from "react-query";
 import supabase from "./supabase";
-import { Conversation } from "model/conversation";
+import { Conversation, ConversationStatus } from "model/conversation";
 import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
 import { Message } from "model/message";
 
@@ -106,6 +106,12 @@ export async function sendMessage(message: Message) {
 
 export async function createConversation(data: Conversation) {
   const response = await supabase.from("conversations").insert([data]).then(handle);
+  await client.invalidateQueries(["conversations"]);
+  return response;
+}
+
+export async function updateConversationStatus(conversationId: string, status: ConversationStatus) {
+  const response = supabase.from("conversations").update({status}).eq("id", conversationId).then(handle);
   await client.invalidateQueries(["conversations"]);
   return response;
 }

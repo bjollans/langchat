@@ -2,7 +2,7 @@ import { Message } from "model/message";
 import posthog from "posthog-js";
 import analytics from "util/analytics";
 import { useAuth } from "util/auth";
-import { sendMessage } from "util/db";
+import { sendMessage, updateConversationStatus } from "util/db";
 
 interface ChatInputProps {
     conversationId: string;
@@ -20,8 +20,9 @@ export default function ChatInput(props: ChatInputProps) {
         const question = e?.target?.message?.value;
         e.target.message.value = "";
         if (!!question) {
-            const message: Message = { content: question, type: "user", conversationId: props.conversationId, createdAt: new Date() };
+            const message: Message = { content: question, role: "user", conversationId: props.conversationId, createdAt: new Date() };
             sendMessage(message);
+            updateConversationStatus(props.conversationId, "pending");
         }
     };
 

@@ -72,7 +72,7 @@ export function useItem(id: string) {
 
 export function useMessagesForConversation(conversationId: string) {
   return useQuery(
-    ["messages", { conversationId }],
+    ["messages"],
     () =>
       supabase
         .from("messages")
@@ -80,7 +80,7 @@ export function useMessagesForConversation(conversationId: string) {
         .eq("conversationId", conversationId)
         .order("createdAt", { ascending: true })
         .then(handle),
-    { enabled: !!conversationId }
+    { refetchInterval: 3000, enabled: !!conversationId }
   );
 }
 
@@ -99,6 +99,7 @@ export function useConversationsByUser(uid: string): UseQueryResult<any> {
 }
 
 export async function sendMessage(message: Message) {
+  client.setQueryData(["messages"], (oldData: any) => [...oldData, message]);
   const response = await supabase.from("messages").insert([message]).then(handle);
   await client.invalidateQueries(["messages"]);
   return response;

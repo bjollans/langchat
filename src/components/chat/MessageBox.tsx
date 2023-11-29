@@ -5,7 +5,6 @@ export default function MessageBox(message: Message): JSX.Element {
     const color: string = message.role === "user" ? "bg-slate-200" : "bg-blue-300";
     const alignment: string = message.role === "user" ? "mr-4 ml-auto" : "ml-4 mr-auto";
     const style = `${color} ${alignment}`;
-    console.log(message.translationJson);
     const translatedWords: Array<JSX.Element> = [];
 
     for (var i = 0; i < message.content.length; i++) {

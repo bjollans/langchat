@@ -8,7 +8,7 @@
   "dependencies": {
     "@analytics/mixpanel": "0.4.0",
     "@headlessui/react": "1.7.17",
-    "@heroicons/react": "2.0.18",
+    "@heroicons/react": "^2.0.18",
     "@stripe/stripe-js": "1.11.0",
     "@supabase/supabase-js": "2.26.0",
     "@tailwindcss/aspect-ratio": "0.4.2",

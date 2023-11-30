@@ -1,5 +1,5 @@
 import { useAuth } from "util/auth";
-import { Message } from "../../model/message";
+import { Message } from "../../model/translations";
 import MessageBox from "./MessageBox";
 import { useConversationsByUser, useMessagesForConversation } from "util/db";
 

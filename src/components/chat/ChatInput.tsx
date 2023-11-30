@@ -1,4 +1,4 @@
-import { Message } from "model/message";
+import { Message } from "model/translations";
 import posthog from "posthog-js";
 import analytics from "util/analytics";
 import { useAuth } from "util/auth";

@@ -70,6 +70,13 @@ export function useItem(id: string) {
   );
 }
 
+export function useStories() {
+  return useQuery(
+    ["stories"],
+    () => supabase.from("stories").select().then(handle),
+  );
+}
+
 export function useStory(storyId: string) : UseQueryResult<StoryText> {
   return useQuery(
     ["story", { storyId }],

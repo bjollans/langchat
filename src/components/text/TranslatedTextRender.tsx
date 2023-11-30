@@ -30,13 +30,13 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
     return (<>
         <span className="relative cursor-pointer"
             onMouseLeave={() => setShowWholeTranslation(false)}>
-            <div className={showWholeTranslation ? "cursor-text absolute bottom-0 left-0" : "hidden"}>
-                <div className="bg-black whitespace-nowrap text-white rounded-lg p-2 mb-6 mx-auto">
-                    <p>
+            <div className={showWholeTranslation ? "cursor-text absolute bottom-0 left-0 z-50" : "hidden"}>
+                <div className="bg-black text-white rounded-lg p-2 mb-6 w-96 max-w-full mx-auto">
+                    <p className="flex">
                         {props.translatedText.translationJson?.wholeSentence?.translation}
                     </p>
                     {props.translatedText.translationJson?.wholeSentence?.transliteration &&
-                        <p className="text-sm italic mx-auto">
+                        <p className="text-sm flex italic mx-auto">
                             {props.translatedText.translationJson?.wholeSentence?.transliteration}
                         </p>
                     }

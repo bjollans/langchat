@@ -34,6 +34,10 @@ export default function Story(props: StoryProps): JSX.Element {
     return (
         <div className="flex">
             <div className={`p-4 mt-4 rounded-lg border-1 border-black`}>
+                <div className="border-b border-gray-200 pb-5 mb-5 flex items-end">
+                    <img className="w-24 rounded-full flex-none" src={story?.imageUrl} alt="" />
+                    <h3 className="mx-6 text-base text-2xl font-semibold leading-6 text-gray-900">{story?.title}</h3>
+                </div>
                 {translatedLines}
             </div>
         </div>

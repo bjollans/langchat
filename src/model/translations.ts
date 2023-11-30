@@ -27,6 +27,7 @@ export interface Message extends TranslatedText {
 export interface StoryText extends TranslatedText {
     storyId: string;
     title: string;
+    imageUrl?: string;
     createdAt: Date;
     targetLanguage: Language;
     translationLanguage: Language;

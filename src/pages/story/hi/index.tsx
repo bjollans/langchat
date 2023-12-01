@@ -21,4 +21,4 @@ function IndexPage() {
     );
 }
 
-export default requireAuth(IndexPage);
+export default IndexPage;

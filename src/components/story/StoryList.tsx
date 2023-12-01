@@ -1,4 +1,5 @@
 import Meta from "components/Meta";
+import { StoryText } from "model/translations";
 import { useStories } from "util/db";
 
 export default function StoryList() {
@@ -9,7 +10,7 @@ export default function StoryList() {
             <Meta />
             <div className="flex flex-col">
                 <ul role="list" className="divide-y divide-gray-100">
-                    {stories?.map((story: any) => (
+                    {stories?.filter((story: StoryText) => story.visible).map((story: any) => (
                         <>
                             <a href={`/story/hi/${story.id}`} className="w-full h-full">
                                 <li key={story.title} className="flex gap-x-4 py-5 hover:bg-slate-100 items-center">

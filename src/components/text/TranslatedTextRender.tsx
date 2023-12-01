@@ -20,7 +20,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                 term={termAtThisPosition[0].text}
                 translation={termAtThisPosition[0].translation}
                 transliteration={termAtThisPosition[0].transliteration} />));
-            i = termAtThisPosition[0].position + termAtThisPosition[0].text.length;
+            i = termAtThisPosition[0].position + termAtThisPosition[0].text.length - 1;
         }
         else {
             translatedWords.push(<span>{props.translatedText.content[i]}</span>);
@@ -42,10 +42,10 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                     }
                 </div>
             </div>
-            <div className={`flex-wrap`}>
+            <div className={`flex flex-wrap text-2xl`}>
                 {translatedWords}
-                <button className="hover:bg-slate-200 text-black font-bold py-2 px-4 rounded" onClick={() => setShowWholeTranslation(true)}>
-                    <LanguageIcon className="h-3 w-3" aria-hidden="true" />
+                <button className="hover:bg-slate-200 text-black font-bold py-2 px-2 mx-4 rounded" onClick={() => setShowWholeTranslation(true)}>
+                    <LanguageIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
             </div>
         </span>

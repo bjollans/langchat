@@ -1,16 +1,13 @@
-import React from "react";
-import Meta from "components/Meta";
-import { useAuth, requireAuth } from "util/auth";
-import Chat from "./chat";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
 
 function IndexPage() {
-  return (
-    <>
-      <Meta />
-      
-    <Chat />
-    </>
-  );
+  const { push } = useRouter();
+
+  useEffect(() => {
+    push('/story/hi');
+  }, []);
+  return <p></p>;
 }
 
-export default requireAuth(IndexPage);
+export default IndexPage;

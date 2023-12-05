@@ -1,26 +1,116 @@
-import { useState } from "react";
+import { PauseCircleIcon, PauseIcon, PlayCircleIcon, PlayIcon } from '@heroicons/react/24/solid';
+import { useState, useRef, useEffect } from 'react';
 
 interface StoryAudioPlayerProps {
     src: string;
+    currentTime: number;
+    isPlaying: boolean;
     onTimeUpdate: (currentTime: number) => void;
+    onPlayPause: (isPlayingAudio: boolean) => void
 }
 
 export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
-    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const audioRef = useRef<HTMLAudioElement>(null);
+    const [progressBarWidth, setProgressBarWidth] = useState('0%');
+
+    const play = () => {
+        if (audioRef.current) {
+            audioRef.current.play();
+            props.onPlayPause(true);
+        }
+    };
+
+    const pause = () => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            props.onPlayPause(false);
+        }
+    };
+
+    const togglePlayPause = () => {
+        if (props.isPlaying) {
+            pause();
+        } else {
+            play();
+        }
+    };
+
+    useEffect(() => {
+        if (!audioRef.current) return;
+        if (props.isPlaying) {
+            audioRef.current.play();
+        } else {
+            audioRef.current.pause();
+        }
+    }, [props.isPlaying]);
+
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        const onPlay = () => props.onPlayPause(true);
+        audio.addEventListener('play', onPlay);
+
+        const onPause = () => props.onPlayPause(false);
+        audio.addEventListener('pause', onPause);
+
+        const onLoadedMetadata = () => {
+            setDuration(audio.duration);
+        };
+        audio.addEventListener('loadedmetadata', onLoadedMetadata);
+
+        // Remove event listeners on cleanup
+        return () => {
+            audio.removeEventListener('play', onPlay);
+            audio.removeEventListener('pause', onPause);
+            audio.removeEventListener('loadedmetadata', onLoadedMetadata);
+        };
+    }, []);
 
     const handleTimeUpdate = (e: React.SyntheticEvent<HTMLAudioElement>) => {
         const audioElement = e.target as HTMLAudioElement;
         props.onTimeUpdate(audioElement.currentTime);
-        setCurrentTime(audioElement.currentTime);
     };
 
+    const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        const progressBar = e.currentTarget;
+        const clickX = e.clientX - progressBar.getBoundingClientRect().left;
+        const newTime = (clickX / progressBar.offsetWidth) * (audioRef.current?.duration || 0);
+        if (audioRef.current) {
+            audioRef.current.currentTime = newTime;
+            props.onTimeUpdate(newTime);
+        }
+    };
+
+    useEffect(() => {
+        if (audioRef.current && Math.abs(props.currentTime - audioRef.current.currentTime) > 0.1) {
+            audioRef.current.currentTime = props.currentTime;
+        }
+        setProgressBarWidth(`${(props.currentTime / duration) * 100}%`);
+    }, [props.currentTime, duration]);
+
     return (
-        <div>
-            <p>{currentTime}</p>
-            <audio controls onTimeUpdate={handleTimeUpdate}>
+        <div className='bg-white fixed bottom-0 left-0 right-0 drop-shadow-xl border'>
+            <div
+                className='w-full bg-gray-200 cursor-pointer'
+                onClick={handleProgressBarClick}
+            >
+                <div className='bg-emerald-600 h-1' style={{ width: progressBarWidth }}></div>
+            </div>
+            <audio
+                ref={audioRef}
+                onTimeUpdate={handleTimeUpdate}
+                onLoadedMetadata={handleTimeUpdate}
+            >
                 <source src={props.src} type="audio/mpeg" />
                 Your browser does not support the audio element.
             </audio>
+            <button onClick={togglePlayPause}>
+                {props.isPlaying
+                    ? <PauseCircleIcon className='text-slate-700 w-6 h-6' />
+                    : <PlayCircleIcon className='text-slate-700 w-6 h-6' />}
+            </button>
         </div>
     )
 }

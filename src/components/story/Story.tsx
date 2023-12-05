@@ -13,10 +13,13 @@ export default function Story(props: StoryProps): JSX.Element {
     const { data: story } = useStory(props.id);
     const [currentAudioTime, setCurrentAudioTime] = useState(0);
     const [currentAudioSentenceIndex, setCurrentAudioSentenceIndex] = useState(-1);
+    const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
     const lines = story?.content.split("\n");
+    var nonSentenceLinesSeen = 0;
     const lineToTranslatedTextRender = (line: string) => {
         if (line === "") {
+            nonSentenceLinesSeen+=1;
             return (<br />);
         }
         const linePositionStart = story?.content.indexOf(line)!;
@@ -32,7 +35,12 @@ export default function Story(props: StoryProps): JSX.Element {
             }) ?? [],
             wholeSentence: story?.translationJson?.sentences!.find((sentence: TermTranslation) => sentence.position == lineIndex)
         };
-        return (<TranslatedTextRender translatedText={{ content: line, translationJson: lineTranslationJson }} isHighlighted={currentAudioSentenceIndex === lineIndex} />);
+        const lineAudioSentenceTime: AudioSentenceTime | undefined = story?.audioSentenceTimes ? story?.audioSentenceTimes[lineIndex - nonSentenceLinesSeen] : undefined;
+        const audioStartTime = lineAudioSentenceTime ? lineAudioSentenceTime.start : 0;
+        const audioEndTime = lineAudioSentenceTime ? lineAudioSentenceTime.end : 0;
+        return (<TranslatedTextRender translatedText={{ content: line, translationJson: lineTranslationJson }} 
+            isHighlighted={currentAudioTime < audioEndTime - 0.0001 && currentAudioTime >= audioStartTime - 0.0001}
+            isPlayingAudio={isPlayingAudio} onPlayAudio={() => {setCurrentAudioTime(audioStartTime - 0.00001); setIsPlayingAudio(true)}}/>);
     };
 
     useEffect(() => {
@@ -58,7 +66,11 @@ export default function Story(props: StoryProps): JSX.Element {
                 </div>
                 {story?.content.split("\n").map(lineToTranslatedTextRender)}
                 {story?.audioUrl &&
-                    <StoryAudioPlayer src={story.audioUrl} onTimeUpdate={setCurrentAudioTime} />
+                    <StoryAudioPlayer src={story.audioUrl} 
+                    currentTime={currentAudioTime} 
+                    isPlaying={isPlayingAudio}
+                    onTimeUpdate={setCurrentAudioTime} 
+                    onPlayPause={setIsPlayingAudio}/>
                 }
             </div>
         </div>

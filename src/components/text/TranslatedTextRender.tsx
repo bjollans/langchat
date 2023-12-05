@@ -1,11 +1,14 @@
 import { TranslatedText, TermTranslation } from "model/translations";
 import TranslatedTerm from "./TranslatedWord";
 import { useState } from "react";
-import { LanguageIcon } from '@heroicons/react/24/solid'
+import { LanguageIcon, PlayCircleIcon, PlayIcon } from '@heroicons/react/24/solid'
+import EqualizerIcon from "components/audio/EqualizerIcon";
 
 interface TranslatedTextProps {
     translatedText: TranslatedText;
-    isHighlighted?: boolean;
+    isHighlighted: boolean;
+    isPlayingAudio: boolean;
+    onPlayAudio: () => void;
 }
 
 export default function TranslatedTextRender(props: TranslatedTextProps): JSX.Element {
@@ -45,11 +48,18 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                     }
                 </div>
             </div>
-            <div className={`flex flex-wrap text-2xl ${props.isHighlighted ? "text-green-800":"text-black"}`}>
-                {translatedWords}
-                <button className="hover:bg-slate-200 text-black font-bold py-2 px-2 mx-4 rounded" onClick={() => setShowWholeTranslation(true)}>
-                    <LanguageIcon className="h-5 w-5" aria-hidden="true" />
-                </button>
+            <div className={`relative flex flex-wrap text-2xl items-center ${props.isHighlighted ? "text-emerald-600" : "text-black"}`}>
+                <div className="absolute left-0">
+                    {props.isHighlighted
+                        && <EqualizerIcon isAnimated={props.isPlayingAudio} onClick={props.onPlayAudio}/>
+                        || <PlayIcon className="text-slate-100 w-6 h-6" onClick={props.onPlayAudio}/>}
+                </div>
+                <div className="mx-8 relative">
+                    {translatedWords}
+                    <button className="hover:bg-slate-200 text-black font-bold py-2 px-2 mx-4 rounded" onClick={() => setShowWholeTranslation(true)}>
+                        <LanguageIcon className="h-5 w-5" aria-hidden="true" />
+                    </button>
+                </div>
             </div>
         </span>
     </>

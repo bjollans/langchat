@@ -32,4 +32,11 @@ export interface StoryText extends TranslatedText {
     createdAt: Date;
     targetLanguage: Language;
     translationLanguage: Language;
+    audioUrl?: string;
+    audioSentenceTimes?: Array<AudioSentenceTime>;
+}
+
+export interface AudioSentenceTime {
+    start: number;
+    end: number;
 }

@@ -37,7 +37,7 @@ export default function EqualizerIcon(props: EqualizerIconProps) {
     display: 'inline-block',
     width: '3px',
     height: props.isAnimated ? '15px' : `${(30 + (delay * 50))/2}px`, // Assign different heights when not animated
-    backgroundColor: '#059669',
+    backgroundColor: '#0891b2',
     margin: '0 1px',
     animation: props.isAnimated ? 'equalize 0.6s infinite alternate' : 'none',
     animationDelay: props.isAnimated ? `${delay}s` : '0s',

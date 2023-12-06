@@ -96,7 +96,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
                 className='w-full h-2 bg-gray-200 cursor-pointer'
                 onClick={handleProgressBarClick}
             >
-                <div className='bg-emerald-600 h-2' style={{ width: progressBarWidth }}></div>
+                <div className='bg-cyan-600 h-2' style={{ width: progressBarWidth }}></div>
             </div>
             <audio
                 ref={audioRef}

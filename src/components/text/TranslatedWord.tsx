@@ -13,7 +13,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
         <span
             onClick={() => setShowTranslation(true)}
             onMouseLeave={() => setShowTranslation(false)}
-            className="cursor-pointer relative mx-0.5 underline decoration-dotted hover:text-blue-500 cursor-pointer">
+            className="cursor-pointer relative mx-0.5 underline decoration-dotted hover:text-indigo-500 cursor-pointer">
             {showTranslation && <div className="cursor-text absolute bottom-0 left-0">
                 <div className="bg-black whitespace-nowrap text-white rounded-lg p-2 mb-6 mx-auto">
                     <p>

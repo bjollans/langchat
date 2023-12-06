@@ -49,7 +49,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                     }
                 </div>
             </div>
-            <div className={`relative flex flex-wrap text-2xl items-center ${props.isHighlighted ? "text-emerald-600" : "text-black"}`}>
+            <div className={`relative flex flex-wrap text-2xl items-center ${props.isHighlighted ? "text-cyan-600" : "text-black"}`}>
                 <div className="absolute left-0">
                     {props.hasAudio &&
                         (props.isHighlighted

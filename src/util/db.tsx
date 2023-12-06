@@ -73,11 +73,15 @@ export function useItem(id: string) {
 export function useStories() {
   return useQuery(
     ["stories"],
-    () => supabase.from("stories").select().then(handle),
+    () => supabase
+      .from("stories")
+      .select()
+      .order("wordCount", { ascending: true })
+      .then(handle),
   );
 }
 
-export function useStory(storyId: string) : UseQueryResult<StoryText> {
+export function useStory(storyId: string): UseQueryResult<StoryText> {
   return useQuery(
     ["story", { storyId }],
     () =>
@@ -133,7 +137,7 @@ export async function createConversation(data: Conversation) {
 }
 
 export async function updateConversationStatus(conversationId: string, status: ConversationStatus) {
-  const response = supabase.from("conversations").update({status}).eq("id", conversationId).then(handle);
+  const response = supabase.from("conversations").update({ status }).eq("id", conversationId).then(handle);
   await client.invalidateQueries(["conversations"]);
   return response;
 }

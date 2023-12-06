@@ -10,7 +10,7 @@ export default function MessageBox(message: Message): JSX.Element {
     return (
         <div className="flex">
             <div className={`p-4 mt-4 rounded-lg border-1 border-black ${style}`}>
-                <TranslatedTextRender translatedText={message}/>
+                {/*<TranslatedTextRender translatedText={message}/>*/}
             </div>
         </div>
     );

@@ -93,10 +93,10 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     return (
         <div className='bg-white fixed bottom-0 left-0 right-0 drop-shadow-xl border'>
             <div
-                className='w-full bg-gray-200 cursor-pointer'
+                className='w-full h-2 bg-gray-200 cursor-pointer'
                 onClick={handleProgressBarClick}
             >
-                <div className='bg-emerald-600 h-1' style={{ width: progressBarWidth }}></div>
+                <div className='bg-emerald-600 h-2' style={{ width: progressBarWidth }}></div>
             </div>
             <audio
                 ref={audioRef}
@@ -106,10 +106,10 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
                 <source src={props.src} type="audio/mpeg" />
                 Your browser does not support the audio element.
             </audio>
-            <button onClick={togglePlayPause}>
+            <button className='w-full justify-center flex my-1 rounded-full' onClick={togglePlayPause}>
                 {props.isPlaying
-                    ? <PauseCircleIcon className='text-slate-700 w-6 h-6' />
-                    : <PlayCircleIcon className='text-slate-700 w-6 h-6' />}
+                    ? <PauseIcon className='rounded-full border-4 border-slate-600 text-slate-600 w-12 h-12' />
+                    : <PlayIcon className='rounded-full border-4 pl-1 border-slate-600 text-slate-600 w-12 h-12' />}
             </button>
         </div>
     )

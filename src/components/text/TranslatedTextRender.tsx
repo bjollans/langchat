@@ -8,6 +8,7 @@ interface TranslatedTextProps {
     translatedText: TranslatedText;
     isHighlighted: boolean;
     isPlayingAudio: boolean;
+    hasAudio: boolean;
     onPlayAudio: () => void;
 }
 
@@ -50,9 +51,11 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
             </div>
             <div className={`relative flex flex-wrap text-2xl items-center ${props.isHighlighted ? "text-emerald-600" : "text-black"}`}>
                 <div className="absolute left-0">
-                    {props.isHighlighted
-                        && <EqualizerIcon isAnimated={props.isPlayingAudio} onClick={props.onPlayAudio}/>
-                        || <PlayIcon className="text-slate-100 w-6 h-6" onClick={props.onPlayAudio}/>}
+                    {props.hasAudio &&
+                        (props.isHighlighted
+                            && <EqualizerIcon isAnimated={props.isPlayingAudio} onClick={props.onPlayAudio} />
+                            || <PlayIcon className="text-slate-100 w-6 h-6" onClick={props.onPlayAudio} />)
+                    }
                 </div>
                 <div className="mx-8 relative">
                     {translatedWords}

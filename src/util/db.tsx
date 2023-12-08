@@ -13,16 +13,15 @@ import { Message, StoryText } from "model/translations";
 // React Query client
 const client = new QueryClient();
 
-/**** USERS ****/
 
-// Fetch user data
-// Note: This is called automatically in `auth.js` and data is merged into `auth.user`
+
+/***************/
+/**** USERS ****/
+/***************/
+
 export function useUser(uid: string) {
-  // Manage data fetching with React Query: https://react-query.tanstack.com/overview
   return useQuery(
-    // Unique query key: https://react-query.tanstack.com/guides/query-keys
     ["user", { uid }],
-    // Query function that fetches data
     () =>
       supabase
         .from("users")
@@ -30,7 +29,6 @@ export function useUser(uid: string) {
         .eq("id", uid)
         .single()
         .then(handle),
-    // Only call query function if we have a `uid`
     { enabled: !!uid }
   );
 }
@@ -58,17 +56,11 @@ export async function updateUser(uid: string, data: LinguinUser) {
   return response;
 }
 
-/**** ITEMS ****/
-/* Example query functions (modify to your needs) */
 
-// Fetch item data
-export function useItem(id: string) {
-  return useQuery(
-    ["item", { id }],
-    () => supabase.from("items").select().eq("id", id).single().then(handle),
-    { enabled: !!id }
-  );
-}
+
+/*****************/
+/**** STORIES ****/
+/*****************/
 
 export function useStories() {
   return useQuery(
@@ -94,6 +86,12 @@ export function useStory(storyId: string): UseQueryResult<StoryText> {
     { enabled: !!storyId }
   );
 }
+
+
+
+/**********************************/
+/**** MESSAGES & CONVERSATIONS ****/
+/**********************************/
 
 export function useMessagesForConversation(conversationId: string) {
   return useQuery(
@@ -142,7 +140,13 @@ export async function updateConversationStatus(conversationId: string, status: C
   return response;
 }
 
+
+
+
+/*****************/
 /**** HELPERS ****/
+/*****************/
+
 function handle(response: PostgrestResponse<any> | PostgrestSingleResponse<any>): any {
   if (response.error) throw response.error;
   return response.data;

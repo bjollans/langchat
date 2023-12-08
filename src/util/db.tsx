@@ -9,6 +9,7 @@ import supabase from "./supabase";
 import { Conversation, ConversationStatus } from "model/conversation";
 import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
 import { Message, StoryText } from "model/translations";
+import { Vocab } from "model/vocab";
 
 // React Query client
 const client = new QueryClient();
@@ -53,6 +54,44 @@ export async function updateUser(uid: string, data: LinguinUser) {
     .then(handle);
   // Invalidate and refetch queries that could have old data
   await client.invalidateQueries(["user", { uid }]);
+  return response;
+}
+
+
+
+/***************/
+/**** VOCAB ****/
+/***************/
+
+export function useVocab(uid: string): UseQueryResult<Vocab> {
+  return useQuery(
+    ["vocab"],
+    () => supabase
+      .from("vocab")
+      .select()
+      .eq("userId", uid)
+      .order("lastPracticed", { ascending: true })
+      .then(handle),
+  );
+}
+
+export async function updateVocab(data: Vocab) {
+  if (!data.id) throw new Error("Vocab ID is required");
+  const response = await supabase
+    .from("vocab")
+    .update(data)
+    .eq("id", data.id)
+    .then(handle);
+  await client.invalidateQueries(["vocab"]);
+  return response;
+}
+
+export async function createVocab(data: Vocab) {
+  const response = await supabase
+    .from("vocab")
+    .insert([data])
+    .then(handle);
+  await client.invalidateQueries(["vocab"]);
   return response;
 }
 

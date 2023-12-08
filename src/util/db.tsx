@@ -63,7 +63,7 @@ export async function updateUser(uid: string, data: LinguinUser) {
 /**** VOCAB ****/
 /***************/
 
-export function useVocab(uid: string): UseQueryResult<Vocab> {
+export function useVocab(uid: string): UseQueryResult<Array<Vocab>> {
   return useQuery(
     ["vocab"],
     () => supabase

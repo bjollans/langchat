@@ -7,9 +7,9 @@ export interface Vocab {
     vocab: string;
     translation: string;
     transliteration?: string;
-    timesPracticed: number;
-    lastPracticed: Date;
-    timesCorrect: number;
-    createdAt: Date;
-    deleted: boolean;
+    timesPracticed?: number;
+    timesCorrect?: number;
+    lastPracticed?: Date;
+    createdAt?: Date;
+    deleted?: boolean;
 }

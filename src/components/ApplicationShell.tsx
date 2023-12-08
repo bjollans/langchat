@@ -1,19 +1,14 @@
-import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {
     ArrowLeftIcon,
     Bars3Icon,
     BookOpenIcon,
-    CalendarIcon,
-    ChartPieIcon,
-    DocumentDuplicateIcon,
-    FolderIcon,
-    HomeIcon,
     LanguageIcon,
-    UsersIcon,
-    XMarkIcon,
+    XMarkIcon
 } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
+import { Fragment, useState } from 'react'
+import { useAuth } from 'util/auth'
 
 const navigation = [
     { name: 'Stories', href: '/story/hi', icon: BookOpenIcon, current: true },
@@ -38,6 +33,7 @@ export default function ApplicationShell(props) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const router = useRouter();
     const currentPath = router.pathname;
+    const auth = useAuth();
 
     return (
         <>
@@ -86,11 +82,13 @@ export default function ApplicationShell(props) {
                                     {/* Sidebar component, swap this element with another sidebar if you like */}
                                     <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2">
                                         <div className="flex h-16 shrink-0 items-center">
-                                            <img
-                                                className="h-8 w-auto"
-                                                src="/favicon.png"
-                                                alt="Linguin"
-                                            />
+                                            <a href="/" className="flex items-center">
+                                                <img
+                                                    className="h-8 w-auto"
+                                                    src="/favicon.png"
+                                                    alt="Linguin"
+                                                />
+                                            </a>
                                         </div>
                                         <nav className="flex flex-1 flex-col">
                                             <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -129,25 +127,39 @@ export default function ApplicationShell(props) {
                     </Dialog>
                 </Transition.Root>
 
-                <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6">
+                <div className="sticky top-0 z-40 flex items-center justify-between gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6">
 
-                    <button type="button" className="-m-2.5 p-2.5 text-gray-700" onClick={() => setSidebarOpen(true)}>
-                        <span className="sr-only">Open sidebar</span>
-                        <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-                    </button>
-                    {currentPath in pageTitles
-                        && <div className="min-w-0 flex w-full">
-                            <h2 className="text-2xl font-bold mx-auto leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-                                {pageTitles[currentPath]}
-                            </h2>
-                        </div>
-                        || <button onClick={() => router.back()}>
-                            <ArrowLeftIcon className="h-6 w-6" />
-                        </button>}
+                    <div className='flex gap-x-6'>
+                        <button type="button" className="-m-2.5 p-2.5 text-gray-700" onClick={() => setSidebarOpen(true)}>
+                            <span className="sr-only">Open sidebar</span>
+                            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+                        </button>
+                        {currentPath in pageTitles
+                            && <div className="min-w-0 flex w-full">
+                                <h2 className="text-2xl font-bold mx-auto leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                                    {pageTitles[currentPath]}
+                                </h2>
+                            </div>
+                            || <button onClick={() => router.back()}>
+                                <ArrowLeftIcon className="h-6 w-6" />
+                            </button>}
+                    </div>
+                    <a href="/auth/signin"
+                        className='flex items-center gap-x-1 hover:bg-slate-50'
+                        onClick={(e) => {
+                            if (auth.user) {
+                                e.preventDefault();
+                                auth.signout();
+                            }
+                        }}>
+                        {auth.user
+                            && <span>Logout</span>
+                            || <span>Login</span>}
+                    </a>
                 </div>
 
-                <main className="lg:pl-72">
-                    <div className="px-4 sm:px-6 lg:px-8">{props.children}</div>
+                <main>
+                    {props.children}
                 </main>
             </div>
         </>

@@ -4,6 +4,7 @@ import TranslatedTextRender from "components/text/TranslatedTextRender";
 import { useStory } from "util/db";
 import StoryAudioPlayer from "components/audio/StoryAudioPlayer";
 import { useEffect, useState } from "react";
+import { TargetLanguageContext } from "context/targetLanguageContext";
 
 interface StoryProps {
     id: string;
@@ -57,27 +58,29 @@ export default function Story(props: StoryProps): JSX.Element {
     }, [currentAudioTime]);
 
     useEffect(() => {
-        if(isPlayingAudio) setHasPlayedAudio(true);
+        if (isPlayingAudio) setHasPlayedAudio(true);
     }, [isPlayingAudio]);
 
     return (
         <div className="flex">
             <div className={`p-4 my-4 mb-36 rounded-lg border-1 border-black`}>
-                {story?.targetLanguage == "hi" &&
-                    <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
-                }
-                <img className="h-96 lg:w-1/2 w-full md:w-2/3 mx-auto object-cover rounded-lg shadow-md shadow-black flex-none" src={story?.imageUrl} alt="" />
-                <div className="border-b border-gray-200 pb-5 my-8 flex items-end">
-                    <h3 className="mx-6 text-base text-4xl mx-auto font-semibold leading-6 text-gray-900">{story?.title}</h3>
-                </div>
-                {story?.content.split("\n").map(lineToTranslatedTextRender)}
-                {story?.audioUrl &&
-                    <StoryAudioPlayer src={story.audioUrl}
-                        currentTime={currentAudioTime}
-                        isPlaying={isPlayingAudio}
-                        onTimeUpdate={setCurrentAudioTime}
-                        onPlayPause={setIsPlayingAudio} />
-                }
+                <TargetLanguageContext.Provider value={story?.targetLanguage}>
+                    {story?.targetLanguage == "hi" &&
+                        <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
+                    }
+                    <img className="h-96 lg:w-1/2 w-full md:w-2/3 mx-auto object-cover rounded-lg shadow-md shadow-black flex-none" src={story?.imageUrl} alt="" />
+                    <div className="border-b border-gray-200 pb-5 my-8 flex items-end">
+                        <h3 className="mx-6 text-base text-4xl mx-auto font-semibold leading-6 text-gray-900">{story?.title}</h3>
+                    </div>
+                    {story?.content.split("\n").map(lineToTranslatedTextRender)}
+                    {story?.audioUrl &&
+                        <StoryAudioPlayer src={story.audioUrl}
+                            currentTime={currentAudioTime}
+                            isPlaying={isPlayingAudio}
+                            onTimeUpdate={setCurrentAudioTime}
+                            onPlayPause={setIsPlayingAudio} />
+                    }
+                </TargetLanguageContext.Provider>
             </div>
         </div>
     );

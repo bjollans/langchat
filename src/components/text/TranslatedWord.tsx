@@ -1,6 +1,7 @@
 import { BookmarkIcon } from "@heroicons/react/24/outline";
 import TooltipButton from "components/TooltipButton";
-import { useState } from "react";
+import { TargetLanguageContext } from "context/targetLanguageContext";
+import { useContext, useState } from "react";
 import { Language } from "types/language";
 import { useAuth } from "util/auth";
 import { createVocab, useVocab } from "util/db";
@@ -9,15 +10,15 @@ export interface TranslatedTermProps {
     term: string;
     translation: string | undefined;
     transliteration: string | undefined;
-    targetLanguage: Language;
 }
 
 export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element {
     const auth = useAuth();
+    const targetLanguage = useContext(TargetLanguageContext);
     const [showTranslation, setShowTranslation] = useState(false);
     const { data: vocabList } = useVocab(auth.user?.uid ?? null)
     const vocab = vocabList?.find((vocabItem) => vocabItem.vocab === props.term);
-
+    
     const handleVocabSaveClick = () => {
         if (!auth.user) return;
         if (vocab) {
@@ -28,7 +29,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
                 vocab: props.term,
                 translation: props.translation!,
                 transliteration: props.transliteration,
-                targetLanguage: props.targetLanguage,
+                targetLanguage: targetLanguage,
             });
         }
     };
@@ -55,7 +56,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
                         }
                     </div>
                     <TooltipButton
-                        disabled={!!(auth.user)}
+                        disabled={!(auth.user)}
                         onClick={handleVocabSaveClick}
                         disabledTooltip="Login to save vocabulary"
                         disabledClassName="bg-slate-600"

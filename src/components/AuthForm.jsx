@@ -71,10 +71,9 @@ function AuthForm(props) {
         <TextField
           type="email"
           id="email"
-          name="email"
           placeholder="Email"
           error={errors.email}
-          inputRef={register({
+          {...register("email",{
             required: "Please enter an email address",
           })}
         />
@@ -97,10 +96,9 @@ function AuthForm(props) {
         <TextField
           type="password"
           id="confirmPass"
-          name="confirmPass"
           placeholder="Confirm Password"
           error={errors.confirmPass}
-          inputRef={register({
+          {...register("confirmPass", {
             required: "Please enter your password again",
             validate: (value) => {
               if (value === getValues().pass) {

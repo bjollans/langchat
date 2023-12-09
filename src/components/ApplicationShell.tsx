@@ -39,7 +39,7 @@ export default function ApplicationShell(props) {
         <>
             <div>
                 <Transition.Root show={sidebarOpen} as={Fragment}>
-                    <Dialog as="div" className="relative z-50" onClose={setSidebarOpen}>
+                    <Dialog as="div" className="relative z-20" onClose={setSidebarOpen}>
                         <Transition.Child
                             as={Fragment}
                             enter="transition-opacity ease-linear duration-300"
@@ -127,7 +127,7 @@ export default function ApplicationShell(props) {
                     </Dialog>
                 </Transition.Root>
 
-                <div className="sticky top-0 z-40 flex items-center justify-between gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6">
+                <div className="sticky top-0 z-10 flex items-center justify-between gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6">
 
                     <div className='flex gap-x-6'>
                         <button type="button" className="-m-2.5 p-2.5 text-gray-700" onClick={() => setSidebarOpen(true)}>

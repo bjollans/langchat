@@ -70,6 +70,7 @@ export function useVocab(uid: string): UseQueryResult<Array<Vocab>> {
       .from("vocab")
       .select()
       .eq("userId", uid)
+      .eq("deleted", false)
       .order("lastPracticed", { ascending: true })
       .then(handle),
   );

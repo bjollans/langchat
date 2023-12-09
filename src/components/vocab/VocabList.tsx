@@ -1,12 +1,29 @@
 import { Vocab } from "model/vocab";
+import { useState } from "react";
 import { useAuth } from "util/auth";
 import { useVocab } from "util/db";
+import VocabEditDialog from "./VocabEditDialog";
 
 export default function VocabList() {
     const auth = useAuth();
     const { data: vocabList } = useVocab(auth.user?.uid);
+
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+    const [editDialogVocab, setEditDialogVocab] = useState<Vocab | undefined>(undefined);
+
+    const handleEdit = (vocab: Vocab) => {
+        setEditDialogVocab(vocab);
+        setIsEditDialogOpen(true);
+    }
+
+    const handleCreate = () => {
+        setEditDialogVocab(undefined);
+        setIsEditDialogOpen(true);
+    }
+
     return (
         <div className="px-4 sm:px-6 lg:px-8">
+            <VocabEditDialog vocab={editDialogVocab} isOpen={isEditDialogOpen} setIsOpen={setIsEditDialogOpen} />
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
                     <h1 className="text-base font-semibold leading-6 text-gray-900">Users</h1>
@@ -30,16 +47,10 @@ export default function VocabList() {
                             <thead>
                                 <tr>
                                     <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                                        Word
+                                        Vocab
                                     </th>
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                        Translation
-                                    </th>
-                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                        Times Practiced
-                                    </th>
-                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                        Percentage Correct
+                                        Transl.
                                     </th>
                                     <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                                         <span className="sr-only">Edit</span>
@@ -53,19 +64,18 @@ export default function VocabList() {
                                             {vocab.vocab}
                                         </td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{vocab.translation} ({vocab.transliteration})</td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{vocab.timesPracticed}</td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{vocab.timesPracticed && vocab.timesPracticed > 0 ? vocab.timesCorrect! / vocab.timesPracticed! : "---"}</td>
                                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                                            <button onClick={() => handleEdit(vocab)} className="text-indigo-600 hover:text-indigo-900">
                                                 Edit
-                                            </a>
+                                            </button>
                                         </td>
                                     </tr>
                                 ))}
                                 <tr>
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                        <button className="block rounded-md my-2 px-3 py-2 text-center text-sm font-semibold border shadow-sm hover:bg-slate-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                            + Add custom vocab
+                                        <button className="block rounded-md my-2 px-3 py-2 text-center text-sm font-semibold border shadow-sm hover:bg-slate-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                            onClick={handleCreate}>
+                                            +
                                         </button>
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">---</td>
@@ -74,7 +84,6 @@ export default function VocabList() {
                                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-center text-gray-500 text-sm font-medium sm:pr-0">
                                         ---
                                     </td>
-
                                 </tr>
                             </tbody>
                         </table>

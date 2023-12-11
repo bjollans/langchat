@@ -9,7 +9,7 @@ function AuthForm(props) {
   const auth = useAuth();
 
   const [pending, setPending] = useState(false);
-  const { handleSubmit, register, errors, getValues } = useForm();
+  const { handleSubmit, register, formState: { errors }, getValues } = useForm();
 
   const submitHandlersByType = {
     signin: ({ email, pass }) => {
@@ -73,7 +73,7 @@ function AuthForm(props) {
           id="email"
           placeholder="Email"
           error={errors.email}
-          {...register("email",{
+          {...register("email", {
             required: "Please enter an email address",
           })}
         />
@@ -83,10 +83,9 @@ function AuthForm(props) {
         <TextField
           type="password"
           id="pass"
-          name="pass"
           placeholder="Password"
           error={errors.pass}
-          inputRef={register({
+          {...register("pass", {
             required: "Please enter a password",
           })}
         />

@@ -1,13 +1,12 @@
 import React from "react";
 
-function TextField(props) {
+const TextField = React.forwardRef((props, ref) => {
   const {
     error,
     type = "text",
     size = "md",
     label,
     className,
-    inputRef,
     ...inputProps
   } = props;
 
@@ -31,7 +30,7 @@ function TextField(props) {
       {type === "textarea" && (
         <textarea
           className={`${classes.base} ${classes.size[size]}`}
-          ref={inputRef}
+          ref={ref}
           {...inputProps}
         />
       )}
@@ -39,7 +38,7 @@ function TextField(props) {
       {type !== "textarea" && (
         <input
           className={`${classes.base} ${classes.size[size]}`}
-          ref={inputRef}
+          ref={ref}
           type={type}
           {...inputProps}
         />
@@ -50,6 +49,6 @@ function TextField(props) {
       )}
     </div>
   );
-}
+});
 
 export default TextField;

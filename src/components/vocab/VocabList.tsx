@@ -1,10 +1,10 @@
 import { Vocab } from "model/vocab";
 import { useState } from "react";
-import { useAuth } from "util/auth";
+import { requireAuth, useAuth } from "util/auth";
 import { useVocab } from "util/db";
 import VocabEditDialog from "./VocabEditDialog";
 
-export default function VocabList() {
+function VocabList() {
     const auth = useAuth();
     const { data: vocabList } = useVocab(auth.user?.uid);
 
@@ -88,3 +88,6 @@ export default function VocabList() {
         </div>
     )
 }
+
+
+export default requireAuth(VocabList);

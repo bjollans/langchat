@@ -127,23 +127,23 @@ export default function ApplicationShell(props) {
                     </Dialog>
                 </Transition.Root>
 
-                <div className="sticky top-0 z-10 flex items-center justify-between gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6">
-
+                <div className="sticky top-0 z-10 flex items-center justify-between w-full gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6">
                     <div className='flex gap-x-6'>
                         <button type="button" className="-m-2.5 p-2.5 text-gray-700" onClick={() => setSidebarOpen(true)}>
                             <span className="sr-only">Open sidebar</span>
                             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                         </button>
                         {currentPath in pageTitles
-                            && <div className="min-w-0 flex w-full">
-                                <h2 className="text-2xl font-bold mx-auto leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-                                    {pageTitles[currentPath]}
-                                </h2>
-                            </div>
                             || <button onClick={() => router.back()}>
                                 <ArrowLeftIcon className="h-6 w-6" />
                             </button>}
                     </div>
+                    {currentPath in pageTitles
+                        && <div className="min-w-0 flex w-full">
+                            <h2 className="text-2xl font-bold mx-auto leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                                {pageTitles[currentPath]}
+                            </h2>
+                        </div>}
                     <a href="/auth/signin"
                         className='flex items-center gap-x-1 hover:bg-slate-50'
                         onClick={(e) => {

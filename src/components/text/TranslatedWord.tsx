@@ -5,7 +5,7 @@ import { TargetLanguageContext } from "context/targetLanguageContext";
 import { useContext, useState } from "react";
 import { Language } from "types/language";
 import { useAuth } from "util/auth";
-import { createVocab, useVocab } from "util/db";
+import { createVocab, updateVocab, useVocab } from "util/db";
 
 export interface TranslatedTermProps {
     term: string;
@@ -24,6 +24,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
         if (!auth.user) return;
         if (vocab) {
             vocab.deleted = true;
+            updateVocab(vocab);
         } else {
             createVocab({
                 userId: auth.user?.uid ?? null,
@@ -69,7 +70,9 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
                     </TooltipButton>
                 </div>
             </div>}
+            <span className={vocab ? "bg-cyan-100" : ""}>
             {props.term}
+            </span>
         </span>
 
     )

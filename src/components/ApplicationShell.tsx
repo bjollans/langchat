@@ -3,6 +3,7 @@ import {
     ArrowLeftIcon,
     Bars3Icon,
     BookOpenIcon,
+    BuildingLibraryIcon,
     LanguageIcon,
     XMarkIcon
 } from '@heroicons/react/24/outline'
@@ -11,13 +12,15 @@ import { Fragment, useState } from 'react'
 import { useAuth } from 'util/auth'
 
 const navigation = [
-    { name: 'Stories', href: '/story/hi', icon: BookOpenIcon, current: true },
-    { name: 'Your Vocab', href: '/vocab', icon: LanguageIcon, current: false },
+    { name: 'Stories', href: '/story/hi', icon: BookOpenIcon },
+    { name: 'See Your Vocab', href: '/vocab', icon: LanguageIcon },
+    { name: 'Practice Your Vocab', href: '/practice', icon: BuildingLibraryIcon },
 ]
 
 const pageTitles = {
     '/story/hi': '🇮🇳 Hindi Mini Stories for Language Learners',
     '/vocab': 'Your Vocabulary',
+    '/practice': 'Practice Vocabulary',
 }
 
 const hasBackButton = {
@@ -99,7 +102,7 @@ export default function ApplicationShell(props) {
                                                                 <a
                                                                     href={item.href}
                                                                     className={classNames(
-                                                                        item.current
+                                                                        item.href == currentPath
                                                                             ? 'bg-gray-50 text-indigo-600'
                                                                             : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
                                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
@@ -107,7 +110,7 @@ export default function ApplicationShell(props) {
                                                                 >
                                                                     <item.icon
                                                                         className={classNames(
-                                                                            item.current ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
+                                                                            item.href == currentPath ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
                                                                             'h-6 w-6 shrink-0'
                                                                         )}
                                                                         aria-hidden="true"

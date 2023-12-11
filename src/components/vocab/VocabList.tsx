@@ -3,6 +3,7 @@ import { useState } from "react";
 import { requireAuth, useAuth } from "util/auth";
 import { useVocab } from "util/db";
 import VocabEditDialog from "./VocabEditDialog";
+import { nextReview, timeUntilNextReview } from "util/srs";
 
 function VocabList() {
     const auth = useAuth();
@@ -31,12 +32,12 @@ function VocabList() {
                     </p>
                 </div>
                 <div className="mt-4 sm:ml-16 sm:mt-0 flex gap-x-6">
-                    <button
-                        type="button"
+                    <a
+                        href="/practice"
                         className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
                         Practice
-                    </button>
+                    </a>
                 </div>
             </div>
             <div className="mt-8 flow-root">
@@ -51,6 +52,9 @@ function VocabList() {
                                     <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                         Transl.
                                     </th>
+                                    <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 max-xs:hidden">
+                                        Next Review
+                                    </th>
                                     <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                                         <span className="sr-only">Edit</span>
                                     </th>
@@ -63,6 +67,11 @@ function VocabList() {
                                             {vocab.vocab}
                                         </td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{vocab.translation} ({vocab.transliteration})</td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 max-xs:hidden">{
+                                            timeUntilNextReview(vocab) > (365 * 1440 * 60) 
+                                            ? "Next year" 
+                                            : nextReview(vocab).toDateString().split(" ").splice(1,2).join(" ")
+                                        }</td>
                                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                                             <button onClick={() => handleEdit(vocab)} className="text-indigo-600 hover:text-indigo-900">
                                                 Edit

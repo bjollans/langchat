@@ -9,7 +9,8 @@ export interface Vocab {
     transliteration?: string;
     timesPracticed?: number;
     timesCorrect?: number;
-    lastPracticed?: Date;
-    createdAt?: Date;
+    lastPracticed?: Date | string;
+    createdAt?: Date | string;
     deleted?: boolean;
+    currentLeitnerBoxNumber?: number;
 }

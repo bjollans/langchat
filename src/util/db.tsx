@@ -71,13 +71,17 @@ export function useVocab(uid: string): UseQueryResult<Array<Vocab>> {
       .select()
       .eq("userId", uid)
       .eq("deleted", false)
-      .order("lastPracticed", { ascending: true })
+      .order("currentLeitnerBoxNumber", { ascending: true })
       .then(handle),
   );
 }
 
 export async function updateVocab(data: Vocab) {
   if (!data.id) throw new Error("Vocab ID is required");
+  client.setQueryData(["vocab"], (oldData: any) => {
+    const filteredOldData = oldData.filter((v: Vocab)=>v.id != data.id);
+    return data.deleted? filteredOldData : [...filteredOldData, data];
+  });
   const response = await supabase
     .from("vocab")
     .update(data)
@@ -88,6 +92,7 @@ export async function updateVocab(data: Vocab) {
 }
 
 export async function createVocab(data: Vocab) {
+  client.setQueryData(["vocab"], (oldData: any) => [...oldData, data]);
   const response = await supabase
     .from("vocab")
     .insert([data])

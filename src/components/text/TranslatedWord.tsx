@@ -1,5 +1,6 @@
 import { BookmarkIcon as BookmarkIconOutline } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
+import RequireAuthButton from "components/RequireAuthButton";
 import TooltipButton from "components/TooltipButton";
 import { TargetLanguageContext } from "context/targetLanguageContext";
 import { useContext, useState } from "react";
@@ -56,18 +57,16 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
                             </p>
                         }
                     </div>
-                    <TooltipButton
-                        disabled={!(auth.user)}
+                    <RequireAuthButton
                         onClick={handleVocabSaveClick}
-                        disabledTooltip="Login to save vocabulary"
-                        disabledClassName="bg-slate-600"
+                        noAuthText="Login to save vocabulary"
                         className="rounded-md ml-2 mt-1 bg-slate-100 p-1"
                     >
                         {vocab
                             && <BookmarkIconSolid className="w-4 h-4 text-black" />
                             || <BookmarkIconOutline className="w-4 h-4 text-black" />
                         }
-                    </TooltipButton>
+                    </RequireAuthButton>
                 </div>
             </div>}
             <span className={vocab ? "bg-cyan-100" : ""}>

@@ -9,6 +9,7 @@ export interface FlashCardProps {
 
 export default function FlashCard(props: FlashCardProps) {
     const [flipped, setFlipped] = useState(false);
+    if (!props.vocab) return null;
 
     function handleClick() {
         setFlipped(!flipped);

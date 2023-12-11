@@ -22,11 +22,10 @@ export default function VocabList() {
     }
 
     return (
-        <div className="px-4 sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-8 mt-8 sm:m-8">
             <VocabEditDialog vocab={editDialogVocab} isOpen={isEditDialogOpen} setIsOpen={setIsEditDialogOpen} />
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
-                    <h1 className="text-base font-semibold leading-6 text-gray-900">Users</h1>
                     <p className="mt-2 text-sm text-gray-700">
                         All the vocabulary you have saved.
                     </p>
@@ -79,11 +78,7 @@ export default function VocabList() {
                                         </button>
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">---</td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">---</td>
-                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">---</td>
-                                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-center text-gray-500 text-sm font-medium sm:pr-0">
-                                        ---
-                                    </td>
+                                    <td></td>
                                 </tr>
                             </tbody>
                         </table>

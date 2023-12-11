@@ -24,8 +24,8 @@ export default function VocabEditDialog(props: VocabEditDialogProps) {
   const onSubmit = (data) => {
     const newVocab: Vocab = {
       'userId': auth.user?.uid,
-      ...data,
       ...props.vocab,
+      ...data,
     };
     if (isCreate) {
       createVocab(newVocab);
@@ -81,7 +81,7 @@ export default function VocabEditDialog(props: VocabEditDialogProps) {
                     {...register("vocab", { required: true })}
                     id="vocabInput"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    value={props.vocab?.vocab}
+                    defaultValue={props.vocab?.vocab}
                   />
                 </div>
                 {errors.vocab && <p className='text-red-500 text-xs'>This field is required</p>}
@@ -96,7 +96,7 @@ export default function VocabEditDialog(props: VocabEditDialogProps) {
                     {...register("translation", { required: true })}
                     id="translationInput"
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    value={props.vocab?.translation}
+                    defaultValue={props.vocab?.translation}
                   />
                 </div>
                 {errors.translation && <p className='text-red-500 text-xs'>This field is required</p>}

@@ -79,8 +79,8 @@ export function useVocab(uid: string): UseQueryResult<Array<Vocab>> {
 export async function updateVocab(data: Vocab) {
   if (!data.id) throw new Error("Vocab ID is required");
   client.setQueryData(["vocab"], (oldData: any) => {
-    const filteredOldData = oldData.filter((v: Vocab)=>v.id != data.id);
-    return data.deleted? filteredOldData : [...filteredOldData, data];
+    const filteredOldData = oldData.filter((v: Vocab) => v.id != data.id);
+    return data.deleted ? filteredOldData : [...filteredOldData, data];
   });
   const response = await supabase
     .from("vocab")
@@ -161,7 +161,7 @@ export function useUserStoriesRead(userId: string): UseQueryResult<Array<string>
 
 export function markUserStoryRead(storyId: string, userId: string) {
   client.setQueryData(["userStoriesRead", { storyId, userId }], [true]);
-  client.setQueryData(["userStoriesRead", { userId }], (oldData: any) => [...oldData, storyId]);
+  client.setQueryData(["userStoriesRead", { userId }], (oldData: any) => oldData ? [...oldData, storyId] : [storyId]);
   const response = supabase
     .from("userStoriesRead")
     .insert([{ storyId, userId }])
@@ -170,8 +170,8 @@ export function markUserStoryRead(storyId: string, userId: string) {
 }
 
 export function unmarkUserStoryRead(storyId: string, userId: string) {
-  client.setQueryData(["userStoriesRead", { storyId, userId }], false);
-  client.setQueryData(["userStoriesRead", { userId }], (oldData: any) => oldData.filter((id: string) => id != storyId));
+  client.setQueryData(["userStoriesRead", { storyId, userId }], [false]);
+  client.setQueryData(["userStoriesRead", { userId }], (oldData: any) => oldData ? oldData.filter((id: string) => id != storyId) : []);
   const response = supabase
     .from("userStoriesRead")
     .delete()

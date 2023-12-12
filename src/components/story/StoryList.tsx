@@ -15,7 +15,7 @@ export default function StoryList() {
                         <>
                             <a href={`/story/hi/${story.id}`} className="w-full h-full">
                                 <li key={story.title} className="flex px-4 gap-x-4 py-5 hover:bg-slate-100 items-center">
-                                    <img className="w-24 flex-none rounded-full bg-gray-50" src={story.imageUrl} alt="" />
+                                    <img className="w-24 flex-none rounded-full bg-gray-50" src={story.previewImageUrl} alt="" />
                                     <div className="min-w-0">
                                         <p className="text-lg font-semibold leading-6 text-gray-900">{story.title}</p>
                                         <div className="sm:flex items-end justify-between gap-x-8">

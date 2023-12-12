@@ -30,6 +30,7 @@ export interface StoryText extends TranslatedText {
     wordCount: number;
     title: string;
     imageUrl?: string;
+    previewImageUrl?: string;
     createdAt: Date;
     targetLanguage: Language;
     translationLanguage: Language;

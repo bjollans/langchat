@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Meta from "components/Meta";
-import AuthSection from "components/AuthSection";
+import AuthSection from "components/auth/AuthSection";
 
 function AuthPage() {
   const router = useRouter();

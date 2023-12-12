@@ -1,8 +1,8 @@
 import React from "react";
 import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
-import Auth from "components/Auth";
-import AuthFooter from "components/AuthFooter";
+import Auth from "components/auth/Auth";
+import AuthFooter from "components/auth/AuthFooter";
 
 function AuthSection(props) {
   // Options by auth type

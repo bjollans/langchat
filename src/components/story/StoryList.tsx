@@ -1,6 +1,7 @@
 import Meta from "components/Meta";
 import { StoryText } from "model/translations";
 import { useStories } from "util/db";
+import StoryReadCheckBox from "./StoryReadCheckbox";
 
 export default function StoryList() {
     const { data: stories } = useStories();
@@ -17,11 +18,16 @@ export default function StoryList() {
                                     <img className="w-24 flex-none rounded-full bg-gray-50" src={story.imageUrl} alt="" />
                                     <div className="min-w-0">
                                         <p className="text-lg font-semibold leading-6 text-gray-900">{story.title}</p>
-                                        <div className="flex">
-                                        <p className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">Words: </p>
-                                        <p className="mt-1 truncate text-xs leading-5 text-gray-400">{story.wordCount}</p>
+                                        <div className="sm:flex items-end justify-between gap-x-8">
+                                            <div>
+                                                <div className="flex">
+                                                    <p className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">Words: </p>
+                                                    <p className="mt-1 truncate text-xs leading-5 text-gray-400">{story.wordCount}</p>
+                                                </div>
+                                                <p className="mt-1 truncate italic text-xs leading-5 text-gray-400">{story.content.slice(0, 30) + '....'}</p>
+                                            </div>
+                                            <StoryReadCheckBox storyId={story.id} />
                                         </div>
-                                        <p className="mt-1 truncate italic text-xs leading-5 text-gray-400">{story.content.slice(0, 30) + '....'}</p>
                                     </div>
                                 </li>
                             </a>

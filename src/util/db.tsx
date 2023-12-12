@@ -132,6 +132,55 @@ export function useStory(storyId: string): UseQueryResult<StoryText> {
   );
 }
 
+export function useUserHasReadStory(storyId: string, userId: string): UseQueryResult<Array<boolean>> {
+  return useQuery(
+    ["userStoriesRead", { storyId, userId }],
+    () =>
+      supabase
+        .from("userStoriesRead")
+        .select()
+        .eq("storyId", storyId)
+        .eq("userId", userId)
+        .then(handle),
+    { enabled: !!storyId && !!userId }
+  );
+}
+
+export function useUserStoriesRead(userId: string): UseQueryResult<Array<string>> {
+  return useQuery(
+    ["userStoriesRead", { userId }],
+    () =>
+      supabase
+        .from("userStoriesRead")
+        .select("storyId")
+        .eq("userId", userId)
+        .then(handle),
+    { enabled: !!userId }
+  );
+}
+
+export function markUserStoryRead(storyId: string, userId: string) {
+  client.setQueryData(["userStoriesRead", { storyId, userId }], [true]);
+  client.setQueryData(["userStoriesRead", { userId }], (oldData: any) => [...oldData, storyId]);
+  const response = supabase
+    .from("userStoriesRead")
+    .insert([{ storyId, userId }])
+    .then(handle);
+  return response;
+}
+
+export function unmarkUserStoryRead(storyId: string, userId: string) {
+  client.setQueryData(["userStoriesRead", { storyId, userId }], false);
+  client.setQueryData(["userStoriesRead", { userId }], (oldData: any) => oldData.filter((id: string) => id != storyId));
+  const response = supabase
+    .from("userStoriesRead")
+    .delete()
+    .eq("storyId", storyId)
+    .eq("userId", userId)
+    .then(handle);
+  return response;
+}
+
 
 
 /**********************************/

@@ -84,7 +84,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     };
 
     useEffect(() => {
-        if (audioRef.current && Math.abs(props.currentTime - audioRef.current.currentTime) > 0.1) {
+        if (audioRef.current && Math.abs(props.currentTime - audioRef.current.currentTime) > 0.5) {
             audioRef.current.currentTime = props.currentTime;
         }
         setProgressBarWidth(`${(props.currentTime / duration) * 100}%`);

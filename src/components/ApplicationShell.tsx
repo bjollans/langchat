@@ -23,9 +23,13 @@ const pageTitles = {
     '/practice': 'Practice Vocabulary',
 }
 
-const hasBackButton = {
-    '/story/hi': false,
-    '/vocab': false,
+const backLocation = (currentLocation: string) => {
+    switch (currentLocation) {
+        case '/story/hi': return null;
+        case '/vocab': return null;
+        case '/practice': return '/vocab';
+        default: return '/story/hi';
+    }
 }
 
 function classNames(...classes) {
@@ -136,8 +140,8 @@ export default function ApplicationShell(props) {
                             <span className="sr-only">Open sidebar</span>
                             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                         </button>
-                        {currentPath in pageTitles
-                            || <button onClick={() => router.back()}>
+                        {backLocation(router.pathname) 
+                            && <button onClick={() => router.push(backLocation(router.pathname)!)}>
                                 <ArrowLeftIcon className="h-6 w-6" />
                             </button>}
                     </div>

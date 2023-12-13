@@ -1,10 +1,9 @@
-import { AudioSentenceTime, Message, StoryText, TermTranslation, TranslationJson } from "model/translations";
-import TranslatedTerm from "../text/TranslatedWord";
-import TranslatedTextRender from "components/text/TranslatedTextRender";
-import { useStory } from "util/db";
 import StoryAudioPlayer from "components/audio/StoryAudioPlayer";
-import { useEffect, useState } from "react";
+import TranslatedTextRender from "components/text/TranslatedTextRender";
 import { TargetLanguageContext } from "context/targetLanguageContext";
+import { AudioSentenceTime, TermTranslation, TranslationJson } from "model/translations";
+import { useEffect, useState } from "react";
+import { useStory } from "util/db";
 
 interface StoryProps {
     id: string;

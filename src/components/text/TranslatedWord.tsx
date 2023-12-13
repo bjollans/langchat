@@ -1,43 +1,18 @@
-import { BookmarkIcon as BookmarkIconOutline } from "@heroicons/react/24/outline";
-import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
-import RequireAuthButton from "components/RequireAuthButton";
-import TooltipButton from "components/TooltipButton";
-import { TargetLanguageContext } from "context/targetLanguageContext";
-import { useContext, useState } from "react";
-import { Language } from "types/language";
+import VocabSaveButton from "components/vocab/VocabSaveButton";
+import { TermTranslation } from "model/translations";
+import { useState } from "react";
 import { useAuth } from "util/auth";
-import { createVocab, updateVocab, useVocab } from "util/db";
+import { useVocab } from "util/db";
 
 export interface TranslatedTermProps {
-    term: string;
-    translation: string | undefined;
-    transliteration: string | undefined;
+    termTranslation: TermTranslation;
 }
 
 export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element {
     const auth = useAuth();
-    const targetLanguage = useContext(TargetLanguageContext);
     const [showTranslation, setShowTranslation] = useState(false);
     const { data: vocabList } = useVocab(auth.user?.uid ?? null)
-    const vocab = vocabList?.find((vocabItem) => vocabItem.vocab === props.term);
-
-    const handleVocabSaveClick = () => {
-        if (!auth.user) return;
-        if (vocab) {
-            vocab.deleted = true;
-            updateVocab(vocab);
-        } else {
-            createVocab({
-                userId: auth.user?.uid ?? null,
-                vocab: props.term,
-                translation: props.translation!,
-                transliteration: props.transliteration,
-                targetLanguage: targetLanguage,
-            });
-        }
-    };
-
-
+    const vocab = vocabList?.find((vocabItem) => vocabItem.vocab === props.termTranslation.text || vocabItem.vocab === props.termTranslation.infinitive);
 
 
     return (
@@ -49,28 +24,19 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
                 <div className="bg-black whitespace-nowrap flex text-white rounded-lg p-2 items-start mb-6 mx-auto">
                     <div>
                         <p>
-                            {props.translation}
+                            {props.termTranslation.translation}
                         </p>
-                        {props.transliteration &&
+                        {props.termTranslation.transliteration &&
                             <p className="text-sm italic mx-auto">
-                                {props.transliteration}
+                                {props.termTranslation.transliteration}
                             </p>
                         }
                     </div>
-                    <RequireAuthButton
-                        onClick={handleVocabSaveClick}
-                        noAuthText="Login to save vocabulary"
-                        className="rounded-md ml-2 mt-1 bg-slate-100 p-1"
-                    >
-                        {vocab
-                            && <BookmarkIconSolid className="w-4 h-4 text-black" />
-                            || <BookmarkIconOutline className="w-4 h-4 text-black" />
-                        }
-                    </RequireAuthButton>
+                    <VocabSaveButton termTranslation={props.termTranslation} />
                 </div>
             </div>}
             <span className={vocab ? "bg-cyan-100" : ""}>
-            {props.term}
+            {props.termTranslation.text}
             </span>
         </span>
 

@@ -22,10 +22,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                 termTranslation.position <= i && termTranslation.position + termTranslation.text.length > i
             )));
             if (termAtThisPosition && termAtThisPosition.length > 0) {
-                translatedWords.push((<TranslatedTerm
-                    term={termAtThisPosition[0].text}
-                    translation={termAtThisPosition[0].translation}
-                    transliteration={termAtThisPosition[0].transliteration} />));
+                translatedWords.push((<TranslatedTerm termTranslation={termAtThisPosition[0]}/>));
                 i = termAtThisPosition[0].position + termAtThisPosition[0].text.length - 1;
             }
             else {

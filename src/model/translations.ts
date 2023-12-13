@@ -5,6 +5,9 @@ export interface TermTranslation {
     translation: string;
     transliteration?: string;
     position: number; //character index for words, line index for sentences
+    infinitive?: string;
+    infinitiveTranslation?: string;
+    infinitiveTransliteration?: string;
 }
 
 export interface TranslationJson {

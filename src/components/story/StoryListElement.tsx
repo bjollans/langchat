@@ -9,6 +9,12 @@ export interface StoryListElementProps {
 export default function StoryListElement(props: StoryListElementProps) {
     const { data: collections } = useStoryCollections(props.story.id);
 
+    const difficultyColor = {
+        "easy": "ring-green-600/20 bg-green-50 text-green-700",
+        "intermediate": "ring-blue-700/10 bg-blue-50 text-blue-700",
+        "hard": "ring-purple-700/10 bg-purple-50 text-purple-700",
+    }
+
     return (
         <a href={`/story/hi/${props.story.id}`} className="w-full h-full">
             <li key={props.story.title} className="flex px-4 gap-x-4 py-5 hover:bg-slate-100 items-center">
@@ -28,6 +34,11 @@ export default function StoryListElement(props: StoryListElementProps) {
                         </div>
                     </div>
                     <div className="flex mt-4 text-sm leading-5 text-gray-500">
+                        <p key={`${props.story.id}-difficulty`}
+                            className={"mr-2 inline-flex items-center rounded-full px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset "
+                                + difficultyColor[props.story.difficulty.toLowerCase()]}>
+                            {props.story.difficulty}
+                        </p>
                         {collections?.map((collection: any) => <p key={collection.id}
                             className="mr-2 inline-flex items-center rounded-full bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-500 ring-1 ring-inset ring-gray-500/10">
                             {collection.collectionName}

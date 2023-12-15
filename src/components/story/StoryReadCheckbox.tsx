@@ -14,7 +14,6 @@ export default function StoryReadCheckBox(props: StoryReadCheckBoxProps) {
     const [showTooltip, setShowTooltip] = useState(false);
 
     useEffect(() => {
-        console.log(storyRead);
         setStoryReadChecked(storyRead !== undefined ? storyRead[0] ?? false : false);
     }, [storyRead]);
 

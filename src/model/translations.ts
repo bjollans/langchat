@@ -39,6 +39,7 @@ export interface StoryText extends TranslatedText {
     translationLanguage: Language;
     audioUrl?: string;
     audioSentenceTimes?: Array<AudioSentenceTime>;
+    difficulty: string;
 }
 
 export interface AudioSentenceTime {

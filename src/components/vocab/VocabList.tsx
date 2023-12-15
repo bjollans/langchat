@@ -61,24 +61,31 @@ function VocabList() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
-                                {vocabList && vocabList.map((vocab: Vocab) => (
-                                    <tr key={vocab.id}>
-                                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                                            {vocab.vocab}
-                                        </td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{vocab.translation} ({vocab.transliteration})</td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 max-xs:hidden">{
-                                            timeUntilNextReview(vocab) > (365 * 1440 * 60) 
-                                            ? "Next year" 
-                                            : nextReview(vocab).toDateString().split(" ").splice(1,2).join(" ")
-                                        }</td>
-                                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                                            <button onClick={() => handleEdit(vocab)} className="text-indigo-600 hover:text-indigo-900">
-                                                Edit
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {vocabList && vocabList.map((vocab: Vocab) => {
+                                    const timeUntilNextReviewMs = timeUntilNextReview(vocab);
+                                    const msInYear = 365 * 1440 * 60_000;
+                                    const msInMonth = 30 * 1440 * 60_000;
+                                    return (
+                                        <tr key={vocab.id}>
+                                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                                                {vocab.vocab}
+                                            </td>
+                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{vocab.translation} ({vocab.transliteration})</td>
+                                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 max-xs:hidden">{
+                                                timeUntilNextReviewMs > msInYear
+                                                    ? `In ${timeUntilNextReviewMs / msInYear} years`
+                                                    : timeUntilNextReviewMs > msInMonth
+                                                        ? `In ${timeUntilNextReviewMs / msInMonth} months`
+                                                        : nextReview(vocab).toDateString().split(" ").splice(1, 2).join(" ")
+                                            }</td>
+                                            <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                                                <button onClick={() => handleEdit(vocab)} className="text-indigo-600 hover:text-indigo-900">
+                                                    Edit
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
                                 <tr>
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                                         <button className="block rounded-md my-2 px-3 py-2 text-center text-sm font-semibold border shadow-sm hover:bg-slate-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

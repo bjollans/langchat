@@ -28,7 +28,7 @@ export interface Message extends TranslatedText {
 }
 
 export interface StoryText extends TranslatedText {
-    storyId: string;
+    id: string;
     visible: boolean;
     wordCount: number;
     title: string;

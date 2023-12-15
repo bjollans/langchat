@@ -62,7 +62,7 @@ export default function Story(props: StoryProps): JSX.Element {
 
     return (
         <div className="flex">
-            <div className={`p-4 my-4 mb-36 rounded-lg border-1 border-black`}>
+            <div className={`p-4 my-4 mb-36 rounded-lg border-1 border-black w-full`}>
                 <TargetLanguageContext.Provider value={story?.targetLanguage}>
                     {story?.targetLanguage == "hi" &&
                         <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />

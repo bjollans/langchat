@@ -181,6 +181,19 @@ export function unmarkUserStoryRead(storyId: string, userId: string) {
   return response;
 }
 
+export function useStoryCollections(storyId: string): UseQueryResult<Array<string>> {
+  return useQuery(
+    ["storyCollections", { storyId }],
+    () =>
+      supabase
+        .from("storiesToCollections")
+        .select("collectionName")
+        .eq("storyId", storyId)
+        .then(handle),
+    { enabled: !!storyId }
+  );
+}
+
 
 
 /**********************************/

@@ -16,7 +16,7 @@ function RequireAuthButton (props: RequireAuthButtonProps) {
         disabled={!(auth.user)}
         onClick={props.onClick}
         disabledTooltip={props.noAuthText}
-        disabledClassName="bg-slate-600"
+        disabledClassName="bg-slate-500 hover:bg-slate-500"
         className={props.className}
     >
         {props.children}

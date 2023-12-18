@@ -41,16 +41,39 @@ export default function VocabSaveButton(props: VocabSaveButtonProps) {
         }
     };
 
+    //AB TEST 
+    // *************
+    //Start
+    // *************
+    const vocabSaveButtonBookmarkIcon = vocab
+        ? <BookmarkIconSolid className="w-4 h-4 text-black" />
+        : <BookmarkIconOutline className="w-4 h-4 text-black" />;
+
+    const vocabSaveButtonText = (
+        <button
+            type="button"
+            className="whitespace-normal flex  shadow-md rounded  px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300"
+        >
+            {vocab ? "Remove Vocab" : "Save Vocab"}
+        </button>);
+
+    const isAbTestOn = posthog.getFeatureFlag('ux_button_saveVocab') === 'test';
+
+    const vocabSaveButton = isAbTestOn
+        ? vocabSaveButtonText
+        : vocabSaveButtonBookmarkIcon;
+    // *************
+    //End
+    // *************
+
+
     return (
         <RequireAuthButton
             onClick={handleVocabSaveClick}
             noAuthText="Login to save vocabulary"
-            className="rounded-md ml-2 mt-1 bg-slate-100 p-1"
+            className={`rounded-md ml-2 mt-1 ${isAbTestOn ? "bg-slate-100 shadow-white hover:bg-white" : "p-1 bg-slate-100"}`}
         >
-            {vocab
-                && <BookmarkIconSolid className="w-4 h-4 text-black" />
-                || <BookmarkIconOutline className="w-4 h-4 text-black" />
-            }
+            {vocabSaveButton}
         </RequireAuthButton>);
 
 }

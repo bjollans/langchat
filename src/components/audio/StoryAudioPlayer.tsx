@@ -1,4 +1,5 @@
 import { PauseCircleIcon, PauseIcon, PlayCircleIcon, PlayIcon } from '@heroicons/react/24/solid';
+import posthog from 'posthog-js';
 import { useState, useRef, useEffect } from 'react';
 
 interface StoryAudioPlayerProps {
@@ -34,6 +35,10 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
         } else {
             play();
         }
+    };
+
+    const onEnded = () => {
+        posthog.capture('audio_ended', { src: props.src.split('/').pop() });
     };
 
     useEffect(() => {
@@ -99,6 +104,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
                 <div className='bg-cyan-600 h-2' style={{ width: progressBarWidth }}></div>
             </div>
             <audio
+                onEnded={onEnded}
                 ref={audioRef}
                 onTimeUpdate={handleTimeUpdate}
                 onLoadedMetadata={handleTimeUpdate}

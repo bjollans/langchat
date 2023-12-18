@@ -2,14 +2,16 @@ import StoryAudioPlayer from "components/audio/StoryAudioPlayer";
 import TranslatedTextRender from "components/text/TranslatedTextRender";
 import { TargetLanguageContext } from "context/targetLanguageContext";
 import { AudioSentenceTime, TermTranslation, TranslationJson } from "model/translations";
+import posthog from "posthog-js";
 import { useEffect, useState } from "react";
+import { requireAuth } from "util/auth";
 import { useStory } from "util/db";
 
 interface StoryProps {
     id: string;
 }
 
-export default function Story(props: StoryProps): JSX.Element {
+function Story(props: StoryProps): JSX.Element {
     const { data: story } = useStory(props.id);
     const [currentAudioTime, setCurrentAudioTime] = useState(0);
     const [currentAudioSentenceIndex, setCurrentAudioSentenceIndex] = useState(-1);
@@ -84,3 +86,13 @@ export default function Story(props: StoryProps): JSX.Element {
         </div>
     );
 }
+
+posthog.featureFlags.override({'ux_login_onOff': 'control'})
+
+//AB Test
+var exportableStory = Story;
+if (posthog.getFeatureFlag('ux_login_onOff') === 'test') {
+    exportableStory = requireAuth(Story);
+}
+
+export default exportableStory;

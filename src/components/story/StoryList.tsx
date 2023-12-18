@@ -1,10 +1,19 @@
 import Meta from "components/Meta";
 import { StoryText } from "model/translations";
-import { useStories } from "util/db";
+import { useStoriesOrderedByCustom } from "util/db";
 import StoryListElement from "./StoryListElement";
+import posthog from "posthog-js";
 
 export default function StoryList() {
-    const { data: stories } = useStories();
+    //AB TEST
+    // *************
+    //Start
+    // *************
+    const abTestOn = posthog.getFeatureFlag('content_postOverview_order') === 'test';
+    const { data: stories } = useStoriesOrderedByCustom(abTestOn ? 'title' : 'wordCount', abTestOn ? false : true);
+    // *************
+    //End
+    // *************
 
     return (
         <>

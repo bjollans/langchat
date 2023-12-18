@@ -118,6 +118,17 @@ export function useStories() {
   );
 }
 
+export function useStoriesOrderedByCustom(property: string, ascending: boolean) {
+  return useQuery(
+    ["stories"],
+    () => supabase
+      .from("stories")
+      .select()
+      .order(property, { ascending })
+      .then(handle),
+  );
+}
+
 export function useStory(storyId: string): UseQueryResult<StoryText> {
   return useQuery(
     ["story", { storyId }],

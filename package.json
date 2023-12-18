@@ -19,6 +19,7 @@
     "next": "12.2.5",
     "postcss": "8.4.31",
     "posthog-js": "^1.89.1",
+    "prop-types": "^15.8.1",
     "query-string": "6.13.8",
     "raw-body": "2.4.1",
     "react": "17.0.2",

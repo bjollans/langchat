@@ -62,6 +62,14 @@ function Story(props: StoryProps): JSX.Element {
         if (isPlayingAudio) setHasPlayedAudio(true);
     }, [isPlayingAudio]);
 
+    useEffect(() => {
+        posthog.capture('story_view', {
+            story_id: props.id,
+            story_title: story?.title,
+            story_target_language: story?.targetLanguage,
+        });
+    }, []);
+
     return (
         <div className="flex">
             <div className={`p-4 my-4 mb-36 rounded-lg border-1 border-black w-full`}>

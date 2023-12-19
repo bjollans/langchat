@@ -5,13 +5,15 @@ import {
     BookOpenIcon,
     BuildingLibraryIcon,
     LanguageIcon,
+    UserCircleIcon,
     XMarkIcon
 } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
-import { Fragment, useState } from 'react'
+import posthog from 'posthog-js'
+import { Fragment, useEffect, useState } from 'react'
 import { useAuth } from 'util/auth'
 
-const navigation = [
+var navigation = [
     { name: 'Stories', href: '/story/hi', icon: BookOpenIcon },
     { name: 'See Your Vocab', href: '/vocab', icon: LanguageIcon },
     { name: 'Practice Your Vocab', href: '/practice', icon: BuildingLibraryIcon },
@@ -41,6 +43,13 @@ export default function ApplicationShell(props) {
     const router = useRouter();
     const currentPath = router.pathname;
     const auth = useAuth();
+
+    //AB Test
+    useEffect(() => {
+        if (posthog.getFeatureFlag('monetization_onOff') === 'test') {
+            navigation.push({ name: 'My Account', href: '/settings/general', icon: UserCircleIcon })
+        }
+    }, []);
 
     return (
         <>
@@ -140,7 +149,7 @@ export default function ApplicationShell(props) {
                             <span className="sr-only">Open sidebar</span>
                             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                         </button>
-                        {backLocation(router.pathname) 
+                        {backLocation(router.pathname)
                             && <button onClick={() => router.push(backLocation(router.pathname)!)}>
                                 <ArrowLeftIcon className="h-6 w-6" />
                             </button>}

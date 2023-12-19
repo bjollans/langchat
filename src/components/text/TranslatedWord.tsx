@@ -1,6 +1,8 @@
 import VocabSaveButton from "components/vocab/VocabSaveButton";
+import { StoryIdContext } from "context/storyIdContext";
 import { TermTranslation } from "model/translations";
-import { useState } from "react";
+import posthog from "posthog-js";
+import { useContext, useState } from "react";
 import { useAuth } from "util/auth";
 import { useVocab } from "util/db";
 
@@ -13,11 +15,20 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     const [showTranslation, setShowTranslation] = useState(false);
     const { data: vocabList } = useVocab(auth.user?.uid ?? null)
     const vocab = vocabList?.find((vocabItem) => vocabItem.vocab === props.termTranslation.text || vocabItem.vocab === props.termTranslation.infinitive);
+    const storyId = useContext(StoryIdContext);
 
+
+    const handleClick = () => {
+        setShowTranslation(true);
+        posthog.capture("view_word_translation", {
+            vocab: props.termTranslation.text,
+            storyId: storyId,
+        });
+    }
 
     return (
         <span
-            onClick={() => setShowTranslation(true)}
+            onClick={handleClick}
             onMouseLeave={() => setShowTranslation(false)}
             className="cursor-pointer relative mx-0.5 underline decoration-dotted hover:text-indigo-500 cursor-pointer">
             {showTranslation && <div className="cursor-text absolute bottom-0 left-0">
@@ -40,5 +51,5 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
             </span>
         </span>
 
-    )
+    );
 }

@@ -210,7 +210,7 @@ export function useStoryCollections(storyId: string): UseQueryResult<Array<strin
 /**** STORIES Automatic Marked ****/
 /**********************************/
 
-export function useUserStoriesReadAutomatic(userId: string): UseQueryResult<Array<string>> {
+export function useUserStoriesReadAutomatic(userId: string): UseQueryResult<Array<any>> {
   return useQuery(
     ["userStoriesReadAutomatic", { userId }],
     () =>
@@ -223,7 +223,7 @@ export function useUserStoriesReadAutomatic(userId: string): UseQueryResult<Arra
   );
 }
 
-export function useUserStoriesReadAutomaticLast7Days(userId: string): UseQueryResult<Array<string>> {
+export function useUserStoriesReadAutomaticLast7Days(userId: string): UseQueryResult<Array<any>> {
   return useQuery(
     ["userStoriesReadAutomatic", { userId }],
     () =>

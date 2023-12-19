@@ -31,11 +31,11 @@ function Story(props: StoryProps): JSX.Element {
     }
 
     //AB Test
-    const monetizationOff = !(posthog.getFeatureFlag('monetization_onOff') === 'test');
+    const monetizationOff = posthog.getFeatureFlag('monetization_onOff') !== 'test';
 
-    const isSubscribed = true;
-    const userStoriesReadCountLast7Days = new Set(userStoriesReadLast7Days?? []).size;
-    const currentStoryAlreadyRead = userStoriesRead?.includes(props.id);
+    const isSubscribed = !!(auth?.user?.planIsActive);
+    const userStoriesReadCountLast7Days = new Set(userStoriesReadLast7Days?.map(x=>x.storyId)?? []).size;
+    const currentStoryAlreadyRead = userStoriesRead?.map(x=>x.storyId).includes(props.id);
     const isAllowedToRead = monetizationOff || isSubscribed || currentStoryAlreadyRead || (userStoriesReadCountLast7Days ?? 0) < 3;
 
     useEffect(() => {

@@ -1,9 +1,7 @@
-import React from "react";
 import Meta from "components/Meta";
-import Chat from "components/chat/Chat";
 import Story from "components/story/Story";
+import { StoryIdContext } from "context/storyIdContext";
 import { useRouter } from "next/router";
-import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 
 function StoryPage() {
   const router = useRouter();
@@ -14,7 +12,9 @@ function StoryPage() {
 
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       <div className="mx-auto">
-        <Story id={id as string} />
+        <StoryIdContext.Provider value={id as string}>
+          <Story id={id as string} />
+        </StoryIdContext.Provider>
       </div>
     </div>
   </>

@@ -7,9 +7,6 @@ export function SubscribeContentBlocker() {
                 <h3 className="text-black text-4xl max-w-lg tracking-tight text-center font-bold mb-4">
                     You have reached your free weekly limit of 3 stories
                 </h3>
-                <p className="text-xl underline font-semibold mb-4 text-black text-center">
-                    Get Premium 7 days free
-                    </p>
                 <PricingSection />
             </div>
         </div>

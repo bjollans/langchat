@@ -3,7 +3,7 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 const subscriptionDetails =
 {
     href: '/purchase/monthly',
-    priceMonthly: '€5',
+    priceMonthly: '$5',
     description: "The perfect plan if you're just getting started with our product.",
     features: [
         'Unlimited Listening and Reading',
@@ -52,8 +52,11 @@ export default function PricingSection() {
                         'mt-10 block rounded-md py-2.5 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600'
                     )}
                 >
-                    Try 7 days for free
+                    Get Full Access (7 days free)
                 </a>
+                <p className="mt-6 text-xs italic leading-tight text-gray-600">
+                    You will only be charged after 7 days. Before then you can cancel your subscription at any time. After that you can cancel to the end of every month.
+                </p>
             </div>
         </div>
     );

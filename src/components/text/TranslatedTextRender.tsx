@@ -1,8 +1,11 @@
-import { TranslatedText, TermTranslation } from "model/translations";
-import TranslatedTerm from "./TranslatedWord";
-import { useState } from "react";
-import { LanguageIcon, PlayCircleIcon, PlayIcon } from '@heroicons/react/24/solid'
+import { LanguageIcon, PlayIcon } from '@heroicons/react/24/solid';
 import EqualizerIcon from "components/audio/EqualizerIcon";
+import { StoryIdContext } from 'context/storyIdContext';
+import { OnReadUsageEvent } from 'context/trackReadContext';
+import { TermTranslation, TranslatedText } from "model/translations";
+import posthog from 'posthog-js';
+import { useContext, useState } from "react";
+import TranslatedTerm from "./TranslatedWord";
 
 interface TranslatedTextProps {
     translatedText: TranslatedText;
@@ -15,6 +18,8 @@ interface TranslatedTextProps {
 export default function TranslatedTextRender(props: TranslatedTextProps): JSX.Element {
     const [showWholeTranslation, setShowWholeTranslation] = useState(false);
     const translatedWords: Array<JSX.Element> = [];
+    const storyId = useContext(StoryIdContext);
+    const onReadUsageEvent = useContext(OnReadUsageEvent);
 
     if (props.translatedText.translationJson !== undefined) {
         for (var i = 0; i < props.translatedText.content.length; i++) {
@@ -29,6 +34,14 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                 translatedWords.push(<span>{props.translatedText.content[i]}</span>);
             }
         }
+    }
+
+    const handleTranslateClick = () => {
+        setShowWholeTranslation(true);
+        onReadUsageEvent();
+        posthog.capture("view_sentence_translation", {
+            storyId: storyId,
+        });
     }
 
     return (<>
@@ -56,7 +69,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                 </div>
                 <div className="mx-8 relative">
                     {translatedWords}
-                    <button className="hover:bg-slate-200 text-black font-bold py-2 px-2 mx-4 rounded" onClick={() => setShowWholeTranslation(true)}>
+                    <button className="hover:bg-slate-200 text-black font-bold py-2 px-2 mx-4 rounded" onClick={handleTranslateClick}>
                         <LanguageIcon className="h-5 w-5" aria-hidden="true" />
                     </button>
                 </div>

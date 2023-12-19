@@ -1,6 +1,7 @@
 import { PauseCircleIcon, PauseIcon, PlayCircleIcon, PlayIcon } from '@heroicons/react/24/solid';
+import { OnReadUsageEvent } from 'context/trackReadContext';
 import posthog from 'posthog-js';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 
 interface StoryAudioPlayerProps {
     src: string;
@@ -14,11 +15,13 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     const [duration, setDuration] = useState(0);
     const audioRef = useRef<HTMLAudioElement>(null);
     const [progressBarWidth, setProgressBarWidth] = useState('0%');
+    const onReadUsageEvent = useContext(OnReadUsageEvent);
 
     const play = () => {
         if (audioRef.current) {
             audioRef.current.play();
             props.onPlayPause(true);
+            onReadUsageEvent();
         }
     };
 

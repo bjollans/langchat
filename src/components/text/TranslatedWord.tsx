@@ -1,5 +1,6 @@
 import VocabSaveButton from "components/vocab/VocabSaveButton";
 import { StoryIdContext } from "context/storyIdContext";
+import { OnReadUsageEvent } from "context/trackReadContext";
 import { TermTranslation } from "model/translations";
 import posthog from "posthog-js";
 import { useContext, useState } from "react";
@@ -16,10 +17,12 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     const { data: vocabList } = useVocab(auth.user?.uid ?? null)
     const vocab = vocabList?.find((vocabItem) => vocabItem.vocab === props.termTranslation.text || vocabItem.vocab === props.termTranslation.infinitive);
     const storyId = useContext(StoryIdContext);
+    const onReadUsageEvent = useContext(OnReadUsageEvent);
 
 
     const handleClick = () => {
         setShowTranslation(true);
+        onReadUsageEvent();
         posthog.capture("view_word_translation", {
             vocab: props.termTranslation.text,
             storyId: storyId,

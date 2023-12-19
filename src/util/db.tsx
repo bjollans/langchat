@@ -206,6 +206,21 @@ export function useStoryCollections(storyId: string): UseQueryResult<Array<strin
 }
 
 
+/**********************************/
+/**** STORIES Automatic Marked ****/
+/**********************************/
+
+export function markUserStoryReadAutomatic(storyId: string, userId: string) {
+  client.setQueryData(["userStoriesReadAutomatic", { storyId, userId }], [true]);
+  client.setQueryData(["userStoriesReadAutomatic", { userId }], (oldData: any) => oldData ? [...oldData, storyId] : [storyId]);
+  const response = supabase
+    .from("userStoriesReadAutomatic")
+    .insert([{ storyId, userId }])
+    .then(handle);
+  return response;
+}
+
+
 
 /**********************************/
 /**** MESSAGES & CONVERSATIONS ****/

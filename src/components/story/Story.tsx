@@ -1,11 +1,12 @@
 import StoryAudioPlayer from "components/audio/StoryAudioPlayer";
 import TranslatedTextRender from "components/text/TranslatedTextRender";
 import { TargetLanguageContext } from "context/targetLanguageContext";
+import { OnReadUsageEvent, minReadUsageEvents } from "context/trackReadContext";
 import { AudioSentenceTime, TermTranslation, TranslationJson } from "model/translations";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
-import { requireAuth } from "util/auth";
-import { useStory } from "util/db";
+import { requireAuth, useAuth } from "util/auth";
+import { markUserStoryReadAutomatic, useStory } from "util/db";
 
 interface StoryProps {
     id: string;
@@ -13,10 +14,31 @@ interface StoryProps {
 
 function Story(props: StoryProps): JSX.Element {
     const { data: story } = useStory(props.id);
+    const auth = useAuth();
     const [currentAudioTime, setCurrentAudioTime] = useState(0);
     const [currentAudioSentenceIndex, setCurrentAudioSentenceIndex] = useState(-1);
     const [isPlayingAudio, setIsPlayingAudio] = useState(false);
     const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
+    const [usageEventsCount, setUsageEventsCount] = useState(0);
+
+    var isStoryRead = false;
+
+    const incrementUsageEventsCount = () => {
+        setUsageEventsCount(usageEventsCount + 1);
+    }
+
+    useEffect(() => {
+        if (usageEventsCount >= minReadUsageEvents && !isStoryRead) {
+            isStoryRead = true;
+            markUserStoryReadAutomatic(props.id, auth.user?.uid ?? null);
+            posthog.capture('story_read', {
+                story_id: props.id,
+                story_title: story?.title,
+                story_target_language: story?.targetLanguage,
+            });
+        }
+    }, [usageEventsCount]);
+
 
     const lines = story?.content.split("\n");
     var nonSentenceLinesSeen = 0;
@@ -71,25 +93,27 @@ function Story(props: StoryProps): JSX.Element {
     }, []);
 
     return (
-        <div className="flex">
+        <div className="relative flex z-0">
             <div className={`p-4 my-4 mb-36 rounded-lg border-1 border-black w-full`}>
-                <TargetLanguageContext.Provider value={story?.targetLanguage}>
-                    {story?.targetLanguage == "hi" &&
-                        <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
-                    }
-                    <img className="h-96 lg:w-1/2 w-full md:w-2/3 mx-auto object-cover rounded-lg shadow-md shadow-black flex-none" src={story?.imageUrl} alt="" />
-                    <div className="border-b border-gray-200 pb-5 my-8 flex items-end">
-                        <h3 className="mx-6 text-base text-4xl mx-auto font-semibold leading-6 text-gray-900">{story?.title}</h3>
-                    </div>
-                    {story?.content.split("\n").map(lineToTranslatedTextRender)}
-                    {story?.audioUrl &&
-                        <StoryAudioPlayer src={story.audioUrl}
-                            currentTime={currentAudioTime}
-                            isPlaying={isPlayingAudio}
-                            onTimeUpdate={setCurrentAudioTime}
-                            onPlayPause={setIsPlayingAudio} />
-                    }
-                </TargetLanguageContext.Provider>
+                <OnReadUsageEvent.Provider value={incrementUsageEventsCount}>
+                    <TargetLanguageContext.Provider value={story?.targetLanguage}>
+                        {story?.targetLanguage == "hi" &&
+                            <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
+                        }
+                        <img className="h-96 lg:w-1/2 w-full md:w-2/3 mx-auto object-cover rounded-lg shadow-md shadow-black flex-none" src={story?.imageUrl} alt="" />
+                        <div className="border-b border-gray-200 pb-5 my-8 flex items-end">
+                            <h3 className="mx-6 text-base text-4xl mx-auto font-semibold leading-6 text-gray-900">{story?.title}</h3>
+                        </div>
+                        {story?.content.split("\n").map(lineToTranslatedTextRender)}
+                        {story?.audioUrl &&
+                            <StoryAudioPlayer src={story.audioUrl}
+                                currentTime={currentAudioTime}
+                                isPlaying={isPlayingAudio}
+                                onTimeUpdate={setCurrentAudioTime}
+                                onPlayPause={setIsPlayingAudio} />
+                        }
+                    </TargetLanguageContext.Provider>
+                </OnReadUsageEvent.Provider>
             </div>
         </div>
     );

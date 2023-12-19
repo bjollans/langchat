@@ -210,6 +210,33 @@ export function useStoryCollections(storyId: string): UseQueryResult<Array<strin
 /**** STORIES Automatic Marked ****/
 /**********************************/
 
+export function useUserStoriesReadAutomatic(userId: string): UseQueryResult<Array<string>> {
+  return useQuery(
+    ["userStoriesReadAutomatic", { userId }],
+    () =>
+      supabase
+        .from("userStoriesReadAutomatic")
+        .select('storyId')
+        .eq("userId", userId)
+        .then(handle),
+    { enabled: !!userId }
+  );
+}
+
+export function useUserStoriesReadAutomaticLast7Days(userId: string): UseQueryResult<Array<string>> {
+  return useQuery(
+    ["userStoriesReadAutomatic", { userId }],
+    () =>
+      supabase
+        .from("userStoriesReadAutomatic")
+        .select('storyId')
+        .eq("userId", userId)
+        .gte("createdAt", new Date(new Date().setDate(new Date().getDate() - 7)).toISOString())
+        .then(handle),
+    { enabled: !!userId }
+  );
+}
+
 export function markUserStoryReadAutomatic(storyId: string, userId: string) {
   client.setQueryData(["userStoriesReadAutomatic", { storyId, userId }], [true]);
   client.setQueryData(["userStoriesReadAutomatic", { userId }], (oldData: any) => oldData ? [...oldData, storyId] : [storyId]);

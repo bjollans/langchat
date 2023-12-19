@@ -6,7 +6,8 @@ import { AudioSentenceTime, TermTranslation, TranslationJson } from "model/trans
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { requireAuth, useAuth } from "util/auth";
-import { markUserStoryReadAutomatic, useStory } from "util/db";
+import { markUserStoryReadAutomatic, useStory, useUserStoriesReadAutomatic, useUserStoriesReadAutomaticLast7Days } from "util/db";
+import { SubscribeContentBlocker } from "./SubscribeContentBlocker";
 
 interface StoryProps {
     id: string;
@@ -15,6 +16,8 @@ interface StoryProps {
 function Story(props: StoryProps): JSX.Element {
     const { data: story } = useStory(props.id);
     const auth = useAuth();
+    const { data: userStoriesRead } = useUserStoriesReadAutomatic(auth.user?.uid ?? null);
+    const { data: userStoriesReadLast7Days } = useUserStoriesReadAutomaticLast7Days(auth.user?.uid ?? null);
     const [currentAudioTime, setCurrentAudioTime] = useState(0);
     const [currentAudioSentenceIndex, setCurrentAudioSentenceIndex] = useState(-1);
     const [isPlayingAudio, setIsPlayingAudio] = useState(false);
@@ -26,6 +29,14 @@ function Story(props: StoryProps): JSX.Element {
     const incrementUsageEventsCount = () => {
         setUsageEventsCount(usageEventsCount + 1);
     }
+
+    //AB Test
+    const monetizationOff = !(posthog.getFeatureFlag('monetization_onOff') === 'test');
+
+    const isSubscribed = true;
+    const userStoriesReadCountLast7Days = new Set(userStoriesReadLast7Days?? []).size;
+    const currentStoryAlreadyRead = userStoriesRead?.includes(props.id);
+    const isAllowedToRead = monetizationOff || isSubscribed || currentStoryAlreadyRead || (userStoriesReadCountLast7Days ?? 0) < 3;
 
     useEffect(() => {
         if (usageEventsCount >= minReadUsageEvents && !isStoryRead) {
@@ -104,8 +115,10 @@ function Story(props: StoryProps): JSX.Element {
                         <div className="border-b border-gray-200 pb-5 my-8 flex items-end">
                             <h3 className="mx-6 text-base text-4xl mx-auto font-semibold leading-6 text-gray-900">{story?.title}</h3>
                         </div>
+                        {!isAllowedToRead
+                            && <SubscribeContentBlocker />}
                         {story?.content.split("\n").map(lineToTranslatedTextRender)}
-                        {story?.audioUrl &&
+                        {isAllowedToRead && story?.audioUrl &&
                             <StoryAudioPlayer src={story.audioUrl}
                                 currentTime={currentAudioTime}
                                 isPlaying={isPlayingAudio}

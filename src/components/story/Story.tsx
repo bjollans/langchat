@@ -132,8 +132,6 @@ function Story(props: StoryProps): JSX.Element {
     );
 }
 
-posthog.featureFlags.override({ 'ux_login_onOff': 'control' })
-
 //AB Test
 var exportableStory = Story;
 if (posthog.getFeatureFlag('ux_login_onOff') === 'test') {

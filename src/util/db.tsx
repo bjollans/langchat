@@ -225,7 +225,7 @@ export function useUserStoriesReadAutomatic(userId: string): UseQueryResult<Arra
 
 export function useUserStoriesReadAutomaticLast7Days(userId: string): UseQueryResult<Array<any>> {
   return useQuery(
-    ["userStoriesReadAutomatic", { userId }],
+    ["userStoriesReadAutomaticLast7Days", { userId }],
     () =>
       supabase
         .from("userStoriesReadAutomatic")
@@ -239,7 +239,8 @@ export function useUserStoriesReadAutomaticLast7Days(userId: string): UseQueryRe
 
 export function markUserStoryReadAutomatic(storyId: string, userId: string) {
   client.setQueryData(["userStoriesReadAutomatic", { storyId, userId }], [true]);
-  client.setQueryData(["userStoriesReadAutomatic", { userId }], (oldData: any) => oldData ? [...oldData, storyId] : [storyId]);
+  client.setQueryData(["userStoriesReadAutomaticLast7Days", { userId }], (oldData: any) => oldData ? [...oldData, {storyId}] : [{storyId}]);
+  client.setQueryData(["userStoriesReadAutomatic", { userId }], (oldData: any) => oldData ? [...oldData, {storyId}] : [{storyId}]);
   const response = supabase
     .from("userStoriesReadAutomatic")
     .insert([{ storyId, userId }])

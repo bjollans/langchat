@@ -23,24 +23,26 @@ function Story(props: StoryProps): JSX.Element {
     const [isPlayingAudio, setIsPlayingAudio] = useState(false);
     const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
     const [usageEventsCount, setUsageEventsCount] = useState(0);
-
-    var isStoryRead = false;
+    const [isAllowedToRead, setIsAllowedToRead] = useState(true);
+    const [isStoryRead, setIsStoryRead] = useState(false);
 
     const incrementUsageEventsCount = () => {
         setUsageEventsCount(usageEventsCount + 1);
     }
 
-    //AB Test
-    const monetizationOff = posthog.getFeatureFlag('monetization_onOff') !== 'test';
+    useEffect(() => {
+        //AB Test
+        const monetizationOff = posthog.getFeatureFlag('monetization_onOff') !== 'test';
 
-    const isSubscribed = !!(auth?.user?.planIsActive);
-    const userStoriesReadCountLast7Days = new Set(userStoriesReadLast7Days?.map(x=>x.storyId)?? []).size;
-    const currentStoryAlreadyRead = userStoriesRead?.map(x=>x.storyId).includes(props.id);
-    const isAllowedToRead = monetizationOff || isSubscribed || currentStoryAlreadyRead || (userStoriesReadCountLast7Days ?? 0) < 3;
+        const isSubscribed = !!(auth?.user?.planIsActive);
+        const userStoriesReadCountLast7Days = new Set(userStoriesReadLast7Days?.map(x => x.storyId) ?? []).size;
+        const currentStoryAlreadyRead = userStoriesRead?.map(x => x.storyId).includes(props.id);
+        setIsAllowedToRead(monetizationOff || isSubscribed || currentStoryAlreadyRead || (userStoriesReadCountLast7Days ?? 0) < 3);
+    }, [userStoriesReadLast7Days, userStoriesRead, auth.user?.planIsActive]);
 
     useEffect(() => {
         if (usageEventsCount >= minReadUsageEvents && !isStoryRead) {
-            isStoryRead = true;
+            setIsStoryRead(true);
             markUserStoryReadAutomatic(props.id, auth.user?.uid ?? null);
             posthog.capture('story_read', {
                 story_id: props.id,

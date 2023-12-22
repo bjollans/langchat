@@ -132,10 +132,4 @@ function Story(props: StoryProps): JSX.Element {
     );
 }
 
-//AB Test
-var exportableStory = Story;
-if (posthog.getFeatureFlag('ux_login_onOff') === 'test') {
-    exportableStory = requireAuth(Story);
-}
-
-export default exportableStory;
+export default requireAuth(Story);

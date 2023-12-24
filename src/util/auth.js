@@ -12,6 +12,7 @@ import router from "next/router";
 import PageLoader from "../components/PageLoader";
 import { getFriendlyPlanId } from "./prices";
 import analytics from "./analytics";
+import posthog from 'posthog-js'
 
 // Whether to merge extra user data from database into `auth.user`
 const MERGE_DB_USER = true;
@@ -275,6 +276,11 @@ function useIdentifyUser(user, { enabled }) {
   useEffect(() => {
     if (user && enabled) {
       analytics.identify(user.uid);
+      posthog.identify(user.uid, {
+        email: user.email,
+        plan: user.planId,
+        planIsActive: user.planIsActive,
+      });
     }
   }, [user, enabled]);
 }

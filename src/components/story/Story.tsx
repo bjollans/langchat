@@ -41,6 +41,16 @@ function Story(props: StoryProps): JSX.Element {
     }, [userStoriesReadLast7Days, userStoriesRead, auth.user?.planIsActive]);
 
     useEffect(() => {
+        if (!isAllowedToRead) {
+            posthog.capture('story_blocked', {
+                story_id: props.id,
+                story_title: story?.title,
+                story_target_language: story?.targetLanguage,
+            });
+        }
+    }, [isAllowedToRead]);
+
+    useEffect(() => {
         if (usageEventsCount >= minReadUsageEvents && !isStoryRead) {
             setIsStoryRead(true);
             markUserStoryReadAutomatic(props.id, auth.user?.uid ?? null);

@@ -28,16 +28,17 @@ function Story(props: StoryProps): JSX.Element {
 
     const incrementUsageEventsCount = () => {
         setUsageEventsCount(usageEventsCount + 1);
-    }
+    };
 
     useEffect(() => {
         //AB Test
-        const monetizationOff = posthog.getFeatureFlag('monetization_onOff') !== 'test';
+        const earlyMonetization = posthog.getFeatureFlag('monetization_after_2_stories') === 'test';
+        const freeStoriesPerWeek = earlyMonetization ? 2 : 3;
 
         const isSubscribed = !!(auth?.user?.planIsActive);
         const userStoriesReadCountLast7Days = new Set(userStoriesReadLast7Days?.map(x => x.storyId) ?? []).size;
         const currentStoryAlreadyRead = userStoriesRead?.map(x => x.storyId).includes(props.id);
-        setIsAllowedToRead(monetizationOff || isSubscribed || currentStoryAlreadyRead || (userStoriesReadCountLast7Days ?? 0) < 3);
+        setIsAllowedToRead(isSubscribed || currentStoryAlreadyRead || (userStoriesReadCountLast7Days ?? 0) < freeStoriesPerWeek);
     }, [userStoriesReadLast7Days, userStoriesRead, auth.user?.planIsActive]);
 
     useEffect(() => {

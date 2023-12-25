@@ -17,6 +17,7 @@ var navigation = [
     { name: 'Stories', href: '/story/hi', icon: BookOpenIcon },
     { name: 'See Your Vocab', href: '/vocab', icon: LanguageIcon },
     { name: 'Practice Your Vocab', href: '/practice', icon: BuildingLibraryIcon },
+    { name: 'My Account', href: '/settings/general', icon: UserCircleIcon },
 ]
 
 const pageTitles = {
@@ -43,13 +44,6 @@ export default function ApplicationShell(props) {
     const router = useRouter();
     const currentPath = router.pathname;
     const auth = useAuth();
-
-    //AB Test
-    useEffect(() => {
-        if (posthog.getFeatureFlag('monetization_onOff') === 'test') {
-            navigation.push({ name: 'My Account', href: '/settings/general', icon: UserCircleIcon })
-        }
-    }, []);
 
     return (
         <>

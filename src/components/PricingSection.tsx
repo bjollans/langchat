@@ -1,4 +1,6 @@
 import { CheckIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/router";
+import posthog from "posthog-js";
 
 const subscriptionDetails =
 {
@@ -17,6 +19,7 @@ function classNames(...classes) {
 }
 
 export default function PricingSection() {
+    const router = useRouter();
     return (
         <div className="mx-auto mt-8 items-center max-w-sm">
             <div
@@ -47,6 +50,10 @@ export default function PricingSection() {
                 <a
                     href={subscriptionDetails.href}
                     aria-describedby={"subscriptionDetails"}
+                    onClick={() => posthog.capture('buy_click', {
+                        sourceUrl: router.asPath,
+                    })
+                    }
                     className={classNames(
                         'bg-cyan-600/90 text-white shadow hover:bg-cyan-500',
                         'mt-10 block rounded-md py-2.5 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600'

@@ -17,6 +17,15 @@ function getCustomer(uid) {
     .then(handle);
 }
 
+function getStoryIdsByLanguage(targetLanguage) {
+  return supabase
+    .from("stories")
+    .select("id")
+    .eq("targetLanguage", targetLanguage)
+    .eq("visible", true)
+    .then(handle);
+}
+
 // Get customer by Stripe customer ID
 function getCustomerByStripeCid(id) {
   return supabase
@@ -54,9 +63,9 @@ function handle(response) {
 
 module.exports = {
   getUser,
-
   getCustomer,
   getCustomerByStripeCid,
   createCustomer,
   updateCustomerByStripeCid,
+  getStoryIdsByLanguage,
 };

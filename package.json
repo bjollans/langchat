@@ -17,6 +17,7 @@
     "analytics": "0.8.9",
     "autoprefixer": "10.4.16",
     "next": "12.2.5",
+    "next-sitemap": "^4.2.3",
     "postcss": "8.4.31",
     "posthog-js": "^1.89.1",
     "prop-types": "^15.8.1",
@@ -33,6 +34,7 @@
     "tsc": "tsc",
     "dev": "next dev",
     "build": "next build",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "stripe-webhook": "stripe listen --forward-to localhost:3000/api/stripe-webhook"
   },

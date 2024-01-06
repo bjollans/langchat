@@ -8,7 +8,7 @@ module.exports = {
         console.log("stories: ", stories);
         const storiesJson = await stories.json();
         console.log("storiesJson: ", storiesJson);
-        const storyUrls = storiesJson.map((story) => story.url);
+        const storyUrls = storiesJson.urls;
         return storyUrls;
     }
   }

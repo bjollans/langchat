@@ -21,7 +21,7 @@ function Meta(props) {
     // Page title
     title: "Linguin",
     // Page description
-    description: "Website for Hindi reading practice and learning. Practice Hindi reading, listening and Hindi comprehension. Improve your Hindi through reading practice with our Hindi passages.",
+    description: "Hindi reading practice and learning. Practice Hindi reading, listening and Hindi comprehension. Improve your Hindi with reading practice with Hindi passages.",
     // Social share image (create this file in /public/images/)
     image: "/images/social.png",
     // Page type (see https://ogp.me/#types)

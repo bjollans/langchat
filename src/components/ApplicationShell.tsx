@@ -21,7 +21,7 @@ var navigation = [
 ]
 
 const pageTitles = {
-    '/story/hi': '🇮🇳 Hindi Mini Stories for Language Learners',
+    '/story/hi': '🇮🇳 Hindi Reading Practice',
     '/vocab': 'Your Vocabulary',
     '/practice': 'Practice Vocabulary',
 }

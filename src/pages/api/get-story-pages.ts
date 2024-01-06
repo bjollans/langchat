@@ -5,7 +5,7 @@ export default async (req, res) => {
         const stories = await getStoryIdsByLanguage("hi");
 
         const urls = stories.map((story) => {
-            return `https://www.linguin.co/story/hi/${story.id}`;
+            return `/story/hi/${story.id}`;
         });
 
         // Return success response

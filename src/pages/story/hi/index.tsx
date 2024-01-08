@@ -1,17 +1,34 @@
 import Meta from "components/Meta";
 import StoryList, { StoryListProps } from "components/story/StoryList";
+import { StoryText, StoryToCollection } from "model/translations";
 import { useRouter } from "next/router";
 import posthog from "posthog-js";
 import { useEffect } from "react";
-import { getStoriesOrderedByCustom } from "util/db";
+import { getAvailableStoryDifficultyLevels, getCollectionNames, getStoriesOrderedByCustom, getStoryCollections } from "util/db";
 
-export async function getServerSideProps() {
+export async function getServerSidePropsForStoryIndexPage() {
     const stories = await getStoriesOrderedByCustom('title', false);
+    const filterDifficulties = await getAvailableStoryDifficultyLevels();
+    const storyIds = stories.map((story: any) => story.id);
+    const storyCollections = await getStoryCollections(storyIds);
+    stories.forEach((story: StoryText) =>
+        story.collections = storyCollections.filter((collection: StoryToCollection) =>
+            collection.storyId == story.id).map((collection: StoryToCollection) =>
+                collection.collectionName));
+
+    const filterCollectionNames = await getCollectionNames().then((collections: any) => collections.map((collection: any) => collection.name));
+    console.log(filterCollectionNames);
     return {
         props: {
-            stories
+            stories,
+            filterDifficulties,
+            filterCollectionNames,
         }
     };
+}
+
+export async function getServerSideProps() {
+    return getServerSidePropsForStoryIndexPage();
 }
 
 function StoryIndexPage(props: StoryListProps) {
@@ -20,9 +37,9 @@ function StoryIndexPage(props: StoryListProps) {
 
     useEffect(() => {
         if (hasPaid == 'true') {
-          posthog.capture('purchase');
+            posthog.capture('purchase');
         }
-      }, [query]);
+    }, [query]);
 
     return (
         <>

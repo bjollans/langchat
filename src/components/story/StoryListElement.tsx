@@ -1,19 +1,20 @@
+import { StoryFilterChangeCalls, StoryListFilterContext } from "context/storyListFilterContext";
 import { StoryText } from "model/translations";
+import { useContext } from "react";
 import StoryReadCheckBox from "./StoryReadCheckbox";
-import { useStoryCollections } from "util/db";
 
 export interface StoryListElementProps {
     story: StoryText;
 }
 
 export default function StoryListElement(props: StoryListElementProps) {
-    const { data: collections } = useStoryCollections(props.story.id);
-
     const difficultyColor = {
         "easy": "ring-green-600/20 bg-green-50 text-green-700",
         "intermediate": "ring-blue-700/10 bg-blue-50 text-blue-700",
         "hard": "ring-purple-700/10 bg-purple-50 text-purple-700",
     }
+
+    const storyFilterChangeCalls: StoryFilterChangeCalls | undefined = useContext(StoryListFilterContext);
 
     return (
         <a href={`/story/hi/${props.story.id}`} className="w-full h-full">
@@ -34,15 +35,32 @@ export default function StoryListElement(props: StoryListElementProps) {
                         </div>
                     </div>
                     <div className="flex mt-4 text-sm leading-5 text-gray-500">
-                        <p key={`${props.story.id}-difficulty`}
+                        <button key={`${props.story.id}-difficulty`}
                             className={"mr-2 inline-flex items-center rounded-full px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset "
-                                + difficultyColor[props.story.difficulty.toLowerCase()]}>
+                                + difficultyColor[props.story.difficulty.toLowerCase()]}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                if (storyFilterChangeCalls!.difficulties.includes(props.story.difficulty)) {
+                                    storyFilterChangeCalls!.onDifficultyRemove(props.story.difficulty);
+                                    return;
+                                }
+                                storyFilterChangeCalls!.onDifficultyAdd(props.story.difficulty);
+                            }}
+                        >
                             {props.story.difficulty}
-                        </p>
-                        {collections?.map((collection: any) => <p key={collection.id}
-                            className="mr-2 inline-flex items-center rounded-full bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-500 ring-1 ring-inset ring-gray-500/10">
-                            {collection.collectionName}
-                        </p>)}
+                        </button>
+                        {props.story.collections?.map((collectionName: any) => <button key={props.story.title + collectionName}
+                            className="mr-2 inline-flex items-center rounded-full bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-500 ring-1 ring-inset ring-gray-500/10"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                if (storyFilterChangeCalls!.collections.includes(collectionName)) {
+                                    storyFilterChangeCalls!.onCollectionRemove(collectionName);
+                                    return;
+                                }
+                                storyFilterChangeCalls!.onCollectionAdd(collectionName);
+                            }}>
+                            {collectionName}
+                        </button>)}
                     </div>
                 </div>
             </li>

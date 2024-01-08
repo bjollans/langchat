@@ -29,6 +29,7 @@ const pageTitles = {
 
 const backLocation = (currentLocation: string) => {
     switch (currentLocation) {
+        case '/': return null;
         case '/story/hi': return null;
         case '/vocab': return null;
         case '/practice': return '/vocab';

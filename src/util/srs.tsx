@@ -24,7 +24,7 @@ export function timeUntilNextReview(vocab: Vocab): number {
 }
 
 function _shouldReview(vocab: Vocab) {
-    return Math.abs(Date.now() - nextReview(vocab).getTime()) < _dueThresholdMs;
+    return nextReview(vocab).getTime() - Date.now() < _dueThresholdMs;
 }
 
 export function orderAndFilterVocabList(vocabList: Array<Vocab>) {

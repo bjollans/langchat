@@ -8,7 +8,7 @@ import {
 import supabase from "./supabase";
 import { Conversation, ConversationStatus } from "model/conversation";
 import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
-import { Message, StoryText } from "model/translations";
+import { Message, StoryQuestionData, StoryText } from "model/translations";
 import { Vocab } from "model/vocab";
 
 // React Query client
@@ -269,6 +269,19 @@ export function markUserStoryReadAutomatic(storyId: string, userId: string) {
     .insert([{ storyId, userId }])
     .then(handle);
   return response;
+}
+
+export function useStoryQuestions(storyId: string): UseQueryResult<Array<StoryQuestionData>> {
+  return useQuery(
+    ["storyQuestions", { storyId }],
+    () =>
+      supabase
+        .from("storyQuestions")
+        .select()
+        .eq("storyId", storyId)
+        .then(handle),
+    { enabled: !!storyId }
+  );
 }
 
 

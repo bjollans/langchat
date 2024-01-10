@@ -47,6 +47,12 @@ export interface StoryToCollection {
     storyId: string;
     collectionName: string;
 }
+
+export interface StoryQuestionData {
+    question: string;
+    correctAnswer: string;
+    otherOptions: Array<string>;
+}
     
 
 export interface AudioSentenceTime {

@@ -7,6 +7,7 @@ import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { requireAuth, useAuth } from "util/auth";
 import { markUserStoryReadAutomatic, useStory, useUserStoriesReadAutomatic, useUserStoriesReadAutomaticLast7Days } from "util/db";
+import StoryQuestionsSection from "./StoryQuestionsSection";
 import { SubscribeContentBlocker } from "./SubscribeContentBlocker";
 
 interface StoryProps {
@@ -131,6 +132,7 @@ function Story(props: StoryProps): JSX.Element {
                         {!isAllowedToRead
                             && <SubscribeContentBlocker />}
                         {story?.content.split("\n").map(lineToTranslatedTextRender)}
+                        <StoryQuestionsSection storyId={props.id} />
                         {isAllowedToRead && story?.audioUrl &&
                             <StoryAudioPlayer src={story.audioUrl}
                                 currentTime={currentAudioTime}
@@ -138,6 +140,7 @@ function Story(props: StoryProps): JSX.Element {
                                 onTimeUpdate={setCurrentAudioTime}
                                 onPlayPause={setIsPlayingAudio} />
                         }
+
                     </TargetLanguageContext.Provider>
                 </OnReadUsageEvent.Provider>
             </div>

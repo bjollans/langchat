@@ -13,46 +13,62 @@ export interface StoryQuestionsSectionProps {
 }
 
 export default function StoryQuestionsSection(props: StoryQuestionsSectionProps) {
+    const questionAmount = 1;
     const auth = useAuth();
     const { data: storyQuestions, isSuccess } = useStoryQuestions(props.storyId);
     const { data: storyReadData } = useUserHasReadStory(props.storyId, auth?.user?.id ?? null);
     const hasUserAlreadyReadStory: boolean = storyReadData !== undefined && storyReadData[0] !== undefined;
     const [triedQuestionIndices, setTriedQuestionIndices] = useState<Array<number>>([]);
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [answeredCorrectly, setAnsweredCorrectly] = useState<boolean | null>(null);
-    const [isComplete, setIsComplete] = useState(false);
+    const [currentQuestionIndices, setCurrentQuestionIndices] = useState<Array<number>>(_.range(questionAmount));
+    const [answeredCorrectlyByIndex, setAnsweredCorrectlyByIndex] = useState<Array<boolean>>(_.range(questionAmount).map(() => false));
+    const [attemptedCount, setAttemptedCount] = useState<number>(0);
+    const answeredCorrectlyCount = answeredCorrectlyByIndex.filter((isCorrect) => isCorrect).length;
+    const answeredAllCorrectly = answeredCorrectlyCount >= questionAmount;
 
 
     useEffect(() => {
         newQuestionIndex();
     }, [storyQuestions]);
 
+    useEffect(() => {
+        if (answeredAllCorrectly && auth?.user?.id) {
+            markUserStoryRead(props.storyId, auth?.user?.id);
+        }
+    }, [answeredCorrectlyByIndex]);
+
     const newQuestionIndex = () => {
         if (!isSuccess || storyQuestions == undefined) return;
         if (storyQuestions?.length - triedQuestionIndices.length <= 1) {
             setTriedQuestionIndices([]);
         }
-        const untriedQuestionIndices = _.range(storyQuestions!.length).filter((i: number) => !(i in triedQuestionIndices) && i != currentQuestionIndex);
-        const randomIndex = untriedQuestionIndices[Math.floor(Math.random() * untriedQuestionIndices.length)];
-        setCurrentQuestionIndex(randomIndex);
+        const untriedQuestionIndices = _.range(storyQuestions!.length).filter((i: number) => !(i in triedQuestionIndices) && !(i in currentQuestionIndices));
+        const randomlySelectedIndices = _.sampleSize(untriedQuestionIndices, questionAmount);
+        setCurrentQuestionIndices(randomlySelectedIndices);
     }
 
-    const onAnswer = (answeredCorrectly: boolean) => {
-        setAnsweredCorrectly(answeredCorrectly);
+    const incrementAttemptedCount = () => {
+        setAttemptedCount(attemptedCount + 1);
+    }
+
+    const getOnAnswerFunction = (questionIndex: number) => (answeredCorrectly: boolean) => {
         if (answeredCorrectly) {
-            markUserStoryRead(props.storyId, auth?.user?.id);
+            const newAnsweredCorrectly = [...answeredCorrectlyByIndex];
+            newAnsweredCorrectly[questionIndex] = true;
+            setAnsweredCorrectlyByIndex(newAnsweredCorrectly);
         }
+        incrementAttemptedCount();
     }
 
-    const resetQuestion = () => {
-        setAnsweredCorrectly(null);
-        setTriedQuestionIndices([...triedQuestionIndices, currentQuestionIndex]);
+    const resetQuestions = () => {
+        setAnsweredCorrectlyByIndex(_.range(questionAmount).map(() => false));
+        setAttemptedCount(0);
+        setTriedQuestionIndices([...triedQuestionIndices, ...currentQuestionIndices]);
         newQuestionIndex();
     }
 
     const tryAgainButton = <button
         className="hover:bg-indigo-100 text-gray-900 py-2 px-4 border border-indigo-400 rounded shadow flex items-center text-sm text-indigo-400 tracking-wide"
-        onClick={resetQuestion}
+        onClick={resetQuestions}
     >
         <ArrowPathIcon className="h-5 w-5 mr-2 text-indigo-400" /> Try Again
     </button>;
@@ -60,13 +76,25 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
     return isSuccess && (storyQuestions.length > 0 || hasUserAlreadyReadStory)
         ? (
             <div className="flex items-center border-t justify-center items-baseline gap-x-2 mt-12">
-                <div className="flex-col flex place-items-center sm:rounded-lg lg:px-24 sm:px-12 px-4 py-4">
-                    {(!hasUserAlreadyReadStory || answeredCorrectly) && <StoryQuestion storyQuestionData={storyQuestions[currentQuestionIndex]} onAnswer={onAnswer} />}
-                    {answeredCorrectly != null && !answeredCorrectly && tryAgainButton}
-                    {(answeredCorrectly || hasUserAlreadyReadStory) &&
-                        <CompletedWidget isOpen={answeredCorrectly || hasUserAlreadyReadStory} 
-                        animateSuccess={!!answeredCorrectly}
-                        newWordCount={150} revisedWordCount={200} />}
+                <div className="flex-col flex place-items-center sm:rounded-lg lg:px-24 sm:px-12 px-4 py-4 max-w-2xl">
+                    {(!hasUserAlreadyReadStory || answeredAllCorrectly) &&
+                        (<>
+                            <div className="mt-1 max-w-xl text-md text-gray-500">
+                                <p>Answer this correctly to mark the story as complete!</p>
+                            </div>
+                            {currentQuestionIndices.map((questionIndex: number) => (
+                                <StoryQuestion
+                                    storyQuestionData={storyQuestions[questionIndex]}
+                                    onAnswer={getOnAnswerFunction(questionIndex)}
+                                />
+                            ))}
+                        </>)
+                    }
+                    {attemptedCount > answeredCorrectlyCount && tryAgainButton}
+                    {(answeredAllCorrectly || hasUserAlreadyReadStory) &&
+                        <CompletedWidget isOpen={answeredAllCorrectly || hasUserAlreadyReadStory}
+                            animateSuccess={!!answeredAllCorrectly}
+                            newWordCount={150} revisedWordCount={200} />}
                 </div>
             </div>)
         : <div>...loading</div>

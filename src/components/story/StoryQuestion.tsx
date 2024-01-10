@@ -34,12 +34,9 @@ export default function StoryQuestion(props: StoryQuestionProps) {
     }
 
     return (
-        <div className="px-4 py-5 sm:p-6">
-            <div className="mt-2 max-w-xl text-sm text-gray-500">
-                <p>Answer this question correctly to mark the story as complete!</p>
-            </div>
-            <h3 className="mt-5 text-base font-semibold leading-6 text-gray-900">{props.storyQuestionData.question}</h3>
-            <ul className="mt-2">
+        <div className="px-4 py-5 sm:p-6 w-full">
+            <h3 className="mt-4 text-base font-semibold leading-6 text-gray-900">{props.storyQuestionData.question}</h3>
+            <ul className="mt-4">
                 {getAnswersInRandomOrder(props.storyQuestionData).map((option, i) => {
                     const borderDefault = "divide-indigo-200 ring-inset ring-indigo-200";
                     const borderCorrect = "divide-green-500 ring-inset ring-green-500";

@@ -6,6 +6,7 @@ export interface CompletedWidgetProps {
     isOpen: boolean;
     newWordCount: number;
     revisedWordCount: number;
+    animateSuccess: boolean;
 }
 
 export default function CompletedWidget(props: CompletedWidgetProps) {
@@ -20,7 +21,6 @@ export default function CompletedWidget(props: CompletedWidgetProps) {
             setTimeout(() => {
                 setNewWordCount(i);
                 if (i == props.newWordCount) {
-                    console.log("asdf1");
                     setRowsShown(rowsShown + 1);
                 }
             }, interval * i);
@@ -33,7 +33,6 @@ export default function CompletedWidget(props: CompletedWidgetProps) {
             setTimeout(() => {
                 setRevisedWordCount(i);
                 if (i == props.revisedWordCount) {
-                    console.log("asdf2");
                     setRowsShown(rowsShown + 1);
                 }
             }, interval * i + countUpTime);
@@ -50,9 +49,9 @@ export default function CompletedWidget(props: CompletedWidgetProps) {
 
     return (
         <div className="p-4">
-            <ConfettiExplosion height={200} width={300} duration={1500}
-            colors={['#a3e635', '#22d3ee', '#6366f1', '#fde047']}
-            particleSize={6} particleCount={50} />
+            {props.animateSuccess && <ConfettiExplosion height={200} width={300} duration={1500}
+                colors={['#a3e635', '#22d3ee', '#6366f1', '#fde047']}
+                particleSize={6} particleCount={50} />}
             <div className="flex items-center mb-2 text-lg tracking-tight font-semibold">
                 <TrophyIcon className="h-5 w-5 mr-2 text-indigo-400" />
                 <span>

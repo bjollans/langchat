@@ -17,7 +17,6 @@ export async function getServerSidePropsForStoryIndexPage() {
                 collection.collectionName));
 
     const filterCollectionNames = await getCollectionNames().then((collections: any) => collections.map((collection: any) => collection.name));
-    console.log(filterCollectionNames);
     return {
         props: {
             stories,

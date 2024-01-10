@@ -1,7 +1,7 @@
 import { StoryFilterChangeCalls, StoryListFilterContext } from "context/storyListFilterContext";
 import { StoryText } from "model/translations";
 import { useContext } from "react";
-import StoryReadCheckBox from "./StoryReadCheckbox";
+import StoryCompletedCheckMark from "./StoryCompletedCheckMark";
 
 export interface StoryListElementProps {
     story: StoryText;
@@ -31,7 +31,7 @@ export default function StoryListElement(props: StoryListElementProps) {
                                 </div>
                                 <p className="mt-1 truncate italic text-xs leading-5 text-gray-400">{props.story.content.slice(0, 30) + '....'}</p>
                             </div>
-                            <StoryReadCheckBox storyId={props.story.id} />
+                            <StoryCompletedCheckMark storyId={props.story.id} />
                         </div>
                     </div>
                     <div className="flex mt-4 text-sm leading-5 text-gray-500">

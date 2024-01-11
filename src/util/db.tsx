@@ -10,6 +10,7 @@ import { Conversation, ConversationStatus } from "model/conversation";
 import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
 import { Message, StoryQuestionData, StoryText } from "model/translations";
 import { Vocab } from "model/vocab";
+import { UserReadStatistics } from "util/userStatistics";
 
 // React Query client
 const client = new QueryClient();
@@ -243,6 +244,16 @@ export function userWordsSeen(userId: string) {
         .then(handle),
     { enabled: !!userId }
   );
+}
+
+export async function upsertUserReadStatistics(userId: string, data: UserReadStatistics) {
+  const response = supabase
+    .from("userReadStatistics")
+    .upsert({ userId, ...data })
+    .eq("userId", userId)
+    .then(handle);
+  await client.invalidateQueries(["userWordsSeen", userId]);
+  return response;
 }
 
 /**********************************/

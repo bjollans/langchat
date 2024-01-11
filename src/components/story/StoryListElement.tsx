@@ -1,9 +1,9 @@
 import { StoryFilterChangeCalls, StoryListFilterContext } from "context/storyListFilterContext";
 import { StoryText } from "model/translations";
-import { useContext, useEffect, useState } from "react";
-import StoryCompletedCheckMark from "./StoryCompletedCheckMark";
+import { useContext } from "react";
 import { useAuth } from "util/auth";
-import { useUserHasReadStory, userWordsSeen } from "util/db";
+import { UserStoryStatistics, useUserStoryStatistics } from "util/userStatistics";
+import StoryCompletedCheckMark from "./StoryCompletedCheckMark";
 
 export interface StoryListElementProps {
     story: StoryText;
@@ -11,33 +11,7 @@ export interface StoryListElementProps {
 
 export default function StoryListElement(props: StoryListElementProps) {
     const auth = useAuth();
-    const { data: storyReadData } = useUserHasReadStory(props.story.id, auth?.user?.id ?? null);
-    const storyRead: boolean = storyReadData !== undefined && storyReadData[0];
-    const { data: wordsSeenJson } = userWordsSeen(auth?.user?.uid);
-    const wordsSeen = wordsSeenJson?.length > 0 ? wordsSeenJson[0]?.wordsSeen : [];
-
-    const [storyNewWordsPercentage, setStoryNewWordsPercentage] = useState<number>(0);
-    const [storyNewWordsCount, setStoryNewWordsCount] = useState<number>(0);
-    const [storyKnownWordsCount, setStoryKnownWordsCount] = useState<number>(0);
-
-    useEffect(() => {
-        const wordsSeenSet = new Set(wordsSeen);
-        const wordsInStory = props.story.wordsInStory ?? [];
-        let newWordsCount = 0;
-        let knownWordsCount = 0;
-
-        wordsInStory.forEach((word: string) => {
-            if (wordsSeenSet.has(word)) {
-                knownWordsCount++;
-            } else {
-                newWordsCount++;
-            }
-        });
-
-        setStoryNewWordsCount(newWordsCount);
-        setStoryNewWordsPercentage(Math.floor(100 * newWordsCount / props.story.wordCount));
-        setStoryKnownWordsCount(knownWordsCount);
-    }, [wordsSeen]);
+    const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics(auth?.user?.id ?? null, props.story.id);
 
     const difficultyColor = {
         "easy": "ring-green-600/20 bg-green-50 text-green-700",
@@ -58,12 +32,12 @@ export default function StoryListElement(props: StoryListElementProps) {
                             <div>
                                 <ul className="flex space-x-2">
                                     <li className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">
-                                        Words: 
+                                        Words:
                                         <span className="mt-1 truncate text-xs leading-5 text-gray-400"> {props.story.wordCount}</span>
                                     </li>
-                                    {!storyRead && <li className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">
-                                        New: 
-                                        <span className="mt-1 truncate text-xs leading-5 text-gray-400"> {storyNewWordsCount} ({storyNewWordsPercentage}%)</span>
+                                    {!userStoryStatistics.hasRead && <li className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">
+                                        New:
+                                        <span className="mt-1 truncate text-xs leading-5 text-gray-400"> {userStoryStatistics.newWords} ({userStoryStatistics.newWordsPercentage}%)</span>
                                     </li>}
                                 </ul>
                                 <p className="mt-1 truncate italic text-xs leading-5 text-gray-400">{props.story.content.slice(0, 30) + '....'}</p>

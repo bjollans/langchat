@@ -10,16 +10,16 @@ export interface CompletedWidgetProps {
 }
 
 export default function CompletedWidget(props: CompletedWidgetProps) {
-    const [newWordCount, setNewWordCount] = useState(0);
-    const [revisedWordCount, setRevisedWordCount] = useState(0);
-    const [rowsShown, setRowsShown] = useState(0);
+    const [newWordDisplayCount, setNewWordDisplayCount] = useState(0);
+    const [revisedWordDisplayCount, setRevisedWordDisplayCount] = useState(0);
+    const [rowsShown, setRowsShown] = useState(1);
     const countUpTime = 1000;
 
     const newWordCountAnimation = () => {
         const interval = countUpTime / props.newWordCount;
         for (let i = 0; i <= props.newWordCount; i++) {
             setTimeout(() => {
-                setNewWordCount(i);
+                setNewWordDisplayCount(i);
                 if (i == props.newWordCount) {
                     setRowsShown(rowsShown + 1);
                 }
@@ -31,7 +31,7 @@ export default function CompletedWidget(props: CompletedWidgetProps) {
         const interval = countUpTime / props.revisedWordCount;
         for (let i = 0; i <= props.revisedWordCount; i++) {
             setTimeout(() => {
-                setRevisedWordCount(i);
+                setRevisedWordDisplayCount(i);
                 if (i == props.revisedWordCount) {
                     setRowsShown(rowsShown + 1);
                 }
@@ -40,8 +40,8 @@ export default function CompletedWidget(props: CompletedWidgetProps) {
     }
 
     useEffect(() => {
-        setNewWordCount(0);
-        setRevisedWordCount(0);
+        setNewWordDisplayCount(0);
+        setRevisedWordDisplayCount(0);
         setRowsShown(1);
         newWordCountAnimation();
         revisedWordCountAnimation();
@@ -58,14 +58,12 @@ export default function CompletedWidget(props: CompletedWidgetProps) {
                     Story Completed!
                 </span>
             </div>
-            <div className="tracking-tighter font-bold text-sm grid grid-cols-2 min-w-2/3 gap-x-2 justify-items-start">
-                {/*
-                    {rowsShown >= 1 && <span>New Words:</span>}
-                    {rowsShown >= 1 && <span className="text-indigo-400">{newWordCount}</span>}
-                    {rowsShown >= 2 && <span>Revised Words:</span>}
-                    {rowsShown >= 2 && <span className="text-indigo-400">{revisedWordCount}</span>}
-                */}
-            </div>
+            {props.animateSuccess && <div className="tracking-tighter font-bold text-sm grid grid-cols-2 min-w-2/3 gap-x-2 justify-items-start">
+                {rowsShown >= 1 && <span>New Words:</span>}
+                {rowsShown >= 1 && <span className="text-indigo-400">{newWordDisplayCount}</span>}
+                {rowsShown >= 2 && <span>Revised Words:</span>}
+                {rowsShown >= 2 && <span className="text-indigo-400">{revisedWordDisplayCount}</span>}
+            </div>}
         </div>
     );
 }

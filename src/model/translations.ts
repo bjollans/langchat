@@ -41,6 +41,7 @@ export interface StoryText extends TranslatedText {
     audioSentenceTimes?: Array<AudioSentenceTime>;
     collections?: Array<string>;
     difficulty: string;
+    wordsInStory?: Array<string>;
 }
 
 export interface StoryToCollection {

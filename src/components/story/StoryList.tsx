@@ -45,7 +45,6 @@ export default function StoryList(props: StoryListProps) {
 
     return (
         <>
-            <Meta />
             <StoryListFilterContext.Provider value={storyFilterChangeCalls}>
                 <StoryFilters filters={filters} />
                 <div className="flex flex-col">

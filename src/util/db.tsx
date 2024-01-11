@@ -127,10 +127,10 @@ export function useStoriesOrderedByCustom(property: string, ascending: boolean) 
 
 export function getStoriesOrderedByCustom(property: string, ascending: boolean) {
   return supabase
-      .from("stories")
-      .select('title, id, difficulty, visible, wordCount, content, previewImageUrl, storiesToCollections ( collectionName )')
-      .order(property, { ascending })
-      .then(handle);
+    .from("stories")
+    .select('title, id, difficulty, visible, wordCount, content, previewImageUrl, storiesToCollections ( collectionName ), wordsInStory')
+    .order(property, { ascending })
+    .then(handle);
 }
 
 export function useStory(storyId: string): UseQueryResult<StoryText> {
@@ -146,6 +146,42 @@ export function useStory(storyId: string): UseQueryResult<StoryText> {
     { enabled: !!storyId }
   );
 }
+
+export function useStoryCollections(storyId: string): UseQueryResult<Array<string>> {
+  return useQuery(
+    ["storyCollections", { storyId }],
+    () =>
+      supabase
+        .from("storiesToCollections")
+        .select("collectionName")
+        .eq("storyId", storyId)
+        .then(handle),
+    { enabled: !!storyId }
+  );
+}
+
+export function getStoryCollections(storyIds: Array<string>) {
+  return supabase
+    .from("storiesToCollections")
+    .select()
+    .in("storyId", storyIds)
+    .then(handle);
+}
+
+export function getCollectionNames() {
+  return supabase
+    .from("collections")
+    .select('name')
+    .then(handle);
+}
+
+export function getAvailableStoryDifficultyLevels() {
+  return supabase.rpc("get_available_story_difficulty_levels").then(handle);
+}
+
+/*************************/
+/**** User Statistics ****/
+/*************************/
 
 export function useUserHasReadStory(storyId: string, userId: string): UseQueryResult<Array<boolean>> {
   return useQuery(
@@ -196,38 +232,18 @@ export function unmarkUserStoryRead(storyId: string, userId: string) {
   return response;
 }
 
-export function useStoryCollections(storyId: string): UseQueryResult<Array<string>> {
+export function userWordsSeen(userId: string) {
   return useQuery(
-    ["storyCollections", { storyId }],
+    ["userWordsSeen", { userId }],
     () =>
       supabase
-        .from("storiesToCollections")
-        .select("collectionName")
-        .eq("storyId", storyId)
+        .from("userReadStatistics")
+        .select("wordsSeen")
+        .eq("userId", userId)
         .then(handle),
-    { enabled: !!storyId }
+    { enabled: !!userId }
   );
 }
-
-export function getStoryCollections(storyIds: Array<string>) {
-  return supabase
-        .from("storiesToCollections")
-        .select()
-        .in("storyId", storyIds)
-        .then(handle);
-}
-
-export function getCollectionNames() {
-  return supabase
-        .from("collections")
-        .select('name')
-        .then(handle);
-}
-
-export function getAvailableStoryDifficultyLevels() {
-  return supabase.rpc("get_available_story_difficulty_levels").then(handle);
-}
-
 
 /**********************************/
 /**** STORIES Automatic Marked ****/
@@ -262,8 +278,8 @@ export function useUserStoriesReadAutomaticLast7Days(userId: string): UseQueryRe
 
 export function markUserStoryReadAutomatic(storyId: string, userId: string) {
   client.setQueryData(["userStoriesReadAutomatic", { storyId, userId }], [true]);
-  client.setQueryData(["userStoriesReadAutomaticLast7Days", { userId }], (oldData: any) => oldData ? [...oldData, {storyId}] : [{storyId}]);
-  client.setQueryData(["userStoriesReadAutomatic", { userId }], (oldData: any) => oldData ? [...oldData, {storyId}] : [{storyId}]);
+  client.setQueryData(["userStoriesReadAutomaticLast7Days", { userId }], (oldData: any) => oldData ? [...oldData, { storyId }] : [{ storyId }]);
+  client.setQueryData(["userStoriesReadAutomatic", { userId }], (oldData: any) => oldData ? [...oldData, { storyId }] : [{ storyId }]);
   const response = supabase
     .from("userStoriesReadAutomatic")
     .insert([{ storyId, userId }])

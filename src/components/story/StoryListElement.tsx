@@ -1,13 +1,44 @@
 import { StoryFilterChangeCalls, StoryListFilterContext } from "context/storyListFilterContext";
 import { StoryText } from "model/translations";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import StoryCompletedCheckMark from "./StoryCompletedCheckMark";
+import { useAuth } from "util/auth";
+import { useUserHasReadStory, userWordsSeen } from "util/db";
 
 export interface StoryListElementProps {
     story: StoryText;
 }
 
 export default function StoryListElement(props: StoryListElementProps) {
+    const auth = useAuth();
+    const { data: storyReadData } = useUserHasReadStory(props.story.id, auth?.user?.id ?? null);
+    const storyRead: boolean = storyReadData !== undefined && storyReadData[0];
+    const { data: wordsSeenJson } = userWordsSeen(auth?.user?.uid);
+    const wordsSeen = wordsSeenJson?.length > 0 ? wordsSeenJson[0]?.wordsSeen : [];
+
+    const [storyNewWordsPercentage, setStoryNewWordsPercentage] = useState<number>(0);
+    const [storyNewWordsCount, setStoryNewWordsCount] = useState<number>(0);
+    const [storyKnownWordsCount, setStoryKnownWordsCount] = useState<number>(0);
+
+    useEffect(() => {
+        const wordsSeenSet = new Set(wordsSeen);
+        const wordsInStory = props.story.wordsInStory ?? [];
+        let newWordsCount = 0;
+        let knownWordsCount = 0;
+
+        wordsInStory.forEach((word: string) => {
+            if (wordsSeenSet.has(word)) {
+                knownWordsCount++;
+            } else {
+                newWordsCount++;
+            }
+        });
+
+        setStoryNewWordsCount(newWordsCount);
+        setStoryNewWordsPercentage(Math.floor(100 * newWordsCount / props.story.wordCount));
+        setStoryKnownWordsCount(knownWordsCount);
+    }, [wordsSeen]);
+
     const difficultyColor = {
         "easy": "ring-green-600/20 bg-green-50 text-green-700",
         "intermediate": "ring-blue-700/10 bg-blue-50 text-blue-700",
@@ -25,10 +56,16 @@ export default function StoryListElement(props: StoryListElementProps) {
                         <p className="text-lg font-semibold leading-6 text-gray-900">{props.story.title}</p>
                         <div className="sm:flex items-end justify-between gap-x-8">
                             <div>
-                                <div className="flex">
-                                    <p className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">Words: </p>
-                                    <p className="mt-1 truncate text-xs leading-5 text-gray-400">{props.story.wordCount}</p>
-                                </div>
+                                <ul className="flex space-x-2">
+                                    <li className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">
+                                        Words: 
+                                        <span className="mt-1 truncate text-xs leading-5 text-gray-400"> {props.story.wordCount}</span>
+                                    </li>
+                                    {!storyRead && <li className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">
+                                        New: 
+                                        <span className="mt-1 truncate text-xs leading-5 text-gray-400"> {storyNewWordsCount} ({storyNewWordsPercentage}%)</span>
+                                    </li>}
+                                </ul>
                                 <p className="mt-1 truncate italic text-xs leading-5 text-gray-400">{props.story.content.slice(0, 30) + '....'}</p>
                             </div>
                             <StoryCompletedCheckMark storyId={props.story.id} />

@@ -1,5 +1,6 @@
 import Meta from "components/Meta";
 import StoryList, { StoryListProps } from "components/story/StoryList";
+import UserStatistics from "components/user/UserStatistics";
 import { StoryText, StoryToCollection } from "model/translations";
 import { useRouter } from "next/router";
 import posthog from "posthog-js";
@@ -43,8 +44,9 @@ function StoryIndexPage(props: StoryListProps) {
     return (
         <>
             <Meta title="Hindi Mini Stories" />
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-3xl">
+                    <UserStatistics />
                     {StoryList(props)}
                 </div>
             </div>

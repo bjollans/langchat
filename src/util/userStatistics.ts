@@ -14,7 +14,6 @@ export interface UserStoryStatistics {
     knownWordsPercentage: number,
     userWordsSeen: string[],
     wordsInStory: string[],
-    userWordsSeenWithWordsInStory: string[],
 }
 
 export function useUserStoryStatistics(userId: string, storyId: string): UserStoryStatistics {
@@ -30,7 +29,6 @@ export function useUserStoryStatistics(userId: string, storyId: string): UserSto
         knownWordsPercentage: 0,
         userWordsSeen: [],
         wordsInStory: [],
-        userWordsSeenWithWordsInStory: [],
     });
 
     useEffect(() => {
@@ -39,8 +37,6 @@ export function useUserStoryStatistics(userId: string, storyId: string): UserSto
         const hasUserAlreadyReadStory: boolean = storyReadData !== undefined && storyReadData[0] !== undefined;
         const wordsSeenSet = new Set<string>(wordsSeenJson[0].wordsSeen);
         const wordsInStory = story!.wordsInStory!;
-        const wordsSeenWithWordsInStory = new Set<string>(wordsSeenSet);
-        wordsInStory.forEach((word: string) => wordsSeenWithWordsInStory.add(word));
 
 
         const ret: UserStoryStatistics = {
@@ -51,7 +47,6 @@ export function useUserStoryStatistics(userId: string, storyId: string): UserSto
             knownWordsPercentage: 0,
             userWordsSeen: wordsSeenJson[0].wordsSeen,
             wordsInStory: wordsInStory,
-            userWordsSeenWithWordsInStory: Array.from(wordsSeenWithWordsInStory),
         };
 
         wordsInStory.forEach((word: string) => {
@@ -76,8 +71,11 @@ export function useUserStoryStatistics(userId: string, storyId: string): UserSto
 export function useUpdatedUserReadStatistics(userId: string, storyId: string) : UserReadStatistics {
     const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics(userId, storyId);
 
+    const wordsSeenWithWordsInStory = new Set<string>(userStoryStatistics.userWordsSeen);
+    userStoryStatistics.wordsInStory.forEach((word: string) => wordsSeenWithWordsInStory.add(word));
+
     return {
-        wordsSeen: userStoryStatistics.userWordsSeenWithWordsInStory,
+        wordsSeen: Array.from(wordsSeenWithWordsInStory),
         lastUpdatedAt: new Date(),
     }
 }

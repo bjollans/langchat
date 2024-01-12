@@ -1,5 +1,6 @@
 import Analytics from "analytics";
 import mixpanelPlugin from "@analytics/mixpanel";
+import googleTagManager from '@analytics/google-tag-manager'
 import Router from "next/router";
 
 // Initialize analytics and plugins
@@ -10,6 +11,9 @@ const analytics = Analytics({
     // Instructions: https://divjoy.com/docs/mixpanel
     mixpanelPlugin({
       token: process.env.NEXT_PUBLIC_MIXPANEL_TOKEN,
+    }),
+    googleTagManager({
+      containerId: 'G-60TGLK5P76'
     }),
   ],
 });

@@ -1,8 +1,7 @@
-import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Menu, Popover, Transition } from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { FunnelIcon } from '@heroicons/react/24/solid'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { XMarkIcon } from '@heroicons/react/24/outline'
+import { Fragment, useState } from 'react'
 
 export interface Filter {
     id: string;
@@ -10,6 +9,13 @@ export interface Filter {
     activeValues: string[];
     setActiveValues: (v: string[]) => void;
     options: FilterOption[];
+}
+
+export interface BooleanFilter {
+    id: string;
+    name: string;
+    activeValue: boolean;
+    setActiveValue: (v: boolean) => void;
 }
 
 export interface FilterOption {
@@ -23,6 +29,7 @@ function classNames(...classes) {
 
 export interface StoryFiltersProps {
     filters: Array<Filter>;
+    booleanFilters: Array<BooleanFilter>;
 }
 
 export default function StoryFiters(props: StoryFiltersProps) {
@@ -72,13 +79,30 @@ export default function StoryFiters(props: StoryFiltersProps) {
 
                                 {/* Filters */}
                                 <form className="mt-4">
-                                    {props.filters.map((section) => (
-                                        <Disclosure as="div" key={section.name} className="border-t border-gray-200 px-4 py-6">
+                                    {props.booleanFilters.map((filter) => (
+                                        <div key={filter.name} className="border-t border-gray-200 px-4 py-4 flex items-center justify-between">
+                                            <div className="flex items-center">
+                                                <h3 className="text-sm font-medium text-gray-900">{filter.name}</h3>
+                                            </div>
+                                            <div className="ml-4 flex-shrink-0">
+                                                <input
+                                                    id={`filter-mobile-${filter.id}`}
+                                                    name={`${filter.id}[]`}
+                                                    type="checkbox"
+                                                    defaultChecked={filter.activeValue}
+                                                    onChange={(e) => filter.setActiveValue(e.target.checked)}
+                                                    className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
+                                                />
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {props.filters.map((filter) => (
+                                        <Disclosure as="div" key={filter.name} className="border-t border-gray-200 px-4 py-6">
                                             {({ open }) => (
                                                 <>
                                                     <h3 className="-mx-2 -my-3 flow-root">
                                                         <Disclosure.Button className="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400">
-                                                            <span className="font-medium text-gray-900">{section.name}</span>
+                                                            <span className="font-medium text-gray-900">{filter.name}</span>
                                                             <span className="ml-6 flex items-center">
                                                                 <ChevronDownIcon
                                                                     className={classNames(open ? '-rotate-180' : 'rotate-0', 'h-5 w-5 transform')}
@@ -89,25 +113,25 @@ export default function StoryFiters(props: StoryFiltersProps) {
                                                     </h3>
                                                     <Disclosure.Panel className="pt-6">
                                                         <div className="space-y-6">
-                                                            {section.options.map((option, optionIdx) => (
+                                                            {filter.options.map((option, optionIdx) => (
                                                                 <div key={option.value} className="flex items-center">
                                                                     <input
-                                                                        id={`filter-mobile-${section.id}-${optionIdx}`}
-                                                                        name={`${section.id}[]`}
+                                                                        id={`filter-mobile-${filter.id}-${optionIdx}`}
+                                                                        name={`${filter.id}[]`}
                                                                         defaultValue={option.value}
                                                                         type="checkbox"
-                                                                        defaultChecked={section.activeValues.includes(option.value)}
+                                                                        defaultChecked={filter.activeValues.includes(option.value)}
                                                                         onChange={(e) => {
                                                                             if (e.target.checked) {
-                                                                                section.setActiveValues([...section.activeValues, option.value]);
+                                                                                filter.setActiveValues([...filter.activeValues, option.value]);
                                                                             } else {
-                                                                                section.setActiveValues(section.activeValues.filter((v) => v != option.value));
+                                                                                filter.setActiveValues(filter.activeValues.filter((v) => v != option.value));
                                                                             }
                                                                         }}
                                                                         className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                                                     />
                                                                     <label
-                                                                        htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
+                                                                        htmlFor={`filter-mobile-${filter.id}-${optionIdx}`}
                                                                         className="ml-3 text-sm text-gray-500"
                                                                     >
                                                                         {option.label}
@@ -128,7 +152,7 @@ export default function StoryFiters(props: StoryFiltersProps) {
             </Transition.Root>
 
             {/* Filters */}
-            <section aria-labelledby="filter-heading my-2">
+            <filter aria-labelledby="filter-heading my-2">
                 <h2 id="filter-heading" className="sr-only">
                     Active Filters
                 </h2>
@@ -193,10 +217,28 @@ export default function StoryFiters(props: StoryFiltersProps) {
                         <div className="hidden sm:block">
                             <div className="flow-root">
                                 <Popover.Group className="-mx-4 flex items-center divide-x divide-gray-200">
-                                    {props.filters.map((section, sectionIdx) => (
-                                        <Popover key={section.name} className="relative inline-block px-4 text-left">
+                                    {props.booleanFilters.map((filter) => (
+                                        <div>
+                                            <input
+                                                id={`filter-${filter.id}`}
+                                                name={`${filter.id}[]`}
+                                                type="checkbox"
+                                                defaultChecked={filter.activeValue}
+                                                onChange={(e) => filter.setActiveValue(e.target.checked)}
+                                                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                            />
+                                            <label
+                                                htmlFor={`filter-${filter.id}`}
+                                                className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900"
+                                            >
+                                                {filter.name}
+                                            </label>
+                                        </div>
+                                    ))}
+                                    {props.filters.map((filter, filterIdx) => (
+                                        <Popover key={filter.name} className="relative inline-block px-4 text-left">
                                             <Popover.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                                                <span>{section.name}</span>
+                                                <span>{filter.name}</span>
                                                 <ChevronDownIcon
                                                     className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                                                     aria-hidden="true"
@@ -214,25 +256,25 @@ export default function StoryFiters(props: StoryFiltersProps) {
                                             >
                                                 <Popover.Panel className="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
                                                     <form className="space-y-4">
-                                                        {section.options.map((option, optionIdx) => (
+                                                        {filter.options.map((option, optionIdx) => (
                                                             <div key={option.value} className="flex items-center">
                                                                 <input
-                                                                    id={`filter-${section.id}-${optionIdx}`}
-                                                                    name={`${section.id}[]`}
+                                                                    id={`filter-${filter.id}-${optionIdx}`}
+                                                                    name={`${filter.id}[]`}
                                                                     defaultValue={option.value}
                                                                     type="checkbox"
-                                                                    defaultChecked={section.activeValues.includes(option.value)}
+                                                                    defaultChecked={filter.activeValues.includes(option.value)}
                                                                     onChange={(e) => {
                                                                         if (e.target.checked) {
-                                                                            section.setActiveValues([...section.activeValues, option.value]);
+                                                                            filter.setActiveValues([...filter.activeValues, option.value]);
                                                                         } else {
-                                                                            section.setActiveValues(section.activeValues.filter((v) => v != option.value));
+                                                                            filter.setActiveValues(filter.activeValues.filter((v) => v != option.value));
                                                                         }
                                                                     }}
                                                                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                                                 />
                                                                 <label
-                                                                    htmlFor={`filter-${section.id}-${optionIdx}`}
+                                                                    htmlFor={`filter-${filter.id}-${optionIdx}`}
                                                                     className="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900"
                                                                 >
                                                                     {option.label}
@@ -249,7 +291,7 @@ export default function StoryFiters(props: StoryFiltersProps) {
                         </div>
                     </div>
                 </div>
-            </section>
+            </filter>
         </div>
     )
 }

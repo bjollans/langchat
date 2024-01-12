@@ -198,7 +198,7 @@ export function useUserHasReadStory(storyId: string, userId: string): UseQueryRe
   );
 }
 
-export function useUserStoriesRead(userId: string): UseQueryResult<Array<string>> {
+export function useUserStoriesRead(userId: string) {
   return useQuery(
     ["userStoriesRead", { userId }],
     () =>

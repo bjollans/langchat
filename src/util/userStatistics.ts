@@ -35,7 +35,7 @@ export function useUserStoryStatistics(userId: string, storyId: string): UserSto
         if (!wordsSeenJsonLoaded || !storyLoaded || !storyReadDataLoaded) return;
 
         const hasUserAlreadyReadStory: boolean = storyReadData !== undefined && storyReadData[0] !== undefined;
-        const wordsSeenSet = new Set<string>(wordsSeenJson ? wordsSeenJson[0].wordsSeen : []);
+        const wordsSeenSet = new Set<string>(wordsSeenJson && wordsSeenJson[0] ? wordsSeenJson[0].wordsSeen : []);
         const wordsInStory = story!.wordsInStory!;
 
 
@@ -45,7 +45,7 @@ export function useUserStoryStatistics(userId: string, storyId: string): UserSto
             newWordsPercentage: 0,
             knownWords: 0,
             knownWordsPercentage: 0,
-            userWordsSeen: wordsSeenJson ? wordsSeenJson[0].wordsSeen : [],
+            userWordsSeen: wordsSeenJson && wordsSeenJson[0] ? wordsSeenJson[0].wordsSeen : [],
             wordsInStory: wordsInStory,
         };
 

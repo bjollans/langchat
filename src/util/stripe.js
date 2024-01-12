@@ -16,8 +16,8 @@ export async function redirectToCheckout(planId) {
   // Create a checkout session
   const session = await apiRequest("stripe-create-checkout-session", "POST", {
     priceId: getStripePriceId(planId),
-    successUrl: `${window.location.origin}/?paid=true`,
-    cancelUrl: `${window.location.origin}/pricing`,
+    successUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/?paid=true`,
+    cancelUrl: `${window.location.origin}/?canceled=true`,
   });
 
   // Ensure if user clicks browser back button from checkout they go to /pricing

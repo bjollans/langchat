@@ -23,7 +23,7 @@ function AuthSection(props) {
       privacyPolicyPath: "/legal/privacy-policy",
     },
     signin: {
-      title: "Sign in to practice!",
+      title: "Sign In to Start Reading!",
       buttonAction: "Sign in",
       showFooter: true,
       signupAction: "Create an account",

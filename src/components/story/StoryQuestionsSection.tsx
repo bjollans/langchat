@@ -18,7 +18,6 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
     const auth = useAuth();
     const { data: storyQuestions, isSuccess } = useStoryQuestions(props.storyId);
     const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics({userId: auth?.user?.id ?? null, storyId: props.storyId, isInSingleStoryContext: true});
-    console.log(userStoryStatistics)
     const updatedUserReadStatistics: UserReadStatistics = useUpdatedUserReadStatistics(auth?.user?.id ?? null, props.storyId);
 
     const [triedQuestionIndices, setTriedQuestionIndices] = useState<Array<number>>([]);

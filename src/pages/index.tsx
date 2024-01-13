@@ -1,7 +1,7 @@
-import StoryIndexPage, { getServerSidePropsForStoryIndexPage } from "./story/hi";
+import StoryIndexPage, { getPropsForStoryIndexPage } from "./story/hi";
 
-export async function getServerSideProps() {
-  return getServerSidePropsForStoryIndexPage();
+export async function getStaticProps() {
+  return getPropsForStoryIndexPage();
 }
 
 export default StoryIndexPage;

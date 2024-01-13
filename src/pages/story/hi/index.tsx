@@ -7,7 +7,7 @@ import posthog from "posthog-js";
 import { useEffect } from "react";
 import { getAvailableStoryDifficultyLevels, getCollectionNames, getStoriesOrderedByCustom, getStoryCollections } from "util/db";
 
-export async function getServerSidePropsForStoryIndexPage() {
+export async function getPropsForStoryIndexPage() {
     const stories = await getStoriesOrderedByCustom('title', false);
     const filterDifficulties = await getAvailableStoryDifficultyLevels();
     const storyIds = stories.map((story: any) => story.id);
@@ -27,8 +27,8 @@ export async function getServerSidePropsForStoryIndexPage() {
     };
 }
 
-export async function getServerSideProps() {
-    return getServerSidePropsForStoryIndexPage();
+export async function getStaticProps() {
+    return getPropsForStoryIndexPage();
 }
 
 function StoryIndexPage(props: StoryListProps) {

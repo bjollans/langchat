@@ -11,7 +11,7 @@ export interface StoryListElementProps {
 
 export default function StoryListElement(props: StoryListElementProps) {
     const auth = useAuth();
-    const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics(auth?.user?.id ?? null, props.story.id);
+    const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics({userId: auth?.user?.id ?? null, storyId: props.story.id});
 
     const difficultyColor = {
         "easy": "ring-green-600/20 bg-green-50 text-green-700",

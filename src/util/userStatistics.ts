@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useStory, useUserHasReadStory, userWordsSeen } from "./db";
+import { useStories, useStory, useUserHasReadStory, useUserStoriesRead, userWordsSeen } from "./db";
 
 export interface UserReadStatistics {
     wordsSeen: string[];
@@ -16,10 +16,14 @@ export interface UserStoryStatistics {
     wordsInStory: string[],
 }
 
-export function useUserStoryStatistics(userId: string, storyId: string): UserStoryStatistics {
+// isInSingleStoryContext => If I am loading the same thing for many stories in one page, 
+//                           I want to just make one bulk request for all stories
+//                           This makes the code slightly less readable, but a lot more performant.
+export function useUserStoryStatistics({ userId, storyId, isInSingleStoryContext = false }): UserStoryStatistics {
     const { data: wordsSeenJson, isSuccess: wordsSeenJsonLoaded } = userWordsSeen(userId);
-    const { data: storyReadData, isSuccess: storyReadDataLoaded } = useUserHasReadStory(storyId, userId);
-    const { data: story, isSuccess: storyLoaded } = useStory(storyId);
+    const { data: storyReadData, isSuccess: storyReadDataLoaded } = isInSingleStoryContext ? useUserHasReadStory(storyId, userId) : useUserStoriesRead(userId);
+    const { data: storyData, isSuccess: storyLoaded } = isInSingleStoryContext ? useStory(storyId) : useStories();
+    const story = isInSingleStoryContext ? storyData : storyData?.find((story) => story.id === storyId);
 
     const [userStoryStatistics, setUserStoryStatistics] = useState<UserStoryStatistics>({
         hasRead: false,
@@ -34,7 +38,7 @@ export function useUserStoryStatistics(userId: string, storyId: string): UserSto
     useEffect(() => {
         if (!wordsSeenJsonLoaded || !storyLoaded || !storyReadDataLoaded) return;
 
-        const hasUserAlreadyReadStory: boolean = storyReadData !== undefined && storyReadData[0] !== undefined;
+        const hasUserAlreadyReadStory: boolean = storyReadData.filter((storyReadData) => storyReadData.storyId === storyId).length > 0;
         const wordsSeenSet = new Set<string>(wordsSeenJson && wordsSeenJson[0] ? wordsSeenJson[0].wordsSeen : []);
         const wordsInStory = story!.wordsInStory!;
 
@@ -68,8 +72,8 @@ export function useUserStoryStatistics(userId: string, storyId: string): UserSto
 
 
 
-export function useUpdatedUserReadStatistics(userId: string, storyId: string) : UserReadStatistics {
-    const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics(userId, storyId);
+export function useUpdatedUserReadStatistics(userId: string, storyId: string): UserReadStatistics {
+    const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics({ userId, storyId, isInSingleStoryContext: true });
 
     const wordsSeenWithWordsInStory = new Set<string>(userStoryStatistics.userWordsSeen);
     userStoryStatistics.wordsInStory.forEach((word: string) => wordsSeenWithWordsInStory.add(word));

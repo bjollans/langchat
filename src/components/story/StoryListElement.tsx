@@ -11,7 +11,10 @@ export interface StoryListElementProps {
 
 export default function StoryListElement(props: StoryListElementProps) {
     const auth = useAuth();
-    const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics({userId: auth?.user?.id ?? null, storyId: props.story.id});
+    const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics({ userId: auth?.user?.id ?? null, storyId: props.story.id });
+    const ageMs = new Date().getTime() - (new Date(props.story.createdAt).getTime());
+    const ageDays = Math.floor(ageMs / (1000 * 60 * 60 * 24));
+    const isNew: boolean = ageDays < 7;
 
     const difficultyColor = {
         "easy": "ring-green-600/20 bg-green-50 text-green-700",
@@ -27,7 +30,12 @@ export default function StoryListElement(props: StoryListElementProps) {
                 <img className="w-24 flex-none rounded-full bg-gray-50" src={props.story.previewImageUrl} alt="" />
                 <div>
                     <div className="min-w-0">
-                        <p className="text-lg font-semibold leading-6 text-gray-900">{props.story.title}</p>
+                        <div className="flex space-x-2">
+                            <p className="text-lg font-semibold leading-6 text-gray-900">{props.story.title}</p>
+                            {isNew && <span className="inline-flex items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                New
+                            </span>}
+                        </div>
                         <div className="sm:flex items-end justify-between gap-x-8">
                             <div>
                                 <ul className="flex space-x-2">

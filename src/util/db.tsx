@@ -129,7 +129,7 @@ export function useStoriesOrderedByCustom(property: string, ascending: boolean) 
 export function getStoriesOrderedByCustom(property: string, ascending: boolean) {
   return supabase
     .from("stories")
-    .select('title, id, difficulty, visible, wordCount, content, previewImageUrl, storiesToCollections ( collectionName ), wordsInStory')
+    .select('title, id, difficulty, visible, wordCount, content, previewImageUrl, storiesToCollections ( collectionName ), wordsInStory, createdAt')
     .order(property, { ascending })
     .then(handle);
 }

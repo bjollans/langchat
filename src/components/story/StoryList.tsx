@@ -45,7 +45,7 @@ export default function StoryList(props: StoryListProps) {
         },
         {
             id: 'collection',
-            name: 'Tags',
+            name: 'Topic',
             activeValues: collectionNames,
             setActiveValues: setCollectionNames,
             options:

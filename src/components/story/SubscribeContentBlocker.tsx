@@ -2,8 +2,8 @@ import PricingSection from "components/PricingSection";
 import posthog from "posthog-js";
 
 export function SubscribeContentBlocker() {
-    const earlyMonetization = posthog.getFeatureFlag('monetization_after_2_stories') === 'test';
-    const freeStoriesPerWeek = earlyMonetization ? 2 : 3;
+    const lateMonetization = posthog.getFeatureFlag('monetization_after_2_stories') === 'test';
+    const freeStoriesPerWeek = lateMonetization ? 2 : 1;
     return (
         <div className="flex justify-center absolute w-full z-10 h-full backdrop-blur-sm bg-white bg-opacity-60">
             <div className="rounded-lg p-4 mx-auto">

@@ -28,6 +28,11 @@ function Story(props: StoryProps): JSX.Element {
     const [isStoryRead, setIsStoryRead] = useState(false);
 
     const incrementUsageEventsCount = () => {
+        posthog.capture('read_usage_event', {
+            story_id: props.id,
+            story_title: story?.title,
+            story_target_language: story?.targetLanguage,
+        });
         setUsageEventsCount(usageEventsCount + 1);
     };
 

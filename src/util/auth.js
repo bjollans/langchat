@@ -8,7 +8,7 @@ import React, {
 import queryString from "query-string";
 import supabase from "./supabase";
 import { useUser, updateUser } from "./db";
-import router from "next/router";
+import router, { useRouter } from "next/router";
 import PageLoader from "../components/PageLoader";
 import { getFriendlyPlanId } from "./prices";
 import analytics from "./analytics";
@@ -87,7 +87,7 @@ function useAuthProvider() {
         .signInWithOAuth({
           provider: name,
           options: {
-            redirectTo: `${window.location.origin}`,
+            redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}${router.query?.from ?? ""}`,
           },
         })
         .then(handleError)
@@ -293,10 +293,10 @@ export const requireAuth = (Component) => {
 
     useEffect(() => {
       // Redirect if not signed in
-      if (auth.user === false) {
-        router.replace("/auth/signin");
+      if (auth.user === false && router.isReady) {
+        router.replace(`/auth/signin?from=${router.asPath}`);
       }
-    }, [auth]);
+    }, [auth, router]);
 
     // Show loading indicator
     // We're either loading (user is `null`) or about to redirect from above `useEffect` (user is `false`)

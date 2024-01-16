@@ -2,7 +2,7 @@ import { CheckIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import posthog from "posthog-js";
 
-const subscriptionDetails =
+export const subscriptionDetails =
 {
     href: '/purchase/monthly',
     priceMonthly: '$5',

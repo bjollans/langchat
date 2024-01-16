@@ -1,7 +1,5 @@
-import StoryIndexPage, { getPropsForStoryIndexPage } from "./story/hi";
+import LandingPage from "components/landing/LandingPage";
 
-export async function getStaticProps() {
-  return getPropsForStoryIndexPage();
+export default function Landing() {
+  return LandingPage();
 }
-
-export default StoryIndexPage;

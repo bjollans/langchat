@@ -13,17 +13,23 @@
 
   /* Prevent child elements from shrinking when content */
   /* is taller than the screen (quirk of having flex parent) */
-  #__next > * {
+  #__next>* {
     flex-shrink: 0;
   }
 }
 
 @layer utilities {
-  .section.bg-white + .section.bg-white {
+  .section.bg-white+.section.bg-white {
     border-top: 1px solid #f0f0f0;
   }
+
   .pattern-dots {
     background-image: radial-gradient(currentColor 2px, transparent 2px);
     background-size: calc(10 * 2px) calc(10 * 2px);
   }
+}
+
+.quote {
+  background-color: #f4f4f5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%525252' fill-opacity='0.19' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
 }

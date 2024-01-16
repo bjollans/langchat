@@ -21,7 +21,7 @@ var navigation = [
 ]
 
 const pageTitles = {
-    '/': '🇮🇳 Hindi Reading Practice',
+    '/': '',
     '/story/hi': '🇮🇳 Hindi Reading Practice',
     '/vocab': 'Your Vocabulary',
     '/practice': 'Practice Vocabulary',

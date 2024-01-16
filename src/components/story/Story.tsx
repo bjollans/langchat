@@ -125,7 +125,7 @@ function Story(props: StoryProps): JSX.Element {
                         {story?.targetLanguage == "hi" &&
                             <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
                         }
-                        <img className="h-96 lg:w-1/2 w-full md:w-2/3 mx-auto object-cover rounded-lg shadow-md shadow-black flex-none" src={story?.imageUrl} alt="" />
+                        <img className="h-96 lg:w-2/5 w-full md:w-1/2 sm:w-2/3 mx-auto object-cover rounded-lg shadow-md shadow-black flex-none" src={story?.imageUrl} alt="" />
                         <div className="border-b border-gray-200 pb-5 my-8 flex items-end">
                             <h3 className="mx-6 text-base text-4xl mx-auto font-semibold leading-6 text-gray-900">{story?.title}</h3>
                         </div>

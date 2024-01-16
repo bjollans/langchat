@@ -19,7 +19,6 @@
     "lodash": "^4.17.21",
     "next": "12.2.5",
     "next-sitemap": "^4.2.3",
-    "nextjs-google-analytics-gtm": "^1.1.12",
     "node-fetch": "^3.3.2",
     "postcss": "8.4.31",
     "posthog-js": "^1.89.1",

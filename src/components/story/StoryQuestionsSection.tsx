@@ -1,10 +1,11 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { useAuth } from "util/auth";
-import { markUserStoryRead, upsertUserReadStatistics, useStoryQuestions } from "util/db";
+import { markUserStoryRead, markUserStoryReadAutomatic, upsertUserReadStatistics, useStoryQuestions } from "util/db";
 import { UserReadStatistics, UserStoryStatistics, useUpdatedUserReadStatistics, useUserStoryStatistics } from "util/userStatistics";
 import CompletedWidget from "./CompletedWidget";
 import StoryQuestion from "./StoryQuestion";
+import posthog from "posthog-js";
 var _ = require('lodash');
 
 
@@ -58,6 +59,21 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
             newAnsweredCorrectly[questionIndex] = true;
             setAnsweredCorrectlyByIndex(newAnsweredCorrectly);
             await upsertUserReadStatistics(auth!.user!.id, updatedUserReadStatistics);
+            await markUserStoryReadAutomatic(props.storyId, auth.user?.uid ?? null);
+            posthog.capture('story_read', {
+                story_id: props.storyId
+            });
+            posthog.capture('story_question_answered_correctly', {
+                story_id: props.storyId,
+                story_title: storyQuestions![questionIndex].question,
+                story_target_language: storyQuestions![questionIndex].correctAnswer,
+            });
+        } else {
+            posthog.capture('story_question_answered_incorrectly', {
+                story_id: props.storyId,
+                story_title: storyQuestions![questionIndex].question,
+                story_target_language: storyQuestions![questionIndex].correctAnswer,
+            });
         }
         incrementAttemptedCount();
     }

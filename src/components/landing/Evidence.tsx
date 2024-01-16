@@ -14,12 +14,12 @@ export default function Evidence() {
                         </p>
                     </blockquote>
                     <figcaption className="mt-10">
-                        <div className="mt-4 flex items-center justify-start space-x-2 text-base">
+                        <div className="mt-4 sm:flex items-center justify-start space-x-1 sm:space-x-2 text-base">
                             <a href="https://twitter.com/skrashen" className="font-semibold underline text-gray-900">Stephen Krashen</a>
-                            <svg viewBox="0 0 2 2" width={3} height={3} aria-hidden="true" className="fill-white">
+                            <svg viewBox="0 0 2 2" width={3} height={3} aria-hidden="true" className="fill-blue-900 max-sm:hidden">
                                 <circle cx={1} cy={1} r={1} />
                             </svg>
-                            <div className="text-gray-700 italic">(Educational Researcher)</div>
+                            <span className="text-gray-700 italic">(Educational Researcher)</span>
                         </div>
                     </figcaption>
                 </figure>

@@ -27,6 +27,13 @@ function Story(props: StoryProps): JSX.Element {
     const [isAllowedToRead, setIsAllowedToRead] = useState(true);
     const [isStoryRead, setIsStoryRead] = useState(false);
 
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+                makeStoryRead();
+        }, 3*60_000); // every 1 second
+        return () => clearTimeout(timeoutId); // cleanup
+    }, []);
+
     const incrementUsageEventsCount = () => {
         posthog.capture('read_usage_event', {
             story_id: props.id,
@@ -57,15 +64,19 @@ function Story(props: StoryProps): JSX.Element {
         }
     }, [isAllowedToRead]);
 
+    const makeStoryRead = () => {
+        setIsStoryRead(true);
+        markUserStoryReadAutomatic(props.id, auth.user?.uid ?? null);
+        posthog.capture('story_read', {
+            story_id: props.id,
+            story_title: story?.title,
+            story_target_language: story?.targetLanguage,
+        });
+    }
+
     useEffect(() => {
         if (usageEventsCount >= minReadUsageEvents && !isStoryRead) {
-            setIsStoryRead(true);
-            markUserStoryReadAutomatic(props.id, auth.user?.uid ?? null);
-            posthog.capture('story_read', {
-                story_id: props.id,
-                story_title: story?.title,
-                story_target_language: story?.targetLanguage,
-            });
+            makeStoryRead();
         }
     }, [usageEventsCount]);
 

@@ -293,7 +293,7 @@ export function markUserStoryReadAutomatic(storyId: string, userId: string) {
   client.setQueryData(["userStoriesReadAutomatic", { userId }], (oldData: any) => oldData ? [...oldData, { storyId }] : [{ storyId }]);
   const response = supabase
     .from("userStoriesReadAutomatic")
-    .insert([{ storyId, userId }])
+    .upsert([{ storyId, userId }])
     .then(handle);
   return response;
 }

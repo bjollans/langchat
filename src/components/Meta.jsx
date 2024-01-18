@@ -54,6 +54,7 @@ function Meta(props) {
       <meta name="twitter:card" content="summary_large_image" key="twitter-card" />
       {meta.twitterHandle && <meta name="twitter:site" content={meta.twitterHandle} key="twitter-site" />}
       {meta.domain && meta.image && <meta name="twitter:image" content={`${meta.domain}${meta.image}`} key="twitter-image" />}
+      {meta.noindex === true && <meta name="robots" content="noindex" key="robots-noindex" />}
     </Head>
   );
 }

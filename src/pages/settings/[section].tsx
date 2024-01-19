@@ -9,7 +9,7 @@ function SettingsPage(props) {
 
   return (
     <>
-      <Meta title="Settings" />
+      <Meta title="Settings" noindex={true} />
       <SettingsSection
         size="md"
         bgColor="bg-white"

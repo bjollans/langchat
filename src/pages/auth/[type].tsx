@@ -8,7 +8,7 @@ function AuthPage() {
 
   return (
     <>
-      <Meta/>
+      <Meta noindex={true} />
       <AuthSection
         size="md"
         bgColor="bg-white"

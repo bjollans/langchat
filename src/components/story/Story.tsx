@@ -65,7 +65,12 @@ function Story(props: StoryProps): JSX.Element {
     }, [isAllowedToRead]);
 
     const makeStoryRead = () => {
+        if (isStoryRead) return;
         setIsStoryRead(true);
+
+        const currentStoryAlreadyRead = userStoriesRead?.map(x => x.storyId).includes(props.id);
+        if (currentStoryAlreadyRead) return;
+        
         markUserStoryReadAutomatic(props.id, auth.user?.uid ?? null);
         posthog.capture('story_read', {
             story_id: props.id,

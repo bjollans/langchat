@@ -46,32 +46,32 @@ export default function HowToReadHindi() {
                     <span className="text-xl">You can learn to read Hindi in 2 days. Here’s how.</span>
                     {br}
                     Below are some Hindi letters and their pronunciation. You can tap all letters to hear their sound. Try it out:
-                    <div className={tableClass}>
-                        <LetterTable letterExplanations={letterExamples} />
-                    </div>
+                </p>
+                <div className={tableClass}>
+                    <LetterTable letterExplanations={letterExamples} />
+                </div>
+                <p className={pClass}>
                     The Hindi alphabet is called “Devanagri” and is also used in other languages. Letters represent syllables (or "aksar"). This is a key difference to the Latin alphabet (used in English).
                     {br}
-                    For example: The word “Parrot” has two syllables “Par” and “Rot”, both have 3 letters. In Hindi, Parrot is <LetterAudioElement letter="तोता"/> (tota). The two letters “<LetterAudioElement letter="तो"/>” and “<LetterAudioElement letter="ता"/>” are also each one syllable.
+                    For example: The word “Parrot” has two syllables “Par” and “Rot”, both have 3 letters. In Hindi, Parrot is <LetterAudioElement letter="तोता" /> (tota). The two letters “<LetterAudioElement letter="तो" />” and “<LetterAudioElement letter="ता" />” are also each one syllable.
                     {br}
-                    Devanagri has so called "Matras", which change the pronounciation of letters. Below you can see how some of them change the pronounciation of the letter "<LetterAudioElement letter="क"/>" (ka).
-                    {br}
-                    <div className={tableClass}>
-                        <LetterTable letterExplanations={matraExamples} />
-                    </div>
-                    That was only a short overview. To learn the complete Hindi alphabet, I strongly recommend following these steps:
-                    {br}
+                    Devanagri has so called "Matras", which change the pronounciation of letters. Below you can see how some of them change the pronounciation of the letter "<LetterAudioElement letter="क" />" (ka).
                 </p>
+                <div className={tableClass}>
+                    <LetterTable letterExplanations={matraExamples} />
+                </div>
                 <p className={pClass}>
-                    <ul className="list-decimal pl-6">
-                        <li>(1 - 2 days): Memorise the Hindi alphabet. Go <a href="/articles/hindi-alphabet" className="underline">here</a> for this lesson.</li>
-
-                        <li>(0 - 1 days): Memorise the Matras. Go <a href="/articles/hindi-matras" className="underline">here</a> for this lesson.</li>
-
-                        <li>(30 minutes): Combine letters. Go <a href="/articles/hindi-pronunciation" className="underline">here</a> for this lesson.</li>
-
-                        <li>Practice, Practice, Practice: Without practice you will forget Devanagri. Use our easy practice stories <a href="/story/hi" className="underline">here</a>.</li>
-                    </ul>
+                    That was only a short overview. To learn the complete Hindi alphabet, I strongly recommend following these steps:
                 </p>
+                <ul className={"list-decimal pl-6 " + pClass}>
+                    <li>(1 - 2 days): Memorise the Hindi alphabet. Go <a href="/articles/hindi-alphabet" className="underline">here</a> for this lesson.</li>
+
+                    <li>(0 - 1 days): Memorise the Matras. Go <a href="/articles/hindi-matras" className="underline">here</a> for this lesson.</li>
+
+                    <li>(30 minutes): Combine letters. Go <a href="/articles/hindi-pronunciation" className="underline">here</a> for this lesson.</li>
+
+                    <li>Practice, Practice, Practice: Without practice you will forget Devanagri. Use our easy practice stories <a href="/story/hi" className="underline">here</a>.</li>
+                </ul>
                 <p className={pClass}>
                     For a refresher, you can always check out our Hindi alphabet chart:
                     {br}

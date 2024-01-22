@@ -13,7 +13,7 @@ export interface LetterExplanation {
     sound: string;
     annotation?: string;
     soundInEnglish?: SoundInEnglish;
-    note?: string;
+    note?: string | JSX.Element;
 }
 
 

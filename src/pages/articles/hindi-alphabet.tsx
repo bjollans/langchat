@@ -26,7 +26,7 @@ export default function HowToReadHindi() {
 
     const consonants2 = [{ sign: "च", sound: "cha", soundInEnglish: { start: "", sound: "ch", end: "at" } },
     { sign: "छ", sound: "chha" },
-    { sign: "ज", sound: "ja", soundInEnglish: { start: "", sound: "j", end: "ump" }, note: <span>If you add a dot to the bottom it becomes <LetterAudioElement letter="ज़"/> (za) as in zoo</span> },
+    { sign: "ज", sound: "ja", soundInEnglish: { start: "", sound: "j", end: "ump" }, note: <span>If you add a dot to the bottom it becomes <LetterAudioElement letter="ज़" /> (za) as in zoo</span> },
     { sign: "झ", sound: "jha" },
     { sign: "ञ", sound: "nya", soundInEnglish: { start: "ca", sound: "ny", end: "on" } },];
 
@@ -43,10 +43,10 @@ export default function HowToReadHindi() {
     { sign: "ण", sound: "ṇa" },];
 
     const consonants5 = [{ sign: "ड़", sound: "ṛa" },
-    { sign: "ढ़", sound: "ṛha"},];
+    { sign: "ढ़", sound: "ṛha" },];
 
     const consonants6 = [{ sign: "प", sound: "pa", soundInEnglish: { start: "", sound: "p", end: "ot" } },
-    { sign: "फ", sound: "pha", note: <span>If you add a dot to the bottom (<LetterAudioElement letter="फ़"/>) it becomes a “f” like in “foto”.</span> },
+    { sign: "फ", sound: "pha", note: <span>If you add a dot to the bottom (<LetterAudioElement letter="फ़" />) it becomes a “f” like in “foto”.</span> },
     { sign: "ब", sound: "ba", soundInEnglish: { start: "", sound: "b", end: "at" } },
     { sign: "भ", sound: "bha" },
     { sign: "म", sound: "ma", soundInEnglish: { start: "", sound: "m", end: "other" } },];
@@ -81,20 +81,21 @@ export default function HowToReadHindi() {
                     When memorising letters it helps a lot to write them down yourself. Get a pen and paper.
                     {br}
                     We will start with the vowels (see below). To learn the pronunciation, click the letters to hear them spoken, or read the text below them.
-                    {br}
-                    <div className={tableClass}><LetterTable letterExplanations={vowels} /></div>
-                    {br}
+                </p>
+                <div className={tableClass}><LetterTable letterExplanations={vowels} /></div>
+                <p className={pClass}>
                     Copy the letters to your paper. Then try to write them from memory. Only move on when you can write them all by heart and remember their pronunciation.
                     {br}
                     Memorizing the vowels should take 10-20 minutes.
                     {br}
                     Let’s move on to the first row of the consonants.
                     Again, write all of these with a pen on your paper. When you know them by heart, move on to the next line. Remembering this line should take another 5-10 minutes.
-                    {br}
-                    <div className={tableClass}><LetterTable letterExplanations={consonants1} /></div>
+                </p>
+                <div className={tableClass}><LetterTable letterExplanations={consonants1} /></div>
+                <p className={pClass}>
                     Congratulations, you know one third of the alphabet! Keep it up.
                     {br}
-                    In Hindi most letters have a version with and without an 'h' sound (like <LetterAudioElement letter="क"/> and <LetterAudioElement letter="ख"/>). Most of the time there are no English words with an equivalent sound. Instead, tap the letter to hear the pronunciation.
+                    In Hindi most letters have a version with and without an 'h' sound (like <LetterAudioElement letter="क" /> and <LetterAudioElement letter="ख" />). Most of the time there are no English words with an equivalent sound. Instead, tap the letter to hear the pronunciation.
                     {br}
                     Let's move on to the next line. By now you know the drill, copy the row below until you can write it by heart.
                 </p>
@@ -116,9 +117,9 @@ export default function HowToReadHindi() {
                     When you are done. Revise some previous letters. Write down the letters for "ka", "kha", "ga", "gha", "cha", "chha", "ja" and "jha".
                     {br}
                     Let's move on. Memorize the next row:
-                    {br}
+                </p>
                     <div className={tableClass}><LetterTable letterExplanations={consonants6} /></div>
-                    {br}
+                <p className={pClass}>
                     The next line only contains two letters. I have singled them out, because pronouncing them takes some explaining.
                 </p>
                 <div className={tableClass}><LetterTable letterExplanations={consonants5} /></div>

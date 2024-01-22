@@ -13,7 +13,7 @@ export default function HowToReadHindi() {
     { sign: "कै", sound: "kai", soundInEnglish: { start: "c", sound: "a", end: "re" } },
     { sign: "को", sound: "ko", note: "There is no good English equivalent. It is similar to the \"o\" in \"note\"" },
     { sign: "कौ", sound: "kau", soundInEnglish: { start: "c", sound: "ou", end: "gh" } },
-    { sign: "कृ", sound: "kr", note: <span>This matra adds an <LetterAudioElement letter="र"/> sound. There is no English equivalent.</span> }];
+    { sign: "कृ", sound: "kr", note: <span>This matra adds an <LetterAudioElement letter="र" /> sound. There is no English equivalent.</span> }];
 
 
     const matras2: LetterExplanation[] = [{ sign: "पा", sound: "paa", soundInEnglish: { start: "p", sound: "a", end: "th" } },
@@ -28,7 +28,7 @@ export default function HowToReadHindi() {
     { sign: "पृ", sound: "pr" }];
 
     const matras3: LetterExplanation[] = [
-        { sign: "कं", sound: "kan", soundInEnglish: { start: "c", sound: "an", end: "" }, note: <span>A dot like this adds an “n” sound after the syllable. It can be combined with other matras, so <LetterAudioElement letter="का"/> + <LetterAudioElement letter="अं"/> = <LetterAudioElement letter="कां"/> (kaan)</span> },
+        { sign: "कं", sound: "kan", soundInEnglish: { start: "c", sound: "an", end: "" }, note: <span>A dot like this adds an “n” sound after the syllable. It can be combined with other matras, so <LetterAudioElement letter="का" /> + <LetterAudioElement letter="अं" /> = <LetterAudioElement letter="कां" /> (kaan)</span> },
         { sign: "कँ", sound: "ka", note: "This makes the sound nasal. There is no equivalent in English. Instead listen to the audio by clicking the letter." },
         { sign: "क़", sound: "ka", note: "A dot below the letter does not change the pronunciation and is only used in loan words." },
         { sign: "कॉ", sound: "kau", soundInEnglish: { start: "c", sound: "ou", end: "gh" }, note: "This is pronounced the same as कौ and is only used in loan words" }];
@@ -41,36 +41,37 @@ export default function HowToReadHindi() {
     return (
         <div className="mx-auto max-w-7xl mt-4 px-4 sm:px-6 lg:px-8">
             <div className="mx-auto max-w-3xl">
-                <p className={pClass}>
+                <p className="text-lg leading-loose mt-12 mb-4">
                     This is lesson 3 of our Hindi reading guide. You can find the previous lessons here:
-<ul className="list-disc pl-6">
-                    <li><a className="underline text-blue-500" href="/articles/how-to-read-hindi">Lesson 1: Intro</a></li>
-                    <li><a className="underline text-blue-500" href="/articles/hindi-alphabet">Lesson 2: Hindi Alphabet</a></li>
-                    </ul>
-                    {br}
+                </p>
+                <ul className="list-disc pl-6 text-lg leading-loose">
+                    <li><a className="link" href="/articles/how-to-read-hindi">Lesson 1: Intro</a></li>
+                    <li><a className="link" href="/articles/hindi-alphabet">Lesson 2: Hindi Alphabet</a></li>
+                </ul>
+                <p className={pClass}>
                     All letters you studied so far end in an 'a' sound. If you want to write any other sound (like 'i' or 'u'), you need to add lines to the letters (called Matras).
                     {br}
                     Below are the most important Matras (applied to 'क'). You should study them the same as the letters. Take these 10 signs and copy them on paper. Try to write them all by heart.
-                    {br}
-                    <div className={tableClass}><LetterTable letterExplanations={matras1} /></div>
-                    {br}
+                </p>
+                <div className={tableClass}><LetterTable letterExplanations={matras1} /></div>
+                <p className={pClass}>
                     Those were all the most important Matras. Before moving on, write these Matras on another letter. Here they are with प:
-                    <div className={tableClass}><LetterTable letterExplanations={matras2} /></div>
-                    {br}
+                </p>
+                <div className={tableClass}><LetterTable letterExplanations={matras2} /></div>
+                <p className={pClass}>
                     The next Matras are more rare, but you should still know them:
-                    {br}
-                    <div className={tableClass}><LetterTable letterExplanations={matras3} /></div>
-                    {br}
+                </p>
+                <div className={tableClass}><LetterTable letterExplanations={matras3} /></div>
+                <p className={pClass}>
                     There are a few more Matras in Devanagri, that are practically never used in modern Hindi, so we will not go over them.
                     {br}
                     Congratulations, you have memorized the whole of Devanagri. Finish up with our guide on how to combine letters to words. There are just a few rules you need to remember.
-                    {br}
-                    <div className="mb-12 flex justify-end">
-                        <a href="/articles/joining-letter-in-hindi" className="text-lg border shadow p-2 underline text-blue-500">
-                            Lesson 4: Joining Letter in Hindi <ChevronDoubleRightIcon className="h-5 w-5 inline" />
-                        </a>
-                    </div>
                 </p>
+                <div className="mb-12 flex justify-end">
+                    <a href="/articles/joining-letter-in-hindi" className="text-lg border shadow p-2 link">
+                        Lesson 4: Joining Letter in Hindi <ChevronDoubleRightIcon className="h-5 w-5 inline" />
+                    </a>
+                </div>
             </div>
         </div>
     );

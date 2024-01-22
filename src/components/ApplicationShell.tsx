@@ -1,5 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react'
 import {
+    AcademicCapIcon,
     ArrowLeftIcon,
     Bars3Icon,
     BookOpenIcon,
@@ -9,18 +10,23 @@ import {
     XMarkIcon
 } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
-import posthog from 'posthog-js'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { useAuth } from 'util/auth'
 
 var navigation = [
     { name: 'Stories', href: '/story/hi', icon: BookOpenIcon },
+    { name: 'How to Read Hindi', href: '/articles/how-to-read-hindi', icon: AcademicCapIcon },
     { name: 'See Your Vocab', href: '/vocab', icon: LanguageIcon },
     { name: 'Practice Your Vocab', href: '/practice', icon: BuildingLibraryIcon },
     { name: 'My Account', href: '/settings/general', icon: UserCircleIcon },
 ]
 
 const pageTitles = {
+    '/articles/how-to-read-hindi': '🇮🇳 How to Read Hindi',
+    '/articles/hindi-alphabet': '🇮🇳 Hindi Alphabet',
+    '/articles/hindi-alphabet-2': '🇮🇳 Hindi Alphabet',
+    '/articles/hindi-matras': '🇮🇳 Hindi Matras',
+    '/articles/joining-letter-in-hindi': '🇮🇳 Joining Letter in Hindi',
     '/': '',
     '/story/hi': '🇮🇳 Hindi Reading Practice',
     '/vocab': 'Your Vocabulary',
@@ -30,6 +36,10 @@ const pageTitles = {
 const backLocation = (currentLocation: string) => {
     switch (currentLocation) {
         case '/': return null;
+        case '/articles/hindi-alphabet': return '/articles/how-to-read-hindi';
+        case '/articles/hindi-alphabet-2': return '/articles/hindi-alphabet';
+        case '/articles/hindi-matras': return '/articles/hindi-alphabet';
+        case '/articles/joining-letter-in-hindi': return '/articles/hindi-matras';
         case '/story/hi': return null;
         case '/vocab': return null;
         case '/practice': return '/vocab';
@@ -152,7 +162,7 @@ export default function ApplicationShell(props) {
                     </div>
                     {currentPath in pageTitles
                         && <div className="min-w-0 flex w-full">
-                            <h2 className="text-2xl font-bold mx-auto leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                            <h2 className="text-2xl text-center font-bold mx-auto leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
                                 {pageTitles[currentPath]}
                             </h2>
                         </div>}

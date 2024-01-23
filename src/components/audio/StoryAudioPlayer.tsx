@@ -1,8 +1,8 @@
 import { PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
 import { useStoryAudioContext } from 'context/storyAudioContext';
-import { OnReadUsageEvent } from 'context/trackReadContext';
+import { useReadUsageContext } from 'context/trackReadContext';
 import posthog from 'posthog-js';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface StoryAudioPlayerProps {
     src: string;
@@ -12,7 +12,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     const [duration, setDuration] = useState(0);
     const audioRef = useRef<HTMLAudioElement>(null);
     const [progressBarWidth, setProgressBarWidth] = useState('0%');
-    const onReadUsageEvent = useContext(OnReadUsageEvent);
+    const { onReadUsageEvent } = useReadUsageContext();
 
     const {
         currentAudioTime,

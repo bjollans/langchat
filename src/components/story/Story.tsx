@@ -2,11 +2,11 @@ import StoryAudioPlayer from "components/audio/StoryAudioPlayer";
 import SuggestedStories from "components/engagement/SuggestedStories";
 import StoryAudioContextProvider from "context/storyAudioContext";
 import { TargetLanguageContext } from "context/targetLanguageContext";
-import { OnReadUsageEvent, minReadUsageEvents } from "context/trackReadContext";
+import ReadUsageContextProvider from "context/trackReadContext";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { requireAuth, useAuth } from "util/auth";
-import { markUserStoryReadAutomatic, useStory, useUserStoriesReadAutomatic, useUserStoriesReadAutomaticLast7Days } from "util/db";
+import { useStory, useUserStoriesReadAutomatic, useUserStoriesReadAutomaticLast7Days } from "util/db";
 import { trackStat } from "util/storyStatistics";
 import StoryQuestionsSection from "./StoryQuestionsSection";
 import StoryTextRender from "./StoryTextRender";
@@ -22,29 +22,11 @@ function Story(props: StoryProps): JSX.Element {
     const { data: userStoriesRead } = useUserStoriesReadAutomatic(auth.user?.uid ?? null);
     const { data: userStoriesReadLast7Days } = useUserStoriesReadAutomaticLast7Days(auth.user?.uid ?? null);
 
-    const [usageEventsCount, setUsageEventsCount] = useState(0);
     const [isAllowedToRead, setIsAllowedToRead] = useState(true);
-    const [isStoryRead, setIsStoryRead] = useState(false);
-
-    useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            makeStoryRead();
-        }, 3 * 60_000); // every 1 second
-        return () => clearTimeout(timeoutId); // cleanup
-    }, []);
 
     useEffect(() => {
         trackStat(props.id, "opens");
     }, []);
-
-    const incrementUsageEventsCount = () => {
-        posthog.capture('read_usage_event', {
-            story_id: props.id,
-            story_title: story?.title,
-            story_target_language: story?.targetLanguage,
-        });
-        setUsageEventsCount(usageEventsCount + 1);
-    };
 
     useEffect(() => {
         //AB Test
@@ -67,30 +49,6 @@ function Story(props: StoryProps): JSX.Element {
         }
     }, [isAllowedToRead]);
 
-    const makeStoryRead = () => {
-        if (isStoryRead) return;
-        setIsStoryRead(true);
-
-        const currentStoryAlreadyRead = userStoriesRead?.map(x => x.storyId).includes(props.id);
-        if (currentStoryAlreadyRead) return;
-
-        markUserStoryReadAutomatic(props.id, auth.user?.uid ?? null);
-
-        trackStat(props.id, "reads");
-
-        posthog.capture('story_read', {
-            story_id: props.id,
-            story_title: story?.title,
-            story_target_language: story?.targetLanguage,
-        });
-    }
-
-    useEffect(() => {
-        if (usageEventsCount >= minReadUsageEvents && !isStoryRead) {
-            makeStoryRead();
-        }
-    }, [usageEventsCount]);
-
     useEffect(() => {
         posthog.capture('story_view', {
             story_id: props.id,
@@ -102,8 +60,8 @@ function Story(props: StoryProps): JSX.Element {
     return (
         <div className="relative flex z-0">
             <div className={`p-4 my-4 mb-36 rounded-lg border-1 border-black w-full`}>
-                <OnReadUsageEvent.Provider value={incrementUsageEventsCount}>
-                    <TargetLanguageContext.Provider value={story?.targetLanguage}>
+                <TargetLanguageContext.Provider value={story?.targetLanguage}>
+                    {story && <ReadUsageContextProvider story={story}>
                         <StoryAudioContextProvider>
                             {story?.targetLanguage == "hi" &&
                                 <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
@@ -114,15 +72,15 @@ function Story(props: StoryProps): JSX.Element {
                             </div>
                             {!isAllowedToRead
                                 && <SubscribeContentBlocker />}
-                            {story && <StoryTextRender story={story} />}
+                            <StoryTextRender story={story} />
                             <StoryQuestionsSection storyId={props.id} />
                             {isAllowedToRead && story?.audioUrl &&
                                 <StoryAudioPlayer src={story.audioUrl} />
                             }
 
                         </StoryAudioContextProvider>
-                    </TargetLanguageContext.Provider>
-                </OnReadUsageEvent.Provider>
+                    </ReadUsageContextProvider>}
+                </TargetLanguageContext.Provider>
                 <SuggestedStories />
             </div>
         </div>

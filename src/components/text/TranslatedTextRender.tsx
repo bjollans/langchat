@@ -1,7 +1,7 @@
 import { LanguageIcon, PlayIcon } from '@heroicons/react/24/solid';
 import EqualizerIcon from "components/audio/EqualizerIcon";
 import { StoryIdContext } from 'context/storyIdContext';
-import { OnReadUsageEvent } from 'context/trackReadContext';
+import { useReadUsageContext } from 'context/trackReadContext';
 import { TermTranslation, TranslatedText } from "model/translations";
 import posthog from 'posthog-js';
 import { useContext, useState } from "react";
@@ -19,7 +19,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
     const [showWholeTranslation, setShowWholeTranslation] = useState(false);
     const translatedWords: Array<JSX.Element> = [];
     const storyId = useContext(StoryIdContext);
-    const onReadUsageEvent = useContext(OnReadUsageEvent);
+    const { onReadUsageEvent } = useReadUsageContext();
 
     if (props.translatedText.translationJson !== undefined) {
         for (var i = 0; i < props.translatedText.content.length; i++) {

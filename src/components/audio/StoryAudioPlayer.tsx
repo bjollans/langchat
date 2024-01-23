@@ -1,14 +1,11 @@
-import { PauseCircleIcon, PauseIcon, PlayCircleIcon, PlayIcon } from '@heroicons/react/24/solid';
+import { PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
+import { useStoryAudioContext } from 'context/storyAudioContext';
 import { OnReadUsageEvent } from 'context/trackReadContext';
 import posthog from 'posthog-js';
-import { useState, useRef, useEffect, useContext } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 
 interface StoryAudioPlayerProps {
     src: string;
-    currentTime: number;
-    isPlaying: boolean;
-    onTimeUpdate: (currentTime: number) => void;
-    onPlayPause: (isPlayingAudio: boolean) => void
 }
 
 export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
@@ -17,10 +14,19 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     const [progressBarWidth, setProgressBarWidth] = useState('0%');
     const onReadUsageEvent = useContext(OnReadUsageEvent);
 
+    const {
+        currentAudioTime,
+        setCurrentAudioTime,
+        isPlayingAudio,
+        setIsPlayingAudio,
+        hasPlayedAudio,
+        setHasPlayedAudio
+    } = useStoryAudioContext();
+
     const play = () => {
         if (audioRef.current) {
             audioRef.current.play();
-            props.onPlayPause(true);
+            setIsPlayingAudio(true);
             onReadUsageEvent();
         }
     };
@@ -28,12 +34,12 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     const pause = () => {
         if (audioRef.current) {
             audioRef.current.pause();
-            props.onPlayPause(false);
+            setIsPlayingAudio(false);
         }
     };
 
     const togglePlayPause = () => {
-        if (props.isPlaying) {
+        if (isPlayingAudio) {
             pause();
         } else {
             play();
@@ -46,21 +52,21 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
 
     useEffect(() => {
         if (!audioRef.current) return;
-        if (props.isPlaying) {
+        if (isPlayingAudio) {
             audioRef.current.play();
         } else {
             audioRef.current.pause();
         }
-    }, [props.isPlaying]);
+    }, [isPlayingAudio]);
 
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio) return;
 
-        const onPlay = () => props.onPlayPause(true);
+        const onPlay = () => setIsPlayingAudio(true);
         audio.addEventListener('play', onPlay);
 
-        const onPause = () => props.onPlayPause(false);
+        const onPause = () => setIsPlayingAudio(false);
         audio.addEventListener('pause', onPause);
 
         const onLoadedMetadata = () => {
@@ -78,7 +84,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
 
     const handleTimeUpdate = (e: React.SyntheticEvent<HTMLAudioElement>) => {
         const audioElement = e.target as HTMLAudioElement;
-        props.onTimeUpdate(audioElement.currentTime);
+        setCurrentAudioTime(audioElement.currentTime);
     };
 
     const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -87,16 +93,16 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
         const newTime = (clickX / progressBar.offsetWidth) * (audioRef.current?.duration || 0);
         if (audioRef.current) {
             audioRef.current.currentTime = newTime;
-            props.onTimeUpdate(newTime);
+            setCurrentAudioTime(newTime);
         }
     };
 
     useEffect(() => {
-        if (audioRef.current && Math.abs(props.currentTime - audioRef.current.currentTime) > 2) {
-            audioRef.current.currentTime = props.currentTime;
+        if (audioRef.current && Math.abs(currentAudioTime - audioRef.current.currentTime) > 2) {
+            audioRef.current.currentTime = currentAudioTime;
         }
-        setProgressBarWidth(`${(props.currentTime / duration) * 100}%`);
-    }, [props.currentTime, duration]);
+        setProgressBarWidth(`${(currentAudioTime / duration) * 100}%`);
+    }, [currentAudioTime, duration]);
 
     return (
         <div className='bg-white fixed bottom-0 left-0 right-0 drop-shadow-xl border'>
@@ -116,7 +122,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
                 Your browser does not support the audio element.
             </audio>
             <button className='w-full justify-center flex my-1 rounded-full' onClick={togglePlayPause}>
-                {props.isPlaying
+                {isPlayingAudio
                     ? <PauseIcon className='rounded-full border-4 border-slate-600 text-slate-600 w-12 h-12' />
                     : <PlayIcon className='rounded-full border-4 pl-1 border-slate-600 text-slate-600 w-12 h-12' />}
             </button>

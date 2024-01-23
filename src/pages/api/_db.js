@@ -53,6 +53,21 @@ function updateCustomerByStripeCid(id, data) {
     .then(handle);
 }
 
+function getStoryStatistics(id) {
+  return supabase
+    .from("_storyStatistics")
+    .select()
+    .eq("id", id)
+    .then(handle);
+}
+
+function upsertStoryStatistics(id, data) {
+  return supabase
+    .from("_storyStatistics")
+    .upsert([{ id, ...data }])
+    .then(handle);
+}
+
 /**** HELPERS ****/
 
 // Get response data or throw error if there is one
@@ -68,4 +83,6 @@ module.exports = {
   createCustomer,
   updateCustomerByStripeCid,
   getStoryIdsByLanguage,
+  getStoryStatistics,
+  upsertStoryStatistics,
 };

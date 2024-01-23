@@ -1,5 +1,6 @@
 import StoryListElement from "components/story/StoryListElement";
 import { StoryText } from "model/translations";
+import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { useAuth } from "util/auth";
 import { getStoriesByIds, useVisibleStoryIds, useUserStoriesRead } from "util/db";
@@ -23,8 +24,14 @@ export default function SuggestedStories() {
         });
     }, [storyIdsLoaded, storiesReadLoaded]);
 
+    const captureClick = () => {
+        posthog.capture('suggested_stories_click', {
+            story_ids: stories.map(x => x.id),
+        });
+    };
+
     return (
-        <div className="flex flex-col gap-y-4 items-center mt-12">
+        <div className="flex flex-col gap-y-4 items-center mt-12" onClick={captureClick}>
             <h2 className="text-2xl font-bold">Read this next</h2>
             {stories && stories.map((story) => (
                 <StoryListElement key={"suggested-story-" + story.title} story={story} />

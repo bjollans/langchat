@@ -1,4 +1,5 @@
 import Meta from "components/Meta";
+import BrandedWelcome from "components/brand/BrandedWelcome";
 import StoryList, { StoryListProps } from "components/story/StoryList";
 import UserStatistics from "components/user/UserStatistics";
 import { StoryText, StoryToCollection } from "model/translations";
@@ -46,6 +47,7 @@ function StoryIndexPage(props: StoryListProps) {
             <Meta title="Hindi Mini Stories" />
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-3xl">
+                    <BrandedWelcome />
                     <UserStatistics />
                     {StoryList(props)}
                 </div>

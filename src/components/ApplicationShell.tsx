@@ -21,16 +21,22 @@ var navigation = [
     { name: 'My Account', href: '/settings/general', icon: UserCircleIcon },
 ]
 
-const pageTitles = {
-    '/articles/how-to-read-hindi': '🇮🇳 How to Read Hindi',
-    '/articles/hindi-alphabet': '🇮🇳 Hindi Alphabet',
-    '/articles/hindi-alphabet-2': '🇮🇳 Hindi Alphabet',
-    '/articles/hindi-matras': '🇮🇳 Hindi Matras',
-    '/articles/joining-letter-in-hindi': '🇮🇳 Joining Letter in Hindi',
-    '/': '',
-    '/story/hi': '🇮🇳 Hindi Reading Practice',
-    '/vocab': 'Your Vocabulary',
-    '/practice': 'Practice Vocabulary',
+const pageTitles = (location: string) => {
+    switch (location) {
+        case '/articles/how-to-read-hindi': return '🇮🇳 How to Read Hindi';
+        case '/articles/hindi-alphabet': return '🇮🇳 Hindi Alphabet';
+        case '/articles/hindi-alphabet-2': return '🇮🇳 Hindi Alphabet';
+        case '/articles/hindi-matras': return '🇮🇳 Hindi Matras';
+        case '/articles/joining-letter-in-hindi': return '🇮🇳 Joining Letter in Hindi';
+        case '/': return '';
+        case '/story/hi': return '🇮🇳 Hindi Reading Practice';
+        case '/vocab': return 'Your Vocabulary';
+        case '/practice': return 'Practice Vocabulary';
+        default: return <span className='flex'>
+            <img src="/android-chrome-32x32.png" className='px-2' />
+            Linguin
+        </span>
+    }
 }
 
 const backLocation = (currentLocation: string) => {
@@ -160,12 +166,11 @@ export default function ApplicationShell(props) {
                                 <ArrowLeftIcon className="h-6 w-6" />
                             </button>}
                     </div>
-                    {currentPath in pageTitles
-                        && <div className="min-w-0 flex w-full">
-                            <h2 className="text-2xl text-center font-bold mx-auto leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-                                {pageTitles[currentPath]}
-                            </h2>
-                        </div>}
+                    <div className="min-w-0 flex w-full">
+                        <h2 className="text-2xl text-center font-bold mx-auto leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                            {pageTitles(currentPath)}
+                        </h2>
+                    </div>
                     <a href="/auth/signin"
                         className='flex items-center gap-x-1 hover:bg-slate-50'
                         onClick={(e) => {

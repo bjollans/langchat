@@ -6,6 +6,7 @@ import { UserReadStatistics, UserStoryStatistics, useUpdatedUserReadStatistics, 
 import CompletedWidget from "./CompletedWidget";
 import StoryQuestion from "./StoryQuestion";
 import posthog from "posthog-js";
+import { trackStat } from "util/storyStatistics";
 var _ = require('lodash');
 
 
@@ -60,6 +61,7 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
             setAnsweredCorrectlyByIndex(newAnsweredCorrectly);
             await upsertUserReadStatistics(auth!.user!.id, updatedUserReadStatistics);
             await markUserStoryReadAutomatic(props.storyId, auth.user?.uid ?? null);
+            await trackStat(props.storyId, "completes")
             posthog.capture('story_read', {
                 story_id: props.storyId
             });

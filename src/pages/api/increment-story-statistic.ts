@@ -3,6 +3,7 @@ const { getStoryStatistics, upsertStoryStatistics } = require("./_db.js");
 interface StoryStatistics {
     id: string;
     views: number;
+    clicks: number;
     opens: number;
     reads: number;
     completes: number;
@@ -14,7 +15,7 @@ export default async (req, res) => {
     if (!id || !statName) {
         return res.status(400).json({ status: "error", message: "Missing id or statName" });
     }
-    if (!["views", "opens", "reads", "completes"].includes(statName)) {
+    if (!["views", "clicks", "opens", "reads", "completes"].includes(statName)) {
         return res.status(400).json({ status: "error", message: "Invalid statName" });
     }
 

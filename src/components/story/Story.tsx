@@ -7,6 +7,7 @@ import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { requireAuth, useAuth } from "util/auth";
 import { markUserStoryReadAutomatic, useStory, useUserStoriesReadAutomatic, useUserStoriesReadAutomaticLast7Days } from "util/db";
+import { trackStat } from "util/storyStatistics";
 import StoryQuestionsSection from "./StoryQuestionsSection";
 import { SubscribeContentBlocker } from "./SubscribeContentBlocker";
 
@@ -29,9 +30,13 @@ function Story(props: StoryProps): JSX.Element {
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-                makeStoryRead();
-        }, 3*60_000); // every 1 second
+            makeStoryRead();
+        }, 3 * 60_000); // every 1 second
         return () => clearTimeout(timeoutId); // cleanup
+    }, []);
+
+    useEffect(() => {
+        trackStat(props.id, "opens");
     }, []);
 
     const incrementUsageEventsCount = () => {
@@ -70,8 +75,11 @@ function Story(props: StoryProps): JSX.Element {
 
         const currentStoryAlreadyRead = userStoriesRead?.map(x => x.storyId).includes(props.id);
         if (currentStoryAlreadyRead) return;
-        
+
         markUserStoryReadAutomatic(props.id, auth.user?.uid ?? null);
+
+        trackStat(props.id, "reads");
+
         posthog.capture('story_read', {
             story_id: props.id,
             story_title: story?.title,

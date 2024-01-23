@@ -6,6 +6,7 @@ import { UserStoryStatistics, useUserStoryStatistics } from "util/userStatistics
 import StoryCompletedCheckMark from "./StoryCompletedCheckMark";
 import { useInView } from 'react-intersection-observer';
 import { apiRequest } from "util/util";
+import { trackStat } from "util/storyStatistics";
 
 export interface StoryListElementProps {
     story: StoryText;
@@ -26,14 +27,7 @@ export default function StoryListElement(props: StoryListElementProps) {
 
     useEffect(() => {
         if (hasBeenSeen) {
-            if (process.env.NODE_ENV === "production") {
-                apiRequest("increment-story-statistic", "POST", {
-                    id: props.story.id,
-                    statName: "views"
-                });
-            } else {
-                console.log("increment-story-statistic views", props.story.title);
-            }
+            trackStat(props.story.id, "views");
         }
     }, [hasBeenSeen]);
 
@@ -46,7 +40,8 @@ export default function StoryListElement(props: StoryListElementProps) {
     const storyFilterChangeCalls: StoryFilterChangeCalls | undefined = useContext(StoryListFilterContext);
 
     return (
-        <a href={`/story/hi/${props.story.id}`} className="w-full h-full" ref={visibilityRef}>
+        <a href={`/story/hi/${props.story.id}`} className="w-full h-full"
+            ref={visibilityRef} onClick={() => trackStat(props.story.id, "clicks")}>
             <li key={props.story.title} className="flex px-4 gap-x-4 py-5 hover:bg-slate-100 items-center">
                 <img className="w-24 flex-none rounded-full bg-gray-50" src={props.story.previewImageUrl} alt="" />
                 <div>

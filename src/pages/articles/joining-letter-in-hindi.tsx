@@ -93,7 +93,7 @@ export default function HowToReadHindi() {
 
                     </li>
                     <li>
-                        ...from the second letter in a 3-letter-word that ends in a Matra:
+                        ...from the second letter in a 3-letter-word that ends in a long sounding Matra:
                         <ul className="list-disc pl-6">
                             <li>
                                 <LetterAudioElement letter="आदमी" /> = aadmi (not aadami)
@@ -104,7 +104,7 @@ export default function HowToReadHindi() {
                         </ul>
                     </li>
                     <li>
-                        ...from the second letter in a 4-letter-word that does NOT end in a Matra:
+                        ...from the second letter in a 4-letter-word that does NOT end in a long sounding Matra:
                         <ul className="list-disc pl-6">
                             <li>
                                 <LetterAudioElement letter="अदरक" /> = adrak (not adarak)
@@ -115,7 +115,7 @@ export default function HowToReadHindi() {
                         </ul>
                     </li>
                     <li>
-                        ...from the third letter in a 4-letter-word that ends in a Matra:
+                        ...from the third letter in a 4-letter-word that ends in a long sounding Matra:
                         <ul className="list-disc pl-6">
                             <li>
                                 <LetterAudioElement letter="समझना" /> = samajhnaa (not samajhanaa)

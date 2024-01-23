@@ -1,9 +1,11 @@
 import { StoryFilterChangeCalls, StoryListFilterContext } from "context/storyListFilterContext";
 import { StoryText } from "model/translations";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useAuth } from "util/auth";
 import { UserStoryStatistics, useUserStoryStatistics } from "util/userStatistics";
 import StoryCompletedCheckMark from "./StoryCompletedCheckMark";
+import { useInView } from 'react-intersection-observer';
+import { apiRequest } from "util/util";
 
 export interface StoryListElementProps {
     story: StoryText;
@@ -16,6 +18,25 @@ export default function StoryListElement(props: StoryListElementProps) {
     const ageDays = Math.floor(ageMs / (1000 * 60 * 60 * 24));
     const isNew: boolean = ageDays < 7;
 
+    const [visibilityRef, hasBeenSeen] = useInView({
+        threshold: 0.5,
+        triggerOnce: true,
+        delay: 1000,
+    });
+
+    useEffect(() => {
+        if (hasBeenSeen) {
+            if (process.env.NODE_ENV === "production") {
+                apiRequest("increment-story-statistic", "POST", {
+                    id: props.story.id,
+                    statName: "views"
+                });
+            } else {
+                console.log("increment-story-statistic views", props.story.title);
+            }
+        }
+    }, [hasBeenSeen]);
+
     const difficultyColor = {
         "easy": "ring-green-600/20 bg-green-50 text-green-700",
         "intermediate": "ring-blue-700/10 bg-blue-50 text-blue-700",
@@ -25,7 +46,7 @@ export default function StoryListElement(props: StoryListElementProps) {
     const storyFilterChangeCalls: StoryFilterChangeCalls | undefined = useContext(StoryListFilterContext);
 
     return (
-        <a href={`/story/hi/${props.story.id}`} className="w-full h-full">
+        <a href={`/story/hi/${props.story.id}`} className="w-full h-full" ref={visibilityRef}>
             <li key={props.story.title} className="flex px-4 gap-x-4 py-5 hover:bg-slate-100 items-center">
                 <img className="w-24 flex-none rounded-full bg-gray-50" src={props.story.previewImageUrl} alt="" />
                 <div>

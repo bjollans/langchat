@@ -46,7 +46,7 @@ function Story(props: StoryProps): JSX.Element {
     useEffect(() => {
         //AB Test
         const lateMonetization = posthog.getFeatureFlag('monetization_after_2_stories') === 'test';
-        const freeStoriesPerWeek = lateMonetization ? 2 : 1;
+        const freeStoriesPerWeek = lateMonetization ? 5 : 3;
 
         const isSubscribed = !!(auth?.user?.planIsActive);
         const userStoriesReadCountLast7Days = new Set(userStoriesReadLast7Days?.map(x => x.storyId) ?? []).size;

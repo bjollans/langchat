@@ -11,7 +11,7 @@ const includedFeatures = [
 
 export default function Pricing() {
     const lateMonetization = posthog.getFeatureFlag('monetization_after_2_stories') === 'test';
-    const freeStoriesPerWeek = lateMonetization ? 2 : 1;
+    const freeStoriesPerWeek = lateMonetization ? 5 : 3;
 
     const topText = `${freeStoriesPerWeek} Free Stor${freeStoriesPerWeek > 1 ? "ies" : "y"} per Week`;
     const bottomText = `Then ${subscriptionDetails.priceMonthly} per month (7 day free trial).`

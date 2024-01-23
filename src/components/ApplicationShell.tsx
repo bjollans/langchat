@@ -32,8 +32,8 @@ const pageTitles = (location: string) => {
         case '/story/hi': return '🇮🇳 Hindi Reading Practice';
         case '/vocab': return 'Your Vocabulary';
         case '/practice': return 'Practice Vocabulary';
-        default: return <span className='flex'>
-            <img src="/android-chrome-32x32.png" className='px-2' />
+        default: return <span className='flex items-center'>
+            <img src="/android-chrome-32x32.png" className='w-6 h-6 mx-2' />
             Linguin
         </span>
     }

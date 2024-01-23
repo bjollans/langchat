@@ -5,51 +5,24 @@ import { TargetLanguageContext } from "context/targetLanguageContext";
 import ReadUsageContextProvider from "context/trackReadContext";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
-import { requireAuth, useAuth } from "util/auth";
-import { useStory, useUserStoriesReadAutomatic, useUserStoriesReadAutomaticLast7Days } from "util/db";
+import { requireAuth } from "util/auth";
+import { useStory } from "util/db";
 import { trackStat } from "util/storyStatistics";
+import { StoryPayWall } from "./StoryPayWall";
 import StoryQuestionsSection from "./StoryQuestionsSection";
 import StoryTextRender from "./StoryTextRender";
-import { SubscribeContentBlocker } from "./SubscribeContentBlocker";
 
 interface StoryProps {
     id: string;
 }
 
 function Story(props: StoryProps): JSX.Element {
-    const { data: story } = useStory(props.id);
-    const auth = useAuth();
-    const { data: userStoriesRead } = useUserStoriesReadAutomatic(auth.user?.uid ?? null);
-    const { data: userStoriesReadLast7Days } = useUserStoriesReadAutomaticLast7Days(auth.user?.uid ?? null);
+    const { data: story, isSuccess: storyLoaded } = useStory(props.id);
 
-    const [isAllowedToRead, setIsAllowedToRead] = useState(true);
+    const [isPayWallOpen, setIsPayWallOpen] = useState(false);
 
     useEffect(() => {
         trackStat(props.id, "opens");
-    }, []);
-
-    useEffect(() => {
-        //AB Test
-        const lateMonetization = posthog.getFeatureFlag('monetization_after_2_stories') === 'test';
-        const freeStoriesPerWeek = lateMonetization ? 5 : 3;
-
-        const isSubscribed = !!(auth?.user?.planIsActive);
-        const userStoriesReadCountLast7Days = new Set(userStoriesReadLast7Days?.map(x => x.storyId) ?? []).size;
-        const currentStoryAlreadyRead = userStoriesRead?.map(x => x.storyId).includes(props.id);
-        setIsAllowedToRead(isSubscribed || currentStoryAlreadyRead || (userStoriesReadCountLast7Days ?? 0) < freeStoriesPerWeek);
-    }, [userStoriesReadLast7Days, userStoriesRead, auth.user?.planIsActive]);
-
-    useEffect(() => {
-        if (!isAllowedToRead) {
-            posthog.capture('story_blocked', {
-                story_id: props.id,
-                story_title: story?.title,
-                story_target_language: story?.targetLanguage,
-            });
-        }
-    }, [isAllowedToRead]);
-
-    useEffect(() => {
         posthog.capture('story_view', {
             story_id: props.id,
             story_title: story?.title,
@@ -57,11 +30,12 @@ function Story(props: StoryProps): JSX.Element {
         });
     }, []);
 
+
     return (
         <div className="relative flex z-0">
             <div className={`p-4 my-4 mb-36 rounded-lg border-1 border-black w-full`}>
                 <TargetLanguageContext.Provider value={story?.targetLanguage}>
-                    {story && <ReadUsageContextProvider story={story}>
+                    {storyLoaded && <ReadUsageContextProvider story={story}>
                         <StoryAudioContextProvider>
                             {story?.targetLanguage == "hi" &&
                                 <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
@@ -70,18 +44,17 @@ function Story(props: StoryProps): JSX.Element {
                             <div className="border-b border-gray-200 pb-5 my-8 flex items-end">
                                 <h3 className="mx-6 text-base text-4xl mx-auto font-semibold leading-6 text-gray-900">{story?.title}</h3>
                             </div>
-                            {!isAllowedToRead
-                                && <SubscribeContentBlocker />}
+                            <StoryPayWall story={story} isPayWallOpen={isPayWallOpen} setIsPayWallOpen={setIsPayWallOpen} />
                             <StoryTextRender story={story} />
                             <StoryQuestionsSection storyId={props.id} />
-                            {isAllowedToRead && story?.audioUrl &&
+                            {isPayWallOpen && story?.audioUrl &&
                                 <StoryAudioPlayer src={story.audioUrl} />
                             }
 
                         </StoryAudioContextProvider>
                     </ReadUsageContextProvider>}
                 </TargetLanguageContext.Provider>
-                <SuggestedStories />
+                {isPayWallOpen && <SuggestedStories />}
             </div>
         </div>
     );

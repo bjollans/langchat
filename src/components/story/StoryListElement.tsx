@@ -64,7 +64,7 @@ export default function StoryListElement(props: StoryListElementProps) {
                                         <span className="mt-1 truncate text-xs leading-5 text-gray-400"> {userStoryStatistics.newWords} ({userStoryStatistics.newWordsPercentage}%)</span>
                                     </li>}
                                 </ul>
-                                <p className="mt-1 truncate italic text-xs leading-5 text-gray-400">{props.story.content.slice(0, 30) + '....'}</p>
+                                <p className="mt-1 truncate italic text-xs leading-5 text-gray-400">{props.story.content?.slice(0, 30) + '....'}</p>
                             </div>
                             <StoryCompletedCheckMark storyId={props.story.id} />
                         </div>
@@ -74,6 +74,7 @@ export default function StoryListElement(props: StoryListElementProps) {
                             className={"mr-2 inline-flex items-center rounded-full px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset "
                                 + difficultyColor[props.story.difficulty.toLowerCase()]}
                             onClick={(e) => {
+                                if (!storyFilterChangeCalls) return;
                                 e.preventDefault();
                                 if (storyFilterChangeCalls!.difficulties.includes(props.story.difficulty)) {
                                     storyFilterChangeCalls!.onDifficultyRemove(props.story.difficulty);

@@ -10,6 +10,7 @@ import { markUserStoryReadAutomatic, useStory, useUserStoriesReadAutomatic, useU
 import { trackStat } from "util/storyStatistics";
 import StoryQuestionsSection from "./StoryQuestionsSection";
 import { SubscribeContentBlocker } from "./SubscribeContentBlocker";
+import SuggestedStories from "components/engagement/SuggestedStories";
 
 interface StoryProps {
     id: string;
@@ -172,6 +173,7 @@ function Story(props: StoryProps): JSX.Element {
 
                     </TargetLanguageContext.Provider>
                 </OnReadUsageEvent.Provider>
+                <SuggestedStories />
             </div>
         </div>
     );

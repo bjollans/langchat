@@ -100,7 +100,7 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
                 <div className="flex-col flex place-items-center sm:rounded-lg lg:px-24 sm:px-12 px-4 py-4 max-w-2xl">
                     {(!userStoryStatistics.hasRead || answeredAllCorrectly) &&
                         (<>
-                            <div className="mt-1 max-w-xl text-md text-gray-500">
+                            <div className="mt-1 max-w-xl text-lg text-gray-500">
                                 <p>Answer this correctly to mark the story as complete!</p>
                             </div>
                             {currentQuestionIndices.map((questionIndex: number) => (

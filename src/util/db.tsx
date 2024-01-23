@@ -119,6 +119,25 @@ export function useStories() {
   );
 }
 
+export function useVisibleStoryIds() {
+  return useQuery(
+    ["storyIds"],
+    () => supabase
+      .from("stories")
+      .select("id")
+      .eq("visible", true)
+      .then(handle),
+  );
+}
+
+export function getStoriesByIds(storyIds: Array<string>) {
+  return supabase
+      .from("stories")
+      .select()
+      .in("id", storyIds)
+      .then(handle);
+}
+
 export function useStoriesOrderedByCustom(property: string, ascending: boolean) {
   return useQuery(
     ["stories"],

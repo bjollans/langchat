@@ -6,13 +6,13 @@ import { StoryText, StoryToCollection } from "model/translations";
 import { useRouter } from "next/router";
 import posthog from "posthog-js";
 import { useEffect } from "react";
-import { getAvailableStoryDifficultyLevels, getCollectionNames, getStoriesOrderedByCustom, getStoryCollections } from "util/db";
+import { getAvailableStoryDifficultyLevels, getCollectionNames, getStoriesOrderedByCustom, getStoriesCollections } from "util/db";
 
 export async function getPropsForStoryIndexPage() {
     const stories = await getStoriesOrderedByCustom('title', false);
     const filterDifficulties = await getAvailableStoryDifficultyLevels();
     const storyIds = stories.map((story: any) => story.id);
-    const storyCollections = await getStoryCollections(storyIds);
+    const storyCollections = await getStoriesCollections(storyIds);
     stories.forEach((story: StoryText) =>
         story.collections = storyCollections.filter((collection: StoryToCollection) =>
             collection.storyId == story.id).map((collection: StoryToCollection) =>

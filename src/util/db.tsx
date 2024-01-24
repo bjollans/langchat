@@ -122,20 +122,24 @@ export function useStories() {
 export function useVisibleStoryIds() {
   return useQuery(
     ["storyIds"],
-    () => supabase
-      .from("stories")
-      .select("id")
-      .eq("visible", true)
-      .then(handle),
+    () => getVisibleStoryIds(),
   );
+}
+
+export function getVisibleStoryIds() {
+  return supabase
+    .from("stories")
+    .select("id")
+    .eq("visible", true)
+    .then(handle)
 }
 
 export function getStoriesByIds(storyIds: Array<string>) {
   return supabase
-      .from("stories")
-      .select()
-      .in("id", storyIds)
-      .then(handle);
+    .from("stories")
+    .select()
+    .in("id", storyIds)
+    .then(handle);
 }
 
 export function useStoriesOrderedByCustom(property: string, ascending: boolean) {
@@ -156,31 +160,29 @@ export function getStoriesOrderedByCustom(property: string, ascending: boolean) 
 export function useStory(storyId: string): UseQueryResult<StoryText> {
   return useQuery(
     ["story", { storyId }],
-    () =>
-      supabase
-        .from("stories")
-        .select()
-        .eq("id", storyId)
-        .single()
-        .then(handle),
+    () => getStory(storyId),
     { enabled: !!storyId }
   );
 }
 
-export function useStoryCollections(storyId: string): UseQueryResult<Array<string>> {
-  return useQuery(
-    ["storyCollections", { storyId }],
-    () =>
-      supabase
+export function getStory(storyId: string) {
+  return supabase
+    .from("stories")
+    .select()
+    .eq("id", storyId)
+    .single()
+    .then(handle);
+}
+
+export function getStoryCollections(storyId: string) {
+  return supabase
         .from("storiesToCollections")
         .select("collectionName")
         .eq("storyId", storyId)
-        .then(handle),
-    { enabled: !!storyId }
-  );
+        .then(handle);
 }
 
-export function getStoryCollections(storyIds: Array<string>) {
+export function getStoriesCollections(storyIds: Array<string>) {
   return supabase
     .from("storiesToCollections")
     .select()

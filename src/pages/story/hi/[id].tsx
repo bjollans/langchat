@@ -1,28 +1,42 @@
 import Meta from "components/Meta";
 import Story from "components/story/Story";
 import { StoryIdContext } from "context/storyIdContext";
-import { useRouter } from "next/router";
-import { useStory, useStoryCollections } from "util/db";
+import { StoryText } from "model/translations";
+import { getStory, getStoryCollections, getVisibleStoryIds } from "util/db";
 
-function StoryPage() {
-  const router = useRouter();
-  const { id } = router.query;
-  const { data: story } = useStory(id as string);
-  const { data: collections } = useStoryCollections(id as string);
 
-  const collectionsAsStrings = (collections as any)?.map((c) => c.collectionName).join(", ");
+export async function getStaticProps({ params }) {
+  const story = await getStory(params.id);
+  const storyCollections = await getStoryCollections(params.id);
+  const storyCollectionNames = (storyCollections as any)?.map((c) => c.collectionName).join(", ");
+  return { props: { story, storyCollectionNames } };
+}
 
+export async function getStaticPaths() {
+  const storyIdObjects = await getVisibleStoryIds();
+  const paths = storyIdObjects.map((storyIdObj) => ({
+    params: { id: storyIdObj.id },
+  }))
+  return { paths, fallback: false };
+}
+
+interface StoryPageProps {
+  story: StoryText;
+  storyCollectionNames: string[];
+}
+
+function StoryPage({ story, storyCollectionNames }: StoryPageProps) {
   return <>
     <Meta title={`Hindi Reading Practice - ${story?.title}`}
       description={`${story?.difficulty} story for Hindi reading practice and listening practice. 
     Improve your Hindi with reading practice with Hindi passages. 
-    This one has these categories: ${collectionsAsStrings}`}
+    This one has these categories: ${storyCollectionNames}`}
       noindex={true} />
 
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       <div className="mx-auto">
-        <StoryIdContext.Provider value={id as string}>
-          <Story id={id as string} />
+        <StoryIdContext.Provider value={story.id}>
+          <Story story={story} />
         </StoryIdContext.Provider>
       </div>
     </div>

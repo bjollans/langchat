@@ -3,28 +3,26 @@ import SuggestedStories from "components/engagement/SuggestedStories";
 import StoryAudioContextProvider from "context/storyAudioContext";
 import { TargetLanguageContext } from "context/targetLanguageContext";
 import ReadUsageContextProvider from "context/trackReadContext";
+import { StoryText } from "model/translations";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { requireAuth } from "util/auth";
-import { useStory } from "util/db";
 import { trackStat } from "util/storyStatistics";
 import { StoryPayWall } from "./StoryPayWall";
 import StoryQuestionsSection from "./StoryQuestionsSection";
 import StoryTextRender from "./StoryTextRender";
 
 interface StoryProps {
-    id: string;
+    story: StoryText;
 }
 
-function Story(props: StoryProps): JSX.Element {
-    const { data: story, isSuccess: storyLoaded } = useStory(props.id);
-
+function Story({ story }: StoryProps): JSX.Element {
     const [isPayWallOpen, setIsPayWallOpen] = useState(false);
 
     useEffect(() => {
-        trackStat(props.id, "opens");
+        trackStat(story.id, "opens");
         posthog.capture('story_view', {
-            story_id: props.id,
+            story_id: story.id,
             story_title: story?.title,
             story_target_language: story?.targetLanguage,
         });
@@ -35,7 +33,7 @@ function Story(props: StoryProps): JSX.Element {
         <div className="relative flex z-0">
             <div className={`p-4 my-4 mb-36 rounded-lg border-1 border-black w-full`}>
                 <TargetLanguageContext.Provider value={story?.targetLanguage}>
-                    {storyLoaded && <ReadUsageContextProvider story={story}>
+                    <ReadUsageContextProvider story={story}>
                         <StoryAudioContextProvider>
                             {story?.targetLanguage == "hi" &&
                                 <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
@@ -46,13 +44,11 @@ function Story(props: StoryProps): JSX.Element {
                             </div>
                             <StoryPayWall story={story} isPayWallOpen={isPayWallOpen} setIsPayWallOpen={setIsPayWallOpen} />
                             <StoryTextRender story={story} />
-                            <StoryQuestionsSection storyId={props.id} />
+                            <StoryQuestionsSection storyId={story.id} />
                             {isPayWallOpen && story?.audioUrl &&
-                                <StoryAudioPlayer src={story.audioUrl} />
-                            }
-
+                                <StoryAudioPlayer src={story.audioUrl} />}
                         </StoryAudioContextProvider>
-                    </ReadUsageContextProvider>}
+                    </ReadUsageContextProvider>
                 </TargetLanguageContext.Provider>
                 {isPayWallOpen && <SuggestedStories />}
             </div>

@@ -17,7 +17,7 @@ interface StoryProps {
 }
 
 function Story({ story }: StoryProps): JSX.Element {
-    const [isPayWallOpen, setIsPayWallOpen] = useState(false);
+    const [isPayWallOpen, setIsPayWallOpen] = useState(true);
 
     useEffect(() => {
         trackStat(story.id, "opens");

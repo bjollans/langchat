@@ -32,10 +32,10 @@ const pageTitles = (location: string) => {
         case '/story/hi': return '🇮🇳 Hindi Reading Practice';
         case '/vocab': return 'Your Vocabulary';
         case '/practice': return 'Practice Vocabulary';
-        default: return <span className='flex items-center'>
+        default: return <a className='flex items-center' href='/story/hi'>
             <img src="/android-chrome-32x32.png" className='w-6 h-6 mx-2' />
             Linguin
-        </span>
+        </a>
     }
 }
 

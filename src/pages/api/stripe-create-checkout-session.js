@@ -23,6 +23,7 @@ export default requireAuth(async (req, res) => {
 
       await createCustomer(user.id, {
         stripeCustomerId: customer.id,
+        affiliate: body.affiliate,
       });
 
       stripeCustomerId = customer.id;

@@ -12,12 +12,13 @@ loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY, {
   stripe = stripeInstance;
 });
 
-export async function redirectToCheckout(planId) {
+export async function redirectToCheckout(planId, affiliate) {
   // Create a checkout session
   const session = await apiRequest("stripe-create-checkout-session", "POST", {
     priceId: getStripePriceId(planId),
     successUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/?paid=true`,
     cancelUrl: `${window.location.origin}/?canceled=true`,
+    affiliate: affiliate ?? "None",
   });
 
   // Ensure if user clicks browser back button from checkout they go to /pricing

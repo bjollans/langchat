@@ -16,8 +16,6 @@ import { useAuth } from 'util/auth'
 var navigation = [
     { name: 'Stories', href: '/story/hi', icon: BookOpenIcon },
     { name: 'How to Read Hindi', href: '/articles/how-to-read-hindi', icon: AcademicCapIcon },
-    { name: 'See Your Vocab', href: '/vocab', icon: LanguageIcon },
-    { name: 'Practice Your Vocab', href: '/practice', icon: BuildingLibraryIcon },
     { name: 'My Account', href: '/settings/general', icon: UserCircleIcon },
 ]
 

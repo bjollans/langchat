@@ -46,7 +46,6 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
                             </p>
                         }
                     </div>
-                    <VocabSaveButton termTranslation={props.termTranslation} />
                 </div>
             </div>}
             <span className={vocab ? "bg-cyan-100" : ""}>

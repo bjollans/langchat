@@ -1,3 +1,4 @@
+import WordPlayerButton from "components/audio/WordPlayerButton";
 import VocabSaveButton from "components/vocab/VocabSaveButton";
 import { StoryIdContext } from "context/storyIdContext";
 import { useReadUsageContext } from "context/trackReadContext";
@@ -35,7 +36,8 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
             onMouseLeave={() => setShowTranslation(false)}
             className="cursor-pointer relative mx-0.5 underline decoration-dotted hover:text-indigo-500 cursor-pointer">
             {showTranslation && <div className="cursor-text absolute bottom-0 left-0">
-                <div className="bg-black whitespace-nowrap flex text-white rounded-lg p-2 items-start mb-6 mx-auto">
+                <div className="bg-black whitespace-nowrap flex text-white rounded-lg p-2 items-center space-x-2 mb-6 mx-auto">
+                    <WordPlayerButton word={props.termTranslation.text} />
                     <div>
                         <p>
                             {props.termTranslation.translation}
@@ -49,7 +51,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
                 </div>
             </div>}
             <span className={vocab ? "bg-cyan-100" : ""}>
-            {props.termTranslation.text}
+                {props.termTranslation.text}
             </span>
         </span>
 

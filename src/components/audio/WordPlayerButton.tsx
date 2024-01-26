@@ -1,6 +1,8 @@
 import { PlayIcon } from "@heroicons/react/20/solid";
 import { PlayCircleIcon } from "@heroicons/react/24/solid";
-import { useMemo, useRef } from "react";
+import { StoryIdContext } from "context/storyIdContext";
+import posthog from "posthog-js";
+import { useContext, useMemo, useRef } from "react";
 
 export interface WordPlayerButtonProps {
     word: string;
@@ -8,6 +10,7 @@ export interface WordPlayerButtonProps {
 
 export default function WordPlayerButton({ word }: WordPlayerButtonProps) {
     const audioRef = useRef<HTMLAudioElement>(null);
+    const storyId = useContext(StoryIdContext);
     const audioSrc = useMemo(() => {
         let fileName = "";
         for (let i = 0; i < word.length; i++) {
@@ -19,6 +22,10 @@ export default function WordPlayerButton({ word }: WordPlayerButtonProps) {
     const play = () => {
         if (audioRef.current) {
             audioRef.current.play();
+            posthog.capture("play_word_sound", {
+                vocab: word,
+                storyId: storyId,
+            });
         }
     };
 

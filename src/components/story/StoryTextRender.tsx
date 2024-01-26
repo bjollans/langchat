@@ -34,7 +34,7 @@ export default function StoryTextRender(props: StoryTextRenderProps): JSX.Elemen
                 termTranslationCopy.position -= linePositionStart;
                 return termTranslationCopy;
             }) ?? [],
-            wholeSentence: props.story.translationJson?.sentences!.find((sentence: TermTranslation) => sentence.position == lineIndex)
+            wholeSentence: props.story.translationJson?.sentences?.find((sentence: TermTranslation) => sentence.position == lineIndex)
         };
         const lineAudioSentenceTime: AudioSentenceTime | undefined = props.story.audioSentenceTimes ? props.story.audioSentenceTimes[lineIndex - nonSentenceLinesSeen] : undefined;
         const audioStartTime = lineAudioSentenceTime ? lineAudioSentenceTime.start : 0;

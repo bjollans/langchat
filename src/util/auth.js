@@ -9,7 +9,7 @@ import queryString from "query-string";
 import supabase from "./supabase";
 import { useUser, updateUser } from "./db";
 import router, { useRouter } from "next/router";
-import PageLoader from "../components/PageLoader";
+import PageLoader from "components/PageLoader";
 import { getFriendlyPlanId } from "./prices";
 import analytics from "./analytics";
 import posthog from 'posthog-js'

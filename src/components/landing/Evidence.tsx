@@ -1,7 +1,7 @@
 export default function Evidence() {
     return (
         <section className="relative isolate overflow-hidden p-6 py-12 sm:py-12 lg:px-8 bg-white my-12 md:my-24">
-            <div className="mx-auto quote max-w-2xl lg:max-w-4xl rounded-lg px-6 pb-6 shadow-sm bg-blue-900 text-blue-900 shadow-inner">
+            <div className="mx-auto max-w-2xl lg:max-w-4xl rounded-lg px-6 pb-6 shadow-sm bg-blue-900 text-blue-900 shadow-inner" style={{backgroundColor: "#f4f4f5"}}>
   
                 <figure className="">
                         <svg className="w-11 h-10 bg-white border border-white p-2 shadow-inner mb-6 text-blue-900" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 14">

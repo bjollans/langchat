@@ -9,16 +9,12 @@ module.exports = function (api) {
                     "root": ["./"],
                     "alias": {
                         "components": "./src/components",
-                        "pages": "./src/pages"
+                        "pages": "./src/pages",
+                        "^react-native$": "react-native-web"
                         // Add other aliases here
                     }
                 }
             ],
-            ["module-resolver", {
-                "alias": {
-                  "^react-native$": "react-native-web"
-                }
-              }],
             'nativewind/babel', { mode: 'transformOnly' },
             'react-native-web'
         ]

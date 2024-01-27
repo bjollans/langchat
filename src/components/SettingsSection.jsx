@@ -70,20 +70,18 @@ function SettingsSection(props) {
           { section: "password", label: "Password" },
           { section: "billing", label: "Billing" },
         ].map((tab) => (
-          <Link href={`/settings/${tab.section}`} key={tab.section}>
-            <a
-              className={
-                "flex items-center grow justify-center px-3 md:px-4 -mb-px py-4 border-b-2" +
-                (tab.section === section
-                  ? " text-blue-500 border-blue-500"
-                  : "") +
-                (tab.section !== section
-                  ? " border-transparent hover:text-blue-500"
-                  : "")
-              }
-            >
-              {tab.label}
-            </a>
+          <Link href={`/settings/${tab.section}`} key={tab.section}
+            className={
+              "flex items-center grow justify-center px-3 md:px-4 -mb-px py-4 border-b-2" +
+              (tab.section === section
+                ? " text-blue-500 border-blue-500"
+                : "") +
+              (tab.section !== section
+                ? " border-transparent hover:text-blue-500"
+                : "")
+            }
+          >
+            {tab.label}
           </Link>
         ))}
       </nav>

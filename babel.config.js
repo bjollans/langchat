@@ -15,7 +15,7 @@ module.exports = function (api) {
                     }
                 }
             ],
-            'nativewind/babel', { mode: 'transformOnly' },
+            'nativewind/babel',
             'react-native-web'
         ]
     };

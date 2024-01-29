@@ -35,9 +35,12 @@ function StoryPage({ story, storyCollectionNames }: StoryPageProps) {
 
     <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       <div className="mx-auto">
-        <StoryIdContext.Provider value={story.id}>
-          <Story story={story} />
-        </StoryIdContext.Provider>
+
+        <div className="relative flex z-0">
+          <div className={`p-4 my-4 mb-36 rounded-lg border-1 border-black w-full`}>
+            <Story story={story} />
+          </div>
+        </div>
       </div>
     </div>
   </>

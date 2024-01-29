@@ -1,4 +1,5 @@
 import { PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
+import { Div, Btn, Audio } from 'components/RnTwComponents';
 import { useStoryAudioContext } from 'context/storyAudioContext';
 import { useReadUsageContext } from 'context/trackReadContext';
 import posthog from 'posthog-js';
@@ -105,27 +106,25 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     }, [currentAudioTime, duration]);
 
     return (
-        <div className='bg-white fixed bottom-0 left-0 right-0 drop-shadow-xl border'>
-            <div
+        <Div className='bg-white fixed bottom-0 left-0 right-0 drop-shadow-xl border'>
+            <Div
                 className='w-full h-2 bg-gray-200 cursor-pointer'
                 onClick={handleProgressBarClick}
             >
-                <div className='bg-cyan-600 h-2' style={{ width: progressBarWidth }}></div>
-            </div>
-            <audio
+                <Div className='bg-cyan-600 h-2' style={{ width: progressBarWidth }}></Div>
+            </Div>
+            <Audio
                 onEnded={onEnded}
-                ref={audioRef}
+                audioRef={audioRef}
                 onTimeUpdate={handleTimeUpdate}
                 onLoadedMetadata={handleTimeUpdate}
-            >
-                <source src={props.src} type="audio/mpeg" />
-                Your browser does not support the audio element.
-            </audio>
-            <button className='w-full justify-center flex my-1 rounded-full' onClick={togglePlayPause}>
+                src={props.src}
+                alt="Your browser does not support the audio element."/>
+            <Btn className='w-full justify-center flex my-1 rounded-full' onClick={togglePlayPause}>
                 {isPlayingAudio
                     ? <PauseIcon className='rounded-full border-4 border-slate-600 text-slate-600 w-12 h-12' />
                     : <PlayIcon className='rounded-full border-4 pl-1 border-slate-600 text-slate-600 w-12 h-12' />}
-            </button>
-        </div>
+            </Btn>
+        </Div>
     )
 }

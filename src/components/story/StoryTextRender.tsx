@@ -1,3 +1,4 @@
+import { Br } from "components/RnTwComponents";
 import TranslatedTextRender from "components/text/TranslatedTextRender";
 import { useStoryAudioContext } from "context/storyAudioContext";
 import { AudioSentenceTime, StoryText, TermTranslation, TranslationJson } from "model/translations";
@@ -21,7 +22,7 @@ export default function StoryTextRender(props: StoryTextRenderProps): JSX.Elemen
     const lineToTranslatedTextRender = (line: string) => {
         if (line === "") {
             nonSentenceLinesSeen += 1;
-            return (<br />);
+            return (<Br />);
         }
         const linePositionStart = props.story.content.indexOf(line)!;
         const linePositionEnd = linePositionStart + line.length;

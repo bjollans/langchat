@@ -1,3 +1,4 @@
+import { Div, P, Span } from "components/RnTwComponents";
 import WordPlayerButton from "components/audio/WordPlayerButton";
 import VocabSaveButton from "components/vocab/VocabSaveButton";
 import { StoryIdContext } from "context/storyIdContext";
@@ -31,29 +32,29 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     }
 
     return (
-        <span
+        <Span
             onClick={handleClick}
             onMouseLeave={() => setShowTranslation(false)}
             className="cursor-pointer relative mx-0.5 underline decoration-dotted hover:text-indigo-500 cursor-pointer">
-            {showTranslation && <div className="cursor-text absolute bottom-0 left-0">
-                <div className="bg-black whitespace-nowrap flex text-white rounded-lg p-2 items-center space-x-2 mb-6 mx-auto">
+            {showTranslation && <Div className="cursor-text absolute bottom-0 left-0">
+                <Div className="bg-black whitespace-nowrap flex text-white rounded-lg p-2 items-center space-x-2 mb-6 mx-auto">
                     <WordPlayerButton word={props.termTranslation.text} />
-                    <div>
-                        <p>
+                    <Div>
+                        <P>
                             {props.termTranslation.translation}
-                        </p>
+                        </P>
                         {props.termTranslation.transliteration &&
-                            <p className="text-sm italic mx-auto">
+                            <P className="text-sm italic mx-auto">
                                 {props.termTranslation.transliteration}
-                            </p>
+                            </P>
                         }
-                    </div>
-                </div>
-            </div>}
-            <span className={vocab ? "bg-cyan-100" : ""}>
+                    </Div>
+                </Div>
+            </Div>}
+            <Span className={vocab ? "bg-cyan-100" : ""}>
                 {props.termTranslation.text}
-            </span>
-        </span>
+            </Span>
+        </Span>
 
     );
 }

@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.linguin.co
+
+# Sitemaps
+Sitemap: https://www.linguin.co/sitemap.xml

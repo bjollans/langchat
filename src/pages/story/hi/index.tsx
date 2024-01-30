@@ -17,11 +17,13 @@ export async function getPropsForStoryIndexPage() {
         story.collections = storyCollections.filter((collection: StoryToCollection) =>
             collection.storyId == story.id).map((collection: StoryToCollection) =>
                 collection.collectionName));
+    
+    const randomizedStories = stories.sort(() => Math.random() - 0.5);
 
     const filterCollectionNames = await getCollectionNames().then((collections: any) => collections.map((collection: any) => collection.name));
     return {
         props: {
-            stories,
+            stories: randomizedStories,
             filterDifficulties,
             filterCollectionNames,
         }
@@ -44,7 +46,7 @@ function StoryIndexPage(props: StoryListProps) {
 
     return (
         <>
-            <Meta title="Hindi Mini Stories" />
+            <Meta title="Linguin - Hindi Reading Practice" />
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-3xl">
                     <BrandedWelcome />

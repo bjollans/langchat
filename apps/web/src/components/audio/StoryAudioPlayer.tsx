@@ -1,5 +1,5 @@
 import { PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
-import { Div, Btn, Audio } from 'components/RnTwComponents';
+import { Div, Btn, Audio } from 'linguin-shared/components/RnTwComponents';
 import { useStoryAudioContext } from 'context/storyAudioContext';
 import { useReadUsageContext } from 'context/trackReadContext';
 import posthog from 'posthog-js';

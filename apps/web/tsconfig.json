@@ -7,14 +7,15 @@
     "target": "es5",
     "moduleResolution": "node",
     "paths": {
-      "components/*": ["../../packages/linguin-shared/components/*"],
+      "rn-tw-components/*": ["src/rn-tw-components/*"],
+      "components/*": ["src/components/*"],
       "pages/*": ["src/pages/*"],
       "public/*": ["public/*"],
-      "context/*": ["../../packages/linguin-shared/context/*"],
-      "model/*": ["../../packages/linguin-shared/model/*"],
-      "types/*": ["../../packages/linguin-shared/types/*"],
+      "context/*": ["src/context/*"],
+      "model/*": ["src/model/*"],
+      "types/*": ["src/types/*"],
       "styles/*": ["src/styles/*"],
-      "util/*": ["../../packages/linguin-shared/util/*"],
+      "util/*": ["src/util/*"],
     }
   },
   "include": [

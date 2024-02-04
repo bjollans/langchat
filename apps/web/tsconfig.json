@@ -20,6 +20,6 @@
   },
   "include": [
     "src/**/*.ts*"
-, "src/types/language.ts"],
+, "src/types/language.ts"  ],
   "extends": "@tsconfig/next/tsconfig.json"
 }

@@ -6,7 +6,7 @@ module.exports = function (api) {
             [
                 "module-resolver",
                 {
-                    "root": ["../../"],
+                    "root": ["./"],
                     "alias": {
                         "components": "./src/components",
                         "pages": "./src/pages",

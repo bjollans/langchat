@@ -12,8 +12,6 @@
   "author": "Bernard Jollans",
   "license": "ISC",
   "dependencies": {
-    "nativewind": "^2.0.11",
-    "typescript": "^5.3.3",
-    "react-native-web": "~0.19.6"
+    "typescript": "^5.3.3"
   }
 }

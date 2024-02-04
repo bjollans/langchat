@@ -1,17 +1,16 @@
 const { withExpo } = require('@expo/next-adapter');
 
-const nextConfig = withExpo({
-    reactStrictMode: true,
-    transpilePackages: ['linguin-shared',
-        'react-native',
-        'react-native-web',
-        'nativewind',
-        "react-native-css-interop",
-        // Add more React Native/Expo packages here...
-    ],
-    experimental: {
-        forceSwcTransforms: true,
-    },
+module.exports = withExpo({
+  // transpilePackages is a Next.js +13.1 feature.
+  // older versions can use next-transpile-modules
+  transpilePackages: [
+    'react-native',
+    'expo',
+    'nativewind',
+    "react-native-css-interop",
+    // Add more React Native/Expo packages here...
+  ],
+  experimental: {
+    forceSwcTransforms: true,
+  },
 });
-
-module.exports = nextConfig

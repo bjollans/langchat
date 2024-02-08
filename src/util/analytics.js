@@ -1,3 +1,5 @@
+"use client";
+
 import Analytics from "analytics";
 import mixpanelPlugin from "@analytics/mixpanel";
 import Router from "next/router";

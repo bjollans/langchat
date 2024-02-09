@@ -3,11 +3,10 @@ import "styles/global.css";
 import "util/analytics";
 import { PHProvider } from 'util/providers'
 import { AuthProvider } from "util/auth";
-import { QueryClientProvider } from "util/db";
+import { QueryClientProvider } from "util/clientDb";
 import ApplicationShell from "components/ApplicationShell";
 import Script from 'next/script';
 import OriginTracker from "components/tracking/OriginTracker";
-import { CookiesProvider } from 'react-cookie';
 
 
 
@@ -21,25 +20,22 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>
-
                 <PHProvider>
                     <QueryClientProvider>
-                        <CookiesProvider defaultSetOptions={{ path: '/' }}>
-                            <AuthProvider>
-                                <OriginTracker />
-                                <Script strategy="afterInteractive" src={"https://www.googletagmanager.com/gtag/js?id=" + process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
-                                <Script id="google-analytics" strategy="afterInteractive">
-                                    {`window.dataLayer = window.dataLayer || [];
+                        <AuthProvider>
+                            <OriginTracker />
+                            <Script strategy="afterInteractive" src={"https://www.googletagmanager.com/gtag/js?id=" + process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+                            <Script id="google-analytics" strategy="afterInteractive">
+                                {`window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             
             gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');`}
-                                </Script>
-                                <ApplicationShell>
-                                    {children}
-                                </ApplicationShell>
-                            </AuthProvider>
-                        </CookiesProvider>
+                            </Script>
+                            <ApplicationShell>
+                                {children}
+                            </ApplicationShell>
+                        </AuthProvider>
                     </QueryClientProvider>
                 </PHProvider>
             </body>

@@ -7,7 +7,7 @@ import { TermTranslation } from "model/translations";
 import posthog from "posthog-js";
 import { useContext, useState } from "react";
 import { useAuth } from "util/auth";
-import { useVocab } from "util/db";
+import { useVocab } from "util/clientDb";
 
 export interface TranslatedTermProps {
     termTranslation: TermTranslation;

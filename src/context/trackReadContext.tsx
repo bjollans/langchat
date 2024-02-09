@@ -2,7 +2,7 @@ import { StoryText } from "model/translations";
 import posthog from "posthog-js";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "util/auth";
-import { markUserStoryReadAutomatic, useUserStoriesReadAutomatic } from "util/db";
+import { markUserStoryReadAutomatic, useUserStoriesReadAutomatic } from "util/clientDb";
 import { trackStat } from "util/storyStatistics";
 
 

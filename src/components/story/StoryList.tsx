@@ -1,11 +1,12 @@
-import Meta from "components/Meta";
+"use client";
+
 import { StoryText } from "model/translations";
 import StoryListElement from "./StoryListElement";
 import { useState } from "react";
 import StoryFilters, { BooleanFilter, Filter } from "components/StoryFilters";
 import { StoryListFilterContext, StoryFilterChangeCalls } from "context/storyListFilterContext";
 import { useAuth } from "util/auth";
-import { useUserStoriesRead } from "util/db";
+import { useUserStoriesRead } from "util/clientDb";
 
 export interface StoryListProps {
     stories: StoryText[];

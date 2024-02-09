@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useStories, useStory, useUserHasReadStory, useUserStoriesRead, userWordsSeen } from "./db";
+import { useStories, useStory, useUserHasReadStory, useUserStoriesRead, userWordsSeen } from "./clientDb";
 
 export interface UserReadStatistics {
     wordsSeen: string[];

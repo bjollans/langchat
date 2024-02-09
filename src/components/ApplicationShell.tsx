@@ -11,7 +11,7 @@ import {
     UserCircleIcon,
     XMarkIcon
 } from '@heroicons/react/24/outline'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { Fragment, useState } from 'react'
 import { useAuth } from 'util/auth'
 

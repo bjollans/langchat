@@ -2,7 +2,7 @@ import { Message } from "model/translations";
 import posthog from "posthog-js";
 import analytics from "util/analytics";
 import { useAuth } from "util/auth";
-import { sendMessage, updateConversationStatus } from "util/db";
+import { sendMessage, updateConversationStatus } from "util/clientDb";
 
 interface ChatInputProps {
     conversationId: string;

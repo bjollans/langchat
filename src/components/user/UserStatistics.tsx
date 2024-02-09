@@ -1,5 +1,7 @@
+"use client";
+
 import { useAuth } from "util/auth";
-import { useUserStoriesRead, userWordsSeen } from "util/db";
+import { useUserStoriesRead, userWordsSeen } from "util/clientDb";
 
 export default function UserStatistics() {
     const auth = useAuth();

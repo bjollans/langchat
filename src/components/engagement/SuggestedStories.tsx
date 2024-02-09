@@ -3,7 +3,8 @@ import { StoryText } from "model/translations";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { useAuth } from "util/auth";
-import { getStoriesByIds, useVisibleStoryIds, useUserStoriesRead } from "util/db";
+import { useVisibleStoryIds, useUserStoriesRead } from "util/clientDb";
+import { getStoriesByIds } from "util/serverDb";
 
 export default function SuggestedStories() {
     const STORY_AMOUNT = 3;

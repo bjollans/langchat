@@ -3,7 +3,7 @@ import "styles/global.css";
 import "util/analytics";
 import { PHProvider } from 'util/providers'
 import { AuthProvider } from "util/auth";
-import { QueryClientProvider } from "util/db";
+import { QueryClientProvider } from "util/clientDb";
 import ApplicationShell from "components/ApplicationShell";
 import Script from 'next/script';
 import OriginTracker from "components/tracking/OriginTracker";

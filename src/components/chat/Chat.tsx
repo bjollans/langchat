@@ -2,7 +2,7 @@ import { useAuth } from 'util/auth';
 import ChatHeader from './ChatHeader';
 import ChatHistory from "./ChatHistory";
 import ChatInput from "./ChatInput";
-import { useConversationsByUser } from 'util/db';
+import { useConversationsByUser } from 'util/clientDb';
 
 function Chat() {
     const auth = useAuth();

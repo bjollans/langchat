@@ -3,7 +3,7 @@ import { StoryText } from "model/translations";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { useAuth } from "util/auth";
-import { useUserStoriesReadAutomatic, useUserStoriesReadAutomaticLast7Days } from "util/db";
+import { useUserStoriesReadAutomatic, useUserStoriesReadAutomaticLast7Days } from "util/clientDb";
 
 export interface StoryPayWallProps {
     story: StoryText;

@@ -2,7 +2,7 @@ import Meta from "components/Meta";
 import Story from "components/story/Story";
 import { StoryIdContext } from "context/storyIdContext";
 import { StoryText } from "model/translations";
-import { getStory, getStoryCollections, getVisibleStoryIds } from "util/db";
+import { getStory, getStoryCollections, getVisibleStoryIds } from "util/serverDb";
 
 
 export async function getStaticProps({ params }) {

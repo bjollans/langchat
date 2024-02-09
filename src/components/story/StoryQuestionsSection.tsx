@@ -1,7 +1,7 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { useAuth } from "util/auth";
-import { markUserStoryRead, markUserStoryReadAutomatic, upsertUserReadStatistics, useStoryQuestions } from "util/db";
+import { markUserStoryRead, markUserStoryReadAutomatic, upsertUserReadStatistics, useStoryQuestions } from "util/clientDb";
 import { UserReadStatistics, UserStoryStatistics, useUpdatedUserReadStatistics, useUserStoryStatistics } from "util/userStatistics";
 import CompletedWidget from "./CompletedWidget";
 import StoryQuestion from "./StoryQuestion";

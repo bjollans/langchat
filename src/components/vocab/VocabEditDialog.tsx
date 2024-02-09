@@ -3,7 +3,7 @@ import { Dialog } from '@headlessui/react'
 import { Vocab } from 'model/vocab';
 import { useForm } from 'react-hook-form';
 import { XMarkIcon } from '@heroicons/react/24/solid';
-import { createVocab, updateVocab } from 'util/db';
+import { createVocab, updateVocab } from 'util/clientDb';
 import { useAuth } from 'util/auth';
 import { TrashIcon } from '@heroicons/react/24/outline';
 

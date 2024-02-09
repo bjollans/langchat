@@ -1,7 +1,7 @@
 import { useAuth } from "util/auth";
 import { Message } from "../../model/translations";
 import MessageBox from "./MessageBox";
-import { useConversationsByUser, useMessagesForConversation } from "util/db";
+import { useConversationsByUser, useMessagesForConversation } from "util/clientDb";
 
 interface ChatHistoryProps {
     conversationId: string;

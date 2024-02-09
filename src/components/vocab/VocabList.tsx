@@ -1,7 +1,7 @@
 import { Vocab } from "model/vocab";
 import { useState } from "react";
 import { requireAuth, useAuth } from "util/auth";
-import { useVocab } from "util/db";
+import { useVocab } from "util/clientDb";
 import VocabEditDialog from "./VocabEditDialog";
 import { nextReview, timeUntilNextReview } from "util/srs";
 

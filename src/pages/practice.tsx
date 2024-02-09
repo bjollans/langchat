@@ -1,6 +1,6 @@
 import { requireAuth, useAuth } from "util/auth";
 import Flashcard from "./vocab/Flashcard";
-import { useVocab } from "util/db";
+import { useVocab } from "util/clientDb";
 import { useEffect, useState } from "react";
 import { getCardsLeftToday, orderAndFilterVocabList } from "util/srs";
 import { Vocab } from "model/vocab";

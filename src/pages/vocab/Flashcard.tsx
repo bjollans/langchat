@@ -1,7 +1,7 @@
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Vocab } from "model/vocab";
 import React, { useEffect, useState } from "react";
-import { updateVocab } from "util/db";
+import { updateVocab } from "util/clientDb";
 
 export interface FlashCardProps {
     vocab: Vocab;

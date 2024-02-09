@@ -7,7 +7,7 @@ import { TargetLanguageContext } from "context/targetLanguageContext";
 import posthog from "posthog-js";
 import { useContext } from "react";
 import { useAuth } from "util/auth";
-import { createVocab, updateVocab, useVocab } from "util/db";
+import { createVocab, updateVocab, useVocab } from "util/clientDb";
 
 interface VocabSaveButtonProps {
     termTranslation: TermTranslation;

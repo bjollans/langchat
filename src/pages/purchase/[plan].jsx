@@ -5,13 +5,13 @@ import PageLoader from "components/PageLoader";
 import FormAlert from "components/FormAlert";
 import { useAuth, requireAuth } from "util/auth";
 import { redirectToCheckout } from "util/stripe";
-import { useCookies } from 'react-cookie';
+import { getCookie } from 'cookies-next';
 
 function PurchasePage(props) {
   const router = useRouter();
   const auth = useAuth();
   const [formAlert, setFormAlert] = useState();
-  const [cookies] = useCookies(['via']);
+  const viaCookie = getCookie('via');
 
   useEffect(() => {
     if (auth.user.planIsActive) {
@@ -20,7 +20,7 @@ function PurchasePage(props) {
       router.push("/settings/billing");
     } else {
       // Otherwise go to checkout
-      redirectToCheckout(router.query.plan, cookies.via).catch((error) => {
+      redirectToCheckout(router.query.plan, viaCookie).catch((error) => {
         setFormAlert({
           type: "error",
           message: error.message,

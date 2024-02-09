@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import queryString from "query-string";
 import supabase from "./supabase";
-import { useUser, updateUser } from "./db";
+import { useUser, updateUser } from "./clientDb";
 import router, { useRouter } from "next/router";
 import PageLoader from "components/PageLoader";
 import { getFriendlyPlanId } from "./prices";

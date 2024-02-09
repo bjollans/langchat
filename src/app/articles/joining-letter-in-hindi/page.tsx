@@ -137,7 +137,7 @@ export default function HowToReadHindi() {
                 Happy practicing!
             </p>
             <div className="mb-12 flex justify-end">
-                <a href="/story/hi" className="text-lg border shadow p-2 link">
+                <a href="/story/hi" className="items-center space-x-3 flex text-lg border shadow p-2 link">
                     Practice <ChevronDoubleRightIcon className="h-5 w-5 inline" />
                 </a>
             </div>

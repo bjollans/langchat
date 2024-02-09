@@ -68,7 +68,7 @@ export default function HowToReadHindi() {
                     Congratulations, you have memorized the whole of Devanagri. Finish up with our guide on how to combine letters to words. There are just a few rules you need to remember.
                 </p>
                 <div className="mb-12 flex justify-end">
-                    <a href="/articles/joining-letter-in-hindi" className="text-lg border shadow p-2 link">
+                    <a href="/articles/joining-letter-in-hindi" className="items-center space-x-3 flex text-lg border shadow p-2 link">
                         Lesson 4: Joining Letter in Hindi <ChevronDoubleRightIcon className="h-5 w-5 inline" />
                     </a>
                 </div>

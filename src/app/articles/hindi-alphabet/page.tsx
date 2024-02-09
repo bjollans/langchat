@@ -140,7 +140,7 @@ export default function HowToReadHindi() {
                     Try to write all letters in one go. Don't worry if you can't remember all. If you know 90%, you are ready to move on to Matras.
                 </p>
                 <div className="mb-12 flex justify-end">
-                    <a href="/articles/hindi-matras" className="text-lg border shadow p-2 link">
+                    <a href="/articles/hindi-matras" className="items-center space-x-3 flex text-lg border shadow p-2 link">
                         Lesson 3: Matras <ChevronDoubleRightIcon className="h-5 w-5 inline" />
                     </a>
                 </div>

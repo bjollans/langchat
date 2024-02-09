@@ -1,3 +1,5 @@
+"use client";
+
 import { CheckIcon } from '@heroicons/react/20/solid'
 import PricingSection from 'components/PricingSection';
 

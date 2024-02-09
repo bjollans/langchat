@@ -1,3 +1,5 @@
+"use client";
+
 import { Div, H3, Img } from "components/RnTwComponents";
 import StoryAudioPlayer from "components/audio/StoryAudioPlayer";
 import SuggestedStories from "components/engagement/SuggestedStories";

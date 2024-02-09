@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import Link from "next/link";
 import Section from "components/Section";
@@ -7,6 +9,7 @@ import SettingsGeneral from "components/SettingsGeneral";
 import SettingsPassword from "components/SettingsPassword";
 import SettingsBilling from "components/SettingsBilling";
 import { useAuth } from "util/auth";
+import { requireAuth } from "util/auth";
 
 function SettingsSection(props) {
   const auth = useAuth();
@@ -102,4 +105,4 @@ function SettingsSection(props) {
   );
 }
 
-export default SettingsSection;
+export default requireAuth(SettingsSection);

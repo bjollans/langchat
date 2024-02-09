@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import FormAlert from "components/FormAlert";
 import AuthForm from "components/auth/AuthForm";
 import AuthSocial from "components/auth/AuthSocial";
-import { FormAlertData } from "types/divjoy";
 
 function Auth(props) {
   const router = useRouter();

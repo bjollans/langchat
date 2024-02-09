@@ -10,7 +10,7 @@ import React, {
 import queryString from "query-string";
 import supabase from "./supabase";
 import { useUser, updateUser } from "./clientDb";
-import router, { useRouter } from "next/router";
+import { useRouter, usePathname } from "next/navigation";
 import PageLoader from "components/PageLoader";
 import { getFriendlyPlanId } from "./prices";
 import analytics from "./analytics";
@@ -83,13 +83,13 @@ function useAuthProvider() {
       .then(handleAuth);
   };
 
-  const signinWithProvider = (name) => {
+  const signinWithProvider = (name, nextLocation) => {
     return (
       supabase.auth
         .signInWithOAuth({
           provider: name,
           options: {
-            redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}${router.query?.from ?? ""}`,
+            redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}${nextLocation ?? ""}`,
           },
         })
         .then(handleError)
@@ -292,11 +292,13 @@ export const requireAuth = (Component) => {
   return function RequireAuthHOC(props) {
     // Get authenticated user
     const auth = useAuth();
+    const router = useRouter();
+    const pathname = usePathname()
 
     useEffect(() => {
       // Redirect if not signed in
-      if (auth.user === false && router.isReady) {
-        router.replace(`/auth/signin?from=${router.asPath}`);
+      if (auth.user === false) {
+        router.replace(`/auth/signin?from=${pathname}`);
       }
     }, [auth, router]);
 

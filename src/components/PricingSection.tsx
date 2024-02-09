@@ -1,7 +1,7 @@
 "use client";
 
 import { CheckIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import posthog from "posthog-js";
 
 export const subscriptionDetails =
@@ -21,7 +21,7 @@ function classNames(...classes) {
 }
 
 export default function PricingSection() {
-    const router = useRouter();
+    const pathname = usePathname()
     return (
         <div className="mx-auto mt-8 items-center max-w-sm">
             <div
@@ -53,7 +53,7 @@ export default function PricingSection() {
                     href={subscriptionDetails.href}
                     aria-describedby={"subscriptionDetails"}
                     onClick={() => posthog.capture('buy_click', {
-                        sourceUrl: router.asPath,
+                        sourceUrl: pathname,
                     })
                     }
                     className={classNames(

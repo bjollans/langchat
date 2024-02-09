@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import Button from "components/Button";
 import LoadingIcon from "components/LoadingIcon";
 import { useAuth } from "util/auth";
+import { useSearchParams } from "next/navigation";
 
 function AuthSocial(props) {
+  const searchParams = useSearchParams()
+  const nextLocation = searchParams.get('from')
   const auth = useAuth();
   const [pending, setPending] = useState(null);
 
@@ -17,7 +20,7 @@ function AuthSocial(props) {
   const onSigninWithProvider = (provider) => {
     setPending(provider);
     auth
-      .signinWithProvider(provider)
+      .signinWithProvider(provider, nextLocation)
       .then((user) => {
         // Remember this provider was last used
         // so we can indicate for next login.

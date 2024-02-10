@@ -1,0 +1,15 @@
+{
+  "web": {
+    "bundler": "metro"
+  },
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "f7ff740c-9367-4910-864b-38950c9afcde"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.bjolly.linguin"
+    }
+  }
+}

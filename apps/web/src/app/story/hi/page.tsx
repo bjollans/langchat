@@ -6,7 +6,7 @@ import UserStatistics from "components/user/UserStatistics";
 import { StoryText, StoryToCollection } from "model/translations";
 import { getAvailableStoryDifficultyLevels, getCollectionNames, getStoriesCollections, getStoriesOrderedByCustom } from "util/serverDb";
 
-export async function getPropsForStoryIndexPage() {
+async function getPropsForStoryIndexPage() {
     const stories = await getStoriesOrderedByCustom('title', false);
     const filterDifficulties = await getAvailableStoryDifficultyLevels();
     const storyIds = stories.map((story: any) => story.id);

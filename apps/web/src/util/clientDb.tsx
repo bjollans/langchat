@@ -341,7 +341,7 @@ function handle(response: PostgrestResponse<any> | PostgrestSingleResponse<any>)
   return response.data;
 }
 
-export function QueryClientProvider(props: QueryClientProviderProps): JSX.Element {
+export function QueryClientProvider(props: any): JSX.Element {
   return (
     <QueryClientProviderBase client={client} >
       {props.children}

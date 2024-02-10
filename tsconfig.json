@@ -1,46 +1,4 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "module": "commonjs",
-    "noImplicitAny": false,
-    "removeComments": true,
-    "target": "es5",
-    "moduleResolution": "node",
-    "paths": {
-      "rn-tw-components/*": [
-        "src/rn-tw-components/*"
-      ],
-      "components/*": [
-        "src/components/*"
-      ],
-      "pages/*": [
-        "src/pages/*"
-      ],
-      "public/*": [
-        "public/*"
-      ],
-      "context/*": [
-        "src/context/*"
-      ],
-      "model/*": [
-        "src/model/*"
-      ],
-      "types/*": [
-        "src/types/*"
-      ],
-      "styles/*": [
-        "src/styles/*"
-      ],
-      "util/*": [
-        "src/util/*"
-      ]
-    },
-    "strictNullChecks": true
-  },
-  "include": [
-    "src/**/*.ts*",
-    "src/types/language.ts",
-    ".next/types/**/*.ts"
-  ],
-  "extends": "@tsconfig/next/tsconfig.json"
+  "compilerOptions": {},
+  "extends": "expo/tsconfig.base"
 }

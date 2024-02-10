@@ -1,6 +1,5 @@
 import { Div, P, Span } from "components/RnTwComponents";
 import WordPlayerButton from "components/audio/WordPlayerButton";
-import VocabSaveButton from "components/vocab/VocabSaveButton";
 import { StoryIdContext } from "context/storyIdContext";
 import { useReadUsageContext } from "context/trackReadContext";
 import { TermTranslation } from "model/translations";

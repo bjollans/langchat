@@ -6,7 +6,7 @@ import { TermTranslation, TranslatedText } from "model/translations";
 import posthog from 'posthog-js';
 import { useContext, useState } from "react";
 import TranslatedTerm from "./TranslatedWord";
-import { Div, P, Span } from 'components/RnTwComponents';
+import { Div, P, Span } from '@linguin-shared/components/RnTwComponents';
 
 interface TranslatedTextProps {
     translatedText: TranslatedText;

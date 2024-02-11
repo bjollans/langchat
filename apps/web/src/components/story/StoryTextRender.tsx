@@ -1,4 +1,4 @@
-import { Br } from "components/RnTwComponents";
+import { Br } from "@linguin-shared/components/RnTwComponents";
 import TranslatedTextRender from "components/text/TranslatedTextRender";
 import { useStoryAudioContext } from "context/storyAudioContext";
 import { AudioSentenceTime, StoryText, TermTranslation, TranslationJson } from "model/translations";

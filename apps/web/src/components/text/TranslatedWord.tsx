@@ -1,4 +1,4 @@
-import { Div, P, Span } from "components/RnTwComponents";
+import { Div, P, Span } from "@linguin-shared/components/RnTwComponents";
 import WordPlayerButton from "components/audio/WordPlayerButton";
 import { StoryIdContext } from "context/storyIdContext";
 import { useReadUsageContext } from "context/trackReadContext";

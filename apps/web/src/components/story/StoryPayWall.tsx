@@ -1,4 +1,5 @@
 import PricingSection from "components/PricingSection";
+import { Div, H3 } from "@linguin-shared/components/RnTwComponents";
 import { StoryText } from "model/translations";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
@@ -43,13 +44,13 @@ export function StoryPayWall({ story, isPayWallOpen, setIsPayWallOpen }: StoryPa
     if (isPayWallOpen) return (<></>);
 
     return (
-        <div className="flex justify-center absolute w-full z-10 h-full backdrop-blur-sm bg-white bg-opacity-60">
-            <div className="rounded-lg p-4 mx-auto">
-                <h3 className="text-black text-4xl max-w-lg tracking-tight text-center font-bold mb-4">
+        <Div className="flex justify-center absolute w-full z-10 h-full backdrop-blur-sm bg-white bg-opacity-60">
+            <Div className="rounded-lg p-4 mx-auto">
+                <H3 className="text-black text-4xl max-w-lg tracking-tight text-center font-bold mb-4">
                     You have reached your free weekly limit of {freeStoriesPerWeek} stories
-                </h3>
+                </H3>
                 <PricingSection />
-            </div>
-        </div>
+            </Div>
+        </Div>
     );
 }

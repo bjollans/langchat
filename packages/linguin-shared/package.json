@@ -1,0 +1,17 @@
+{
+    "name": "linguin-shared",
+    "version": "1.0.0",
+    "description": "Components for Linguin shared between web and app",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+      "linguin"
+    ],
+    "author": "Bernard Jollans",
+    "license": "ISC",
+    "dependencies": {
+      "typescript": "^5.3.3"
+    }
+  }

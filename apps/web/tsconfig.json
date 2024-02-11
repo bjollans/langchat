@@ -7,8 +7,8 @@
     "target": "es5",
     "moduleResolution": "node",
     "paths": {
-      "rn-tw-components/*": [
-        "src/rn-tw-components/*"
+      "@linguin-shared/*": [
+        "../../packages/linguin-shared/*"
       ],
       "components/*": [
         "src/components/*"
@@ -41,6 +41,6 @@
     "src/**/*.ts*",
     "src/types/language.ts",
     ".next/types/**/*.ts"
-  ],
+, "../../packages/linguin-shared/components/RnTwComponents.tsx"  ],
   "extends": "@tsconfig/next/tsconfig.json"
 }

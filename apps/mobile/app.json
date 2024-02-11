@@ -1,7 +1,10 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "extra": {
+      "eas": {
+        "projectId": "f7ff740c-9367-4910-864b-38950c9afcde"
+      }
+    },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bjolly.linguin"
     },
     "android": {
       "adaptiveIcon": {

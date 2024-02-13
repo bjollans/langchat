@@ -55,7 +55,7 @@ export default function StoryQuestion(props: StoryQuestionProps) {
                             onClick={() => evaluateAnswer(option)}
                         >
                             <Div className="flex divide-x-2">
-                                <P className="text-sm text-gray-900 px-3 py-2 h-full">{String.fromCharCode(i + 65)}</P>
+                                <P className="text-sm text-gray-900 px-3 py-2">{String.fromCharCode(i + 65)}</P>
                                 <P className="text-sm text-gray-900 px-3 py-2 flex justify-between w-full items-center">{option}
                                     {answerWasGiven && answerIsCorrect &&
                                         <Span className="text-xs text-green-500" >Correct Answer</Span>}

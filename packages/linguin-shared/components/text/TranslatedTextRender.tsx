@@ -48,7 +48,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
     }
 
     return (<>
-        <Span className="relative cursor-pointer"
+        <Div className="relative cursor-pointer"
             onMouseLeave={() => setShowWholeTranslation(false)}>
             <Div className={showWholeTranslation ? "cursor-text absolute bottom-0 left-0 z-50" : "hidden"}>
                 <Div className="bg-black text-white rounded-lg p-2 mb-6 w-96 max-w-full mx-auto">
@@ -76,14 +76,14 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                     </P>
                 </Div>
             </Div>
-        </Span>
+        </Div>
     </>
     );
 }
 
 
 
-export function _PlayButton(onClick): JSX.Element {
+export function _PlayButton({ onClick }): JSX.Element {
     if (Platform.OS === 'web') {
         return <PlayIcon className="text-slate-100 w-6 h-6" onClick={onClick} />;
     }
@@ -97,7 +97,7 @@ export function _PlayButton(onClick): JSX.Element {
     );
 }
 
-export function _TranslateButton(onClick): JSX.Element {
+export function _TranslateButton({ onClick }): JSX.Element {
     if (Platform.OS === 'web') {
         return (<button className="hover:bg-slate-200 text-black font-bold py-2 px-2 mx-4 rounded" onClick={onClick}>
             <LanguageIcon className="h-5 w-5" aria-hidden="true" />

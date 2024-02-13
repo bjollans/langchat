@@ -21,9 +21,9 @@ export function Div(props: DefaultProps): JSX.Element {
             </div>
         );
     }
-    const StyledView = styled(View, props.className ?? "");
+    const StyledView = styled(View);
     return (
-        <StyledView>
+        <StyledView style={props.style}>
             {props.children}
         </StyledView>
     );
@@ -66,10 +66,10 @@ export function Btn(props: DefaultProps): JSX.Element {
             </button>
         );
     }
-    const StyledButton = styled(TouchableHighlight, props.className ?? "");
+    const StyledButton = styled(TouchableHighlight);
     return (
-        <StyledButton onPress={props.onClick}>
-            {props.children}
+        <StyledButton onPress={props.onClick} style={props.style}>
+            {props.children!.length && props.children!.length > 0 ? props.children[0] : <Text>Loading...</Text>}
         </StyledButton>
     );
 }
@@ -85,16 +85,16 @@ interface ImgProps {
     alt?: string;
 }
 
-export function Img({ className, src, alt }: ImgProps): JSX.Element {
+export function Img(props: ImgProps): JSX.Element {
     if (Platform.OS === 'web') {
         return (
-            <img className={className} src={src} alt={alt} />
+            <img className={props.className} src={props.src} alt={props.alt} />
         );
     }
 
-    const StyledImage = styled(Image, className ?? "");
+    const StyledImage = styled(Image);
     return (
-        <StyledImage source={{ uri: src }} alt={alt} />
+        <StyledImage source={{ uri: props.src }} alt={props.alt} style={props.style} />
     );
 }
 
@@ -131,9 +131,9 @@ function _multiplatformTextElement(webElement: JSX.Element, props: DefaultProps)
     if (Platform.OS === 'web') {
         return webElement;
     }
-    const StyledText = styled(Text, props.className ?? "");
+    const StyledText = styled(Text);
     return (
-        <StyledText>
+        <StyledText style={props.style}>
             {props.children}
         </StyledText>
     );

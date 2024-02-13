@@ -1,7 +1,7 @@
 "use client";
 
 import { StoryText } from "model/translations";
-import StoryListElement from "./StoryListElement";
+import StoryListElement from "linguin-shared/components/story/StoryListElement";
 import { useState } from "react";
 import StoryFilters, { BooleanFilter, Filter } from "components/StoryFilters";
 import { StoryListFilterContext, StoryFilterChangeCalls } from "context/storyListFilterContext";

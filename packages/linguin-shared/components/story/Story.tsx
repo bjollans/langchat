@@ -1,6 +1,6 @@
 "use client";
 
-import { Div, H3, Img } from "linguin-shared/components/RnTwComponents";
+import { Div, H3, Img, P } from "linguin-shared/components/RnTwComponents";
 import StoryAudioPlayer from "linguin-shared/components/audio/StoryAudioPlayer";
 //import SuggestedStories from "components/engagement/SuggestedStories";
 import StoryAudioContextProvider from "linguin-shared/context/storyAudioContext";
@@ -16,6 +16,9 @@ import { StoryPayWall } from "./StoryPayWall";
 import StoryQuestionsSection from "./StoryQuestionsSection";
 import StoryTextRender from "linguin-shared/components/story/StoryTextRender";
 import SuggestedStories from "linguin-shared/components/engagement/SuggestedStories";
+import {Text, Image} from "react-native";
+
+import { styled } from 'nativewind';
 
 interface StoryProps {
     story: StoryText;
@@ -33,6 +36,7 @@ function Story({ story }: StoryProps): JSX.Element {
         });
     }, []);
 
+    const StyledText = styled(Text);
 
     return (
 

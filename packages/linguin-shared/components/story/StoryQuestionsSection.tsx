@@ -7,7 +7,7 @@ import CompletedWidget from "./CompletedWidget";
 import StoryQuestion from "./StoryQuestion";
 import posthog from "posthog-js";
 import { trackStat } from "linguin-shared/util/storyStatistics";
-import { P, Div } from "linguin-shared/components/RnTwComponents";
+import { P, Div, Btn } from "linguin-shared/components/RnTwComponents";
 var _ = require('lodash');
 
 
@@ -88,12 +88,12 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
         newQuestionIndex();
     }
 
-    const tryAgainButton = <button
+    const tryAgainButton = <Btn
         className="hover:bg-indigo-100 text-gray-900 py-2 px-4 border border-indigo-400 rounded shadow flex items-center text-sm text-indigo-400 tracking-wide"
         onClick={resetQuestions}
     >
-        <ArrowPathIcon className="h-5 w-5 mr-2 text-indigo-400" /> Try Again
-    </button>;
+        <Div><ArrowPathIcon className="h-5 w-5 mr-2 text-indigo-400" /> <P>Try Again</P></Div>
+    </Btn>;
 
     return isSuccess && (storyQuestions.length > 0 || userStoryStatistics.hasRead)
         ? (

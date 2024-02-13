@@ -1,6 +1,9 @@
 import { TrophyIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import ConfettiExplosion from 'react-confetti-explosion';
+import { Platform } from "react-native";
+import { Div, Span } from "linguin-shared/components/RnTwComponents";
+import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
 export interface CompletedWidgetProps {
     isOpen: boolean;
@@ -48,22 +51,29 @@ export default function CompletedWidget(props: CompletedWidgetProps) {
     }, [props.isOpen]);
 
     return (
-        <div className="p-4">
-            {props.animateSuccess && <ConfettiExplosion height={200} width={300} duration={1500}
+        <Div className="p-4">
+            {props.animateSuccess && Platform.OS == "web" && <ConfettiExplosion height={200} width={300} duration={1500}
                 colors={['#a3e635', '#22d3ee', '#6366f1', '#fde047']}
                 particleSize={6} particleCount={50} />}
-            <div className="flex items-center mb-2 text-lg tracking-tight font-semibold">
-                <TrophyIcon className="h-5 w-5 mr-2 text-indigo-400" />
-                <span>
+            <Div className="flex items-center mb-2 text-lg tracking-tight font-semibold">
+                <_TrophyIcon />
+                <Span>
                     Story Completed!
-                </span>
-            </div>
-            {props.animateSuccess && <div className="tracking-tighter font-bold text-sm grid grid-cols-2 min-w-2/3 gap-x-2 justify-items-start">
-                {rowsShown >= 1 && <span>New Words:</span>}
-                {rowsShown >= 1 && <span className="text-indigo-400">{newWordDisplayCount}</span>}
-                {rowsShown >= 2 && <span>Revised Words:</span>}
-                {rowsShown >= 2 && <span className="text-indigo-400">{revisedWordDisplayCount}</span>}
-            </div>}
-        </div>
+                </Span>
+            </Div>
+            {props.animateSuccess && <Div className="tracking-tighter font-bold text-sm grid grid-cols-2 min-w-2/3 gap-x-2 justify-items-start">
+                {rowsShown >= 1 && <Span>New Words:</Span>}
+                {rowsShown >= 1 && <Span className="text-indigo-400">{newWordDisplayCount}</Span>}
+                {rowsShown >= 2 && <Span>Revised Words:</Span>}
+                {rowsShown >= 2 && <Span className="text-indigo-400">{revisedWordDisplayCount}</Span>}
+            </Div>}
+        </Div>
     );
+}
+
+function _TrophyIcon() {
+    if (Platform.OS == "web") {
+        return <TrophyIcon className="h-5 w-5 mr-2 text-indigo-400" />
+    }
+    return <Icon name="trophy" size={24} color="#6366f1" />
 }

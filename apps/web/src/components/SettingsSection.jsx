@@ -9,7 +9,7 @@ import SettingsGeneral from "components/SettingsGeneral";
 import SettingsPassword from "components/SettingsPassword";
 import SettingsBilling from "components/SettingsBilling";
 import { useAuth } from "util/auth";
-import { requireAuth } from "util/auth";
+import { requireAuth } from "util/requireAuth";
 
 function SettingsSection(props) {
   const auth = useAuth();

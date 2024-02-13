@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import Meta from "components/Meta";
 import PageLoader from "components/PageLoader";
 import FormAlert from "components/FormAlert";
-import { useAuth, requireAuth } from "util/auth";
+import { useAuth } from "util/auth";
+import { requireAuth } from "util/requireAuth";
 import { redirectToCheckout } from "util/stripe";
 import { getCookie } from 'cookies-next';
 

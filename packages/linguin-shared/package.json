@@ -1,17 +1,24 @@
 {
-    "name": "linguin-shared",
-    "version": "1.0.0",
-    "description": "Components for Linguin shared between web and app",
-    "main": "index.js",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "keywords": [
-      "linguin"
-    ],
-    "author": "Bernard Jollans",
-    "license": "ISC",
-    "dependencies": {
-      "typescript": "^5.3.3"
-    }
+  "name": "linguin-shared",
+  "version": "1.0.0",
+  "description": "Components for Linguin shared between web and app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "linguin"
+  ],
+  "author": "Bernard Jollans",
+  "license": "ISC",
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "1.21.0",
+    "@supabase/supabase-js": "^2.39.3",
+    "react-native-elements": "^3.4.3",
+    "react-native-heroicons": "^4.0.0",
+    "react-native-svg": "14.1.0",
+    "react-native-url-polyfill": "^2.0.0",
+    "react-native-vector-icons": "^10.0.3",
+    "typescript": "^5.3.3"
   }
+}

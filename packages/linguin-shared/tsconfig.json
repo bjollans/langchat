@@ -7,8 +7,19 @@
       "target": "es5",
       "moduleResolution": "node",
     },
+    "paths": {
+      "components": ["components/*"],
+      "context": ["context/*"],
+      "types": ["types/*"],
+      "util": ["util/*"],
+      "model": ["model/*"]
+    },
     "include": [
-      "components/**/*.ts*"
+      "components/**/*.ts*",
+      "context/**/*.ts*",
+      "types/**/*.ts*",
+      "util/**/*.ts*",
+      "model/**/*.ts*"
     ],
     "extends": "@tsconfig/next/tsconfig.json"
   }

@@ -1,4 +1,9 @@
 {
   "compilerOptions": {},
-  "extends": "expo/tsconfig.base"
+  "extends": "expo/tsconfig.base",
+  "paths": {
+    "@linguin-shared/*": [
+      "../../packages/linguin-shared/*"
+    ],
+  }
 }

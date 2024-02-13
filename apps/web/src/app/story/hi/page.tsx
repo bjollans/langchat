@@ -5,6 +5,7 @@ import PurchasedTracker from "components/tracking/PurchasedTracker";
 import UserStatistics from "components/user/UserStatistics";
 import { StoryText, StoryToCollection } from "model/translations";
 import { getAvailableStoryDifficultyLevels, getCollectionNames, getStoriesCollections, getStoriesOrderedByCustom } from "util/serverDb";
+import { requireAuth } from "util/requireAuth";
 
 async function getPropsForStoryIndexPage() {
     const stories = await getStoriesOrderedByCustom('title', false);
@@ -43,4 +44,4 @@ async function StoryIndexPage() {
     );
 }
 
-export default StoryIndexPage;
+export default requireAuth(StoryIndexPage);

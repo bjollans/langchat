@@ -5,7 +5,6 @@ import { useAuth } from "util/auth";
 import { UserStoryStatistics, useUserStoryStatistics } from "util/userStatistics";
 import StoryCompletedCheckMark from "./StoryCompletedCheckMark";
 import { useInView } from 'react-intersection-observer';
-import { apiRequest } from "util/util";
 import { trackStat } from "util/storyStatistics";
 
 export interface StoryListElementProps {

@@ -119,6 +119,6 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
                             newWordCount={userStoryStatistics.newWords} revisedWordCount={userStoryStatistics.knownWords} />}
                 </Div>
             </Div>)
-        : <Div>...loading</Div>
+        : <P>...loading</P>
         ;
 }

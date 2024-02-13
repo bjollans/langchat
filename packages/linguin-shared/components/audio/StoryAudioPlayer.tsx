@@ -1,9 +1,11 @@
 import { PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
-import { Div, Btn, Audio } from 'linguin-shared/components/RnTwComponents';
+import { Audio, Btn, Div } from 'linguin-shared/components/RnTwComponents';
 import { useStoryAudioContext } from 'linguin-shared/context/storyAudioContext';
 import { useReadUsageContext } from 'linguin-shared/context/trackReadContext';
 import posthog from 'posthog-js';
 import { useEffect, useRef, useState } from 'react';
+import { Platform } from 'react-native';
+import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
 interface StoryAudioPlayerProps {
     src: string;
@@ -121,10 +123,20 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
                 src={props.src}
                 alt="Your browser does not support the audio element."/>
             <Btn className='w-full justify-center flex my-1 rounded-full' onClick={togglePlayPause}>
-                {isPlayingAudio
-                    ? <PauseIcon className='rounded-full border-4 border-slate-600 text-slate-600 w-12 h-12' />
-                    : <PlayIcon className='rounded-full border-4 pl-1 border-slate-600 text-slate-600 w-12 h-12' />}
+                {_PlayButton(isPlayingAudio)}
             </Btn>
         </Div>
     )
+}
+
+
+function _PlayButton(isPlayingAudio): JSX.Element {
+    if (Platform.OS === 'web') {
+        return isPlayingAudio
+            ? <PauseIcon className='rounded-full border-4 border-slate-600 text-slate-600 w-12 h-12' />
+            : <PlayIcon className='rounded-full border-4 pl-1 border-slate-600 text-slate-600 w-12 h-12' />;
+    }
+    return isPlayingAudio
+    ? <Icon name="pause" className='rounded-full border-4 border-slate-600 text-slate-600 w-12 h-12' />
+    : <Icon name="play_arrow" className='rounded-full border-4 pl-1 border-slate-600 text-slate-600 w-12 h-12' />;
 }

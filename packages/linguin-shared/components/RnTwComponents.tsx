@@ -52,7 +52,7 @@ export function Audio(props: AudioProps): JSX.Element {
             </audio>
         );
     }
-    return (<View>TODO</View>);
+    return (<Text>TODO</Text>);
 }
 
 export function Btn(props: DefaultProps): JSX.Element {

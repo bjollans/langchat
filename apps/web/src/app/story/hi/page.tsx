@@ -44,4 +44,4 @@ async function StoryIndexPage() {
     );
 }
 
-export default requireAuth(StoryIndexPage);
+export default StoryIndexPage;

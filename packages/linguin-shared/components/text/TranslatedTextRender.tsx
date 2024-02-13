@@ -1,4 +1,4 @@
-import { LanguageIcon, PlayIcon } from '@heroicons/react/24/solid';
+import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 import EqualizerIcon from "linguin-shared/components/audio/EqualizerIcon";
 import { StoryIdContext } from 'linguin-shared/context/storyIdContext';
 import { useReadUsageContext } from 'linguin-shared/context/trackReadContext';
@@ -7,6 +7,8 @@ import posthog from 'posthog-js';
 import { useContext, useState } from "react";
 import TranslatedTerm from "./TranslatedWord";
 import { Div, P, Span } from 'linguin-shared/components/RnTwComponents';
+import { Platform } from 'react-native';
+import { LanguageIcon, PlayIcon } from '@heroicons/react/24/solid';
 
 interface TranslatedTextProps {
     translatedText: TranslatedText;
@@ -28,7 +30,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                 termTranslation.position <= i && termTranslation.position + termTranslation.text.length > i
             )));
             if (termAtThisPosition && termAtThisPosition.length > 0) {
-                translatedWords.push((<TranslatedTerm termTranslation={termAtThisPosition[0]}/>));
+                translatedWords.push((<TranslatedTerm termTranslation={termAtThisPosition[0]} />));
                 i = termAtThisPosition[0].position + termAtThisPosition[0].text.length - 1;
             }
             else {
@@ -65,17 +67,48 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                     {props.hasAudio &&
                         (props.isHighlighted
                             && <EqualizerIcon isAnimated={props.isPlayingAudio} onClick={props.onPlayAudio} />
-                            || <PlayIcon className="text-slate-100 w-6 h-6" onClick={props.onPlayAudio} />)
+                            || <_PlayButton onClick={props.onPlayAudio} />)
                     }
                 </Div>
                 <Div className="mx-8 relative">
-                    <P>{translatedWords}</P>
-                    <button className="hover:bg-slate-200 text-black font-bold py-2 px-2 mx-4 rounded" onClick={handleTranslateClick}>
-                        <LanguageIcon className="h-5 w-5" aria-hidden="true" />
-                    </button>
+                    <P>{translatedWords}
+                        <_TranslateButton onClick={handleTranslateClick} />
+                    </P>
                 </Div>
             </Div>
         </Span>
     </>
+    );
+}
+
+
+
+export function _PlayButton(onClick): JSX.Element {
+    if (Platform.OS === 'web') {
+        return <PlayIcon className="text-slate-100 w-6 h-6" onClick={onClick} />;
+    }
+    return (
+        <Icon.Button
+            name="play_arrow"
+            backgroundColor="#ffffff"
+            className="text-slate-100 w-6 h-6"
+            onPress={onClick}
+        />
+    );
+}
+
+export function _TranslateButton(onClick): JSX.Element {
+    if (Platform.OS === 'web') {
+        return (<button className="hover:bg-slate-200 text-black font-bold py-2 px-2 mx-4 rounded" onClick={onClick}>
+            <LanguageIcon className="h-5 w-5" aria-hidden="true" />
+        </button>);
+    }
+    return (
+        <Icon.Button
+            name="translate"
+            backgroundColor="#ffffff"
+            className="text-slate-100 w-6 h-6"
+            onPress={onClick}
+        />
     );
 }

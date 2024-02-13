@@ -1,8 +1,8 @@
 import { CheckIcon, NoSymbolIcon } from "@heroicons/react/24/solid";
-import Tooltip from "components/Tooltip";
+import Tooltip from "linguin-shared/components/Tooltip";
 import { useState } from "react";
-import { useAuth } from "util/auth";
-import { UserStoryStatistics, useUserStoryStatistics } from "util/userStatistics";
+import { useAuth } from "linguin-shared/util/auth";
+import { UserStoryStatistics, useUserStoryStatistics } from "linguin-shared/util/userStatistics";
 
 export interface StoryCompletedCheckMark {
     storyId: string;
@@ -11,7 +11,7 @@ export interface StoryCompletedCheckMark {
 export default function StoryCompletedCheckMark(props: StoryCompletedCheckMark) {
     const auth = useAuth();
     const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics({userId: auth?.user?.id, storyId: props.storyId});
-    const [showTooltip, setShowTooltip] = useState(false);
+    const [showTooltip, setShowTooltip] = useState(false); 
 
     return (<div className="flex items-baseline gap-x-2">
         <Tooltip

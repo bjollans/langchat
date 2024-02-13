@@ -1,11 +1,11 @@
-import { StoryFilterChangeCalls, StoryListFilterContext } from "context/storyListFilterContext";
-import { StoryText } from "model/translations";
+import { StoryFilterChangeCalls, StoryListFilterContext } from "linguin-shared/context/storyListFilterContext";
+import { StoryText } from "linguin-shared/model/translations";
 import { useContext, useEffect } from "react";
-import { useAuth } from "util/auth";
-import { UserStoryStatistics, useUserStoryStatistics } from "util/userStatistics";
+import { useAuth } from "linguin-shared/util/auth";
+import { UserStoryStatistics, useUserStoryStatistics } from "linguin-shared/util/userStatistics";
 import StoryCompletedCheckMark from "./StoryCompletedCheckMark";
 import { useInView } from 'react-intersection-observer';
-import { trackStat } from "util/storyStatistics";
+import { trackStat } from "linguin-shared/util/storyStatistics";
 
 export interface StoryListElementProps {
     story: StoryText;

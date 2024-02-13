@@ -1,10 +1,11 @@
-import StoryListElement from "components/story/StoryListElement";
-import { StoryText } from "model/translations";
+import StoryListElement from "linguin-shared/components/story/StoryListElement";
+import { StoryText } from "linguin-shared/model/translations";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
-import { useAuth } from "util/auth";
-import { useVisibleStoryIds, useUserStoriesRead } from "util/clientDb";
-import { getStoriesByIds } from "util/serverDb";
+import { useAuth } from "linguin-shared/util/auth";
+import { useVisibleStoryIds, useUserStoriesRead } from "linguin-shared/util/clientDb";
+import { getStoriesByIds } from "linguin-shared/util/serverDb";
+import { Div, H2 } from "linguin-shared/components/RnTwComponents";
 
 export default function SuggestedStories() {
     const STORY_AMOUNT = 3;
@@ -32,12 +33,12 @@ export default function SuggestedStories() {
     };
 
     return (
-        <div className="flex flex-col gap-y-4 items-center mt-12" onClick={captureClick}>
-            <h2 className="text-2xl font-bold">Read this next</h2>
+        <Div className="flex flex-col gap-y-4 items-center my-12 mb-24" onClick={captureClick}>
+            <H2 className="text-2xl font-bold">Read this next</H2>
             {stories && stories.map((story) => (
                 <StoryListElement key={"suggested-story-" + story.title} story={story} />
             ))}
-        </div>
+        </Div>
     );
 
 }

@@ -51,10 +51,10 @@ export default function StoryQuestion(props: StoryQuestionProps) {
                             : answerIsChoice ? borderIncorrect : borderDefault;
                     return (<Div>
                         <Btn
-                            className={border + " text-sm text-gray-900 ring-2 divide-x-2 ring-inset w-full mt-2 rounded-md bg-slate-50 flex hover:bg-white"}
+                            className={border + " text-sm text-gray-900 ring-2 ring-inset w-full mt-2 rounded-md bg-slate-50 flex hover:bg-white"}
                             onClick={() => evaluateAnswer(option)}
                         >
-                            <Div>
+                            <Div className="flex divide-x-2">
                                 <P className="text-sm text-gray-900 px-3 py-2 h-full">{String.fromCharCode(i + 65)}</P>
                                 <P className="text-sm text-gray-900 px-3 py-2 flex justify-between w-full items-center">{option}
                                     {answerWasGiven && answerIsCorrect &&

@@ -18,11 +18,11 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
 
     const handleClick = () => {
         setShowTranslation(true);
-        // onReadUsageEvent();
-        // posthog.capture("view_word_translation", {
-        //     vocab: props.termTranslation.text,
-        //     storyId: storyId,
-        // });
+        onReadUsageEvent();
+        posthog.capture("view_word_translation", {
+            vocab: props.termTranslation.text,
+            storyId: storyId,
+        });
     }
 
     return (

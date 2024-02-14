@@ -20,19 +20,12 @@ export interface ReadUsageContextProviderProps {
 
 export default function ReadUsageContextProvider({ children, story }: ReadUsageContextProviderProps): JSX.Element {
     const _MIN_READ_USAGE_EVENTS = 4;
-    
+
     const auth = useAuth();
     const { data: userStoriesRead } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
 
-    const [usageEventsCount, setUsageEventsCount] = useState(0);
-    const [isStoryRead, setIsStoryRead] = useState(false);
-
-
-    useEffect(() => {
-        if (usageEventsCount >= _MIN_READ_USAGE_EVENTS && !isStoryRead) {
-            markStoryAsRead();
-        }
-    }, [usageEventsCount]);
+    var [usageEventsCount] = useState(0);
+    var [isStoryRead] = useState(false);
 
 
     useEffect(() => {
@@ -44,7 +37,7 @@ export default function ReadUsageContextProvider({ children, story }: ReadUsageC
 
     const markStoryAsRead = () => {
         if (isStoryRead) return;
-        setIsStoryRead(true);
+        isStoryRead = true;
 
         const currentStoryAlreadyRead = userStoriesRead?.map(x => x.storyId).includes(story.id);
         if (currentStoryAlreadyRead) return;
@@ -66,7 +59,11 @@ export default function ReadUsageContextProvider({ children, story }: ReadUsageC
             story_title: story.title,
             story_target_language: story.targetLanguage,
         });
-        setUsageEventsCount(usageEventsCount + 1);
+        usageEventsCount = usageEventsCount + 1;
+        console.log("usageEventsCount", usageEventsCount, "isStoryRead", isStoryRead)
+        if (usageEventsCount >= _MIN_READ_USAGE_EVENTS && !isStoryRead) {
+            markStoryAsRead();
+        }
     };
 
     return (

@@ -68,8 +68,8 @@ export function Btn(props: DefaultProps): JSX.Element {
     }
     const StyledButton = styled(TouchableHighlight);
     return (
-        <StyledButton onPress={props.onClick} style={props.style}>
-            {props.children!.length && props.children!.length > 0 ? props.children[0] : <Text>Loading...</Text>}
+        <StyledButton onPress={props.onClick}>
+            {Span(props)}
         </StyledButton>
     );
 }

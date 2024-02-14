@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Div } from "linguin-shared/components/RnTwComponents";
+import { Platform } from 'react-native';
 
 interface EqualizerIconProps {
   isAnimated: boolean;
@@ -8,7 +9,7 @@ interface EqualizerIconProps {
 
 export default function EqualizerIcon(props: EqualizerIconProps) {
   useEffect(() => {
-    if (props.isAnimated) {
+    if (props.isAnimated && Platform.OS === "web") {
       // Define the keyframes as a string
       const keyframes = `
       @keyframes equalize {
@@ -37,7 +38,7 @@ export default function EqualizerIcon(props: EqualizerIconProps) {
   const barStyle = (delay) => ({
     display: 'inline-block',
     width: '3px',
-    height: props.isAnimated ? '15px' : `${(30 + (delay * 50))/2}px`, // Assign different heights when not animated
+    height: props.isAnimated ? '15px' : `${(30 + (delay * 50)) / 2}px`, // Assign different heights when not animated
     backgroundColor: '#0891b2',
     margin: '0 1px',
     animation: props.isAnimated ? 'equalize 0.6s infinite alternate' : 'none',

@@ -1,9 +1,9 @@
-import { PlayCircleIcon } from "@heroicons/react/24/solid";
 import { StoryIdContext } from "linguin-shared/context/storyIdContext";
 import posthog from "posthog-js";
 import { useContext, useMemo, useRef } from "react";
-import { Platform, Text } from "react-native";
-import Icon from 'react-native-vector-icons/dist/MaterialIcons';
+import { Platform} from "react-native";
+import { Btn, Div } from "linguin-shared/components/RnTwComponents";
+import { PlayCircleIcon } from "linguin-shared/components/Icons";
 
 export interface WordPlayerButtonProps {
     word: string;
@@ -30,18 +30,13 @@ export default function WordPlayerButton({ word }: WordPlayerButtonProps) {
         }
     };
 
-    return Platform.OS == "web" ? (<div>
-        <audio ref={audioRef}>
+    return (<Div>
+        {Platform.OS == "web" && <audio ref={audioRef}>
             <source src={audioSrc} type="audio/mpeg" />
             Your browser does not support the audio element.
-        </audio>
-        <button className="word-player-button" onClick={play}>
-            <PlayCircleIcon className="text-sky-300 w-6 h-6" />
-        </button>
-    </div>) : <Icon.Button
-        name="play_arrow"
-        backgroundColor="#7dd3fc"
-        className="text-sky-300 w-6 h-6"
-        onPress={play}
-    />;
+        </audio>}
+        <Btn className="word-player-button" onClick={play}>
+            <PlayCircleIcon />
+        </Btn>
+    </Div>);
 }

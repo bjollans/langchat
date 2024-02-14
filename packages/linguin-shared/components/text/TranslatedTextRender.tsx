@@ -1,4 +1,4 @@
-import Icon from 'react-native-vector-icons/dist/MaterialIcons';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import EqualizerIcon from "linguin-shared/components/audio/EqualizerIcon";
 import { StoryIdContext } from 'linguin-shared/context/storyIdContext';
 import { useReadUsageContext } from 'linguin-shared/context/trackReadContext';
@@ -6,9 +6,9 @@ import { TermTranslation, TranslatedText } from "linguin-shared/model/translatio
 import posthog from 'posthog-js';
 import { useContext, useState } from "react";
 import TranslatedTerm from "./TranslatedWord";
-import { Div, P, Span } from 'linguin-shared/components/RnTwComponents';
-import { Platform } from 'react-native';
-import { LanguageIcon, PlayIcon } from '@heroicons/react/24/solid';
+import { Div, P, Span, Btn } from 'linguin-shared/components/RnTwComponents';
+import { Platform, TouchableHighlight } from 'react-native';
+import { PlayIcon, TranslateIcon } from 'linguin-shared/components/Icons';
 
 interface TranslatedTextProps {
     translatedText: TranslatedText;
@@ -48,7 +48,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
     }
 
     return (<>
-        <Div className="relative cursor-pointer"
+        <Div className="relative cursor-pointer w-full"
             onMouseLeave={() => setShowWholeTranslation(false)}>
             <Div className={showWholeTranslation ? "cursor-text absolute bottom-0 left-0 z-50" : "hidden"}>
                 <Div className="bg-black text-white rounded-lg p-2 mb-6 w-96 max-w-full mx-auto">
@@ -62,52 +62,22 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                     }
                 </Div>
             </Div>
-            <Div className={`relative flex flex-wrap text-2xl items-center ${props.isHighlighted ? "text-cyan-600" : "text-black"}`}>
+            <Div className={`relative flex flex-row flex-wrap text-2xl items-start ${props.isHighlighted ? "text-cyan-600" : "text-black"}`}>
                 <Div className="absolute left-0">
                     {props.hasAudio &&
                         (props.isHighlighted
                             && <EqualizerIcon isAnimated={props.isPlayingAudio} onClick={props.onPlayAudio} />
-                            || <_PlayButton onClick={props.onPlayAudio} />)
+                            || <Btn onClick={props.onPlayAudio}><PlayIcon /></Btn>)
                     }
                 </Div>
-                <Div className="mx-8 relative">
+                <Div className="mx-8 flex flex-row items-center justify-between">
                     <Span>{translatedWords}</Span>
-                    <_TranslateButton onClick={handleTranslateClick} />
+                    <Btn className="hover:bg-slate-200 text-black font-bold rounded" onClick={handleTranslateClick}>
+                        <TranslateIcon />
+                    </Btn>
                 </Div>
             </Div>
         </Div>
     </>
-    );
-}
-
-
-
-export function _PlayButton({ onClick }): JSX.Element {
-    if (Platform.OS === 'web') {
-        return <PlayIcon className="text-slate-100 w-6 h-6" onClick={onClick} />;
-    }
-    return (
-        <Icon.Button
-            name="play_arrow"
-            backgroundColor="#ffffff"
-            className="text-slate-100 w-6 h-6"
-            onPress={onClick}
-        />
-    );
-}
-
-export function _TranslateButton({ onClick }): JSX.Element {
-    if (Platform.OS === 'web') {
-        return (<button className="hover:bg-slate-200 text-black font-bold py-2 px-2 mx-4 rounded" onClick={onClick}>
-            <LanguageIcon className="h-5 w-5" aria-hidden="true" />
-        </button>);
-    }
-    return (
-        <Icon.Button
-            name="translate"
-            backgroundColor="#ffffff"
-            className="text-slate-100 w-6 h-6"
-            onPress={onClick}
-        />
     );
 }

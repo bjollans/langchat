@@ -60,7 +60,6 @@ export default function ReadUsageContextProvider({ children, story }: ReadUsageC
             story_target_language: story.targetLanguage,
         });
         usageEventsCount = usageEventsCount + 1;
-        console.log("usageEventsCount", usageEventsCount, "isStoryRead", isStoryRead)
         if (usageEventsCount >= _MIN_READ_USAGE_EVENTS && !isStoryRead) {
             markStoryAsRead();
         }

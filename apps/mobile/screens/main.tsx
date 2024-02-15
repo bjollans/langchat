@@ -2,14 +2,18 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, ScrollView, SafeAreaView } from 'react-native';
 import { useStory } from 'linguin-shared/util/clientDb';
 import Story from 'linguin-shared/components/story/Story';
+import { RnSoundContext } from 'linguin-shared/context/rnSoundContext';
+import Sound from 'react-native-sound';
 
 export default function Main() {
   const { data: story, isSuccess: loaded } = useStory("d02258d7-e59c-4c5a-9c08-a627187ab6ae");
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.container}>
-        {loaded && <Story story={story} />}
-        <StatusBar style="auto" />
+        <RnSoundContext.Provider value={Sound}>
+          {loaded && <Story story={story} />}
+          <StatusBar style="auto" />
+        </RnSoundContext.Provider>
       </ScrollView>
     </SafeAreaView>
   );

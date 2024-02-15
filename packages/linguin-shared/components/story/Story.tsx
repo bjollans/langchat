@@ -36,10 +36,7 @@ function Story({ story }: StoryProps): JSX.Element {
         });
     }, []);
 
-    const StyledText = styled(Text);
-
     return (
-
         <StoryIdContext.Provider value={story.id}>
             <TargetLanguageContext.Provider value={story?.targetLanguage}>
                 <ReadUsageContextProvider story={story}>

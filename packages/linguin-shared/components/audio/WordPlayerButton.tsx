@@ -1,10 +1,10 @@
 import { StoryIdContext } from "linguin-shared/context/storyIdContext";
 import posthog from "posthog-js";
 import { useContext, useMemo, useRef } from "react";
-import { Platform} from "react-native";
+import { Platform } from "react-native";
 import { Btn, Div } from "linguin-shared/components/RnTwComponents";
 import { PlayCircleIcon } from "linguin-shared/components/Icons";
-import Sound from 'react-native-sound';
+import { RnSoundContext } from "context/rnSoundContext";
 
 export interface WordPlayerButtonProps {
     word: string;
@@ -21,8 +21,11 @@ export default function WordPlayerButton({ word }: WordPlayerButtonProps) {
         return `https://backend.linguin.co/storage/v1/object/public/wordSound/${fileName}.mp3`;
     }, [word]);
 
+    const RnSound = useContext(RnSoundContext);
+
     const rnSound = useMemo(() => {
-        return new Sound(audioSrc, '', (error) => {
+        if (!RnSound) return null;
+        return new RnSound(audioSrc, '', (error) => {
             if (error) {
                 console.log('failed to load the sound', error);
                 return;

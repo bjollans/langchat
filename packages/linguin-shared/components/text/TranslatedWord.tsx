@@ -5,6 +5,7 @@ import { TermTranslation } from "linguin-shared/model/translations";
 import posthog from "posthog-js";
 import { useContext, useState } from "react";
 import TranslatedWordHoverBox from "./TranslatedWordHoverBox";
+import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
 
 export interface TranslatedTermProps {
     termTranslation: TermTranslation;
@@ -14,10 +15,23 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     const [showTranslation, setShowTranslation] = useState(false);
     const storyId = useContext(StoryIdContext);
     const { onReadUsageEvent } = useReadUsageContext();
+    const RnSound = useContext(RnSoundContext);
 
+    const playRnAudio = () => {
+        let fileName = "";
+        for (let i = 0; i < props.termTranslation.text.length; i++) {
+            fileName += props.termTranslation.text.charCodeAt(i) + (i < props.termTranslation.text.length - 1 ? "-" : "");
+        }
+        const audioSrc = `https://backend.linguin.co/storage/v1/object/public/wordSound/${fileName}.mp3`;
+        let rnSound = new RnSound(audioSrc, '', (error) => {
+            if (error) return
+            rnSound.play();
+        });
+    }
 
     const handleClick = () => {
         setShowTranslation(true);
+        playRnAudio();
         onReadUsageEvent();
         posthog.capture("view_word_translation", {
             vocab: props.termTranslation.text,

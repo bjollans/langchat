@@ -15,7 +15,7 @@ import { StoryPayWall } from "./StoryPayWall";
 import StoryQuestionsSection from "./StoryQuestionsSection";
 import StoryTextRender from "linguin-shared/components/story/StoryTextRender";
 import SuggestedStories from "linguin-shared/components/engagement/SuggestedStories";
-import {Text, Image} from "react-native";
+import { Text, Image } from "react-native";
 
 import { styled } from 'nativewind';
 
@@ -38,22 +38,18 @@ function Story({ story }: StoryProps): JSX.Element {
     return (
         <StoryIdContext.Provider value={story.id}>
             <TargetLanguageContext.Provider value={story?.targetLanguage}>
-                <ReadUsageContextProvider story={story}>
-                    
-                        {story?.targetLanguage == "hi" && Platform.OS === 'web' &&
-                            <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
-                        }
-                        <Img className="h-96 lg:w-2/5 w-[90%] md:w-1/2 sm:w-2/3 mx-auto object-cover rounded-lg shadow-sm shadow-black flex-none" src={story?.imageUrl} alt="" />
-                        <Div className="border-b border-gray-200 pb-5 my-8 flex items-end">
-                            <H3 className="mx-6 text-base text-4xl py-3 mx-auto font-semibold leading-6 text-gray-900">{story?.title}</H3>
-                        </Div>
-                        <StoryPayWall story={story} isPayWallOpen={isPayWallOpen} setIsPayWallOpen={setIsPayWallOpen} />
-                        <StoryTextRender story={story} />
-                        <StoryQuestionsSection storyId={story.id} />
-                        {isPayWallOpen && story?.audioUrl &&
-                            <StoryAudioPlayer src={story.audioUrl} />}
-                    
-                </ReadUsageContextProvider>
+                {story?.targetLanguage == "hi" && Platform.OS === 'web' &&
+                    <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
+                }
+                <Img className="h-96 lg:w-2/5 w-[90%] md:w-1/2 sm:w-2/3 mx-auto object-cover rounded-lg shadow-sm shadow-black flex-none" src={story?.imageUrl} alt="" />
+                <Div className="border-b border-gray-200 pb-5 my-8 flex items-end">
+                    <H3 className="mx-6 text-base text-4xl py-3 mx-auto font-semibold leading-6 text-gray-900">{story?.title}</H3>
+                </Div>
+                <StoryPayWall story={story} isPayWallOpen={isPayWallOpen} setIsPayWallOpen={setIsPayWallOpen} />
+                <StoryTextRender story={story} />
+                <StoryQuestionsSection storyId={story.id} />
+                {isPayWallOpen && Platform.OS == "web" && story?.audioUrl &&
+                    <StoryAudioPlayer src={story.audioUrl} />}
             </TargetLanguageContext.Provider>
             {isPayWallOpen && <SuggestedStories />}
         </StoryIdContext.Provider>

@@ -3,6 +3,7 @@ import { StyleSheet, Text, ScrollView, SafeAreaView } from 'react-native';
 import { useStory } from 'linguin-shared/util/clientDb';
 import Story from 'linguin-shared/components/story/Story';
 import { RnSoundContext } from 'linguin-shared/context/rnSoundContext';
+import RnTouchableContextProvider from 'linguin-shared/context/rnTouchableContext';
 import Sound from 'react-native-sound';
 
 export default function Main() {
@@ -11,8 +12,9 @@ export default function Main() {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.container}>
         <RnSoundContext.Provider value={Sound}>
+          <RnTouchableContextProvider>
           {loaded && <Story story={story} />}
-          <StatusBar style="auto" />
+          </RnTouchableContextProvider>
         </RnSoundContext.Provider>
       </ScrollView>
     </SafeAreaView>

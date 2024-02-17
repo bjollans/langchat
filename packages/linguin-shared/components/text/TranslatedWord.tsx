@@ -3,9 +3,10 @@ import { StoryIdContext } from "linguin-shared/context/storyIdContext";
 import { useReadUsageContext } from "linguin-shared/context/trackReadContext";
 import { TermTranslation } from "linguin-shared/model/translations";
 import posthog from "posthog-js";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import TranslatedWordHoverBox from "./TranslatedWordHoverBox";
 import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
+import { useRnTouchableContext } from "linguin-shared/context/rnTouchableContext";
 
 export interface TranslatedTermProps {
     termTranslation: TermTranslation;
@@ -16,6 +17,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     const storyId = useContext(StoryIdContext);
     const { onReadUsageEvent } = useReadUsageContext();
     const RnSound = useContext(RnSoundContext);
+    const { addToResetterFunctions } = useRnTouchableContext();
 
     const playRnAudio = () => {
         let fileName = "";
@@ -29,7 +31,9 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
         });
     }
 
+
     const handleClick = () => {
+        addToResetterFunctions(() => setShowTranslation(false));
         setShowTranslation(true);
         playRnAudio();
         onReadUsageEvent();

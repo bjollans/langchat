@@ -7,8 +7,8 @@ import posthog from 'posthog-js';
 import { useContext, useState } from "react";
 import TranslatedTerm from "./TranslatedWord";
 import { Div, P, Span, Btn } from 'linguin-shared/components/RnTwComponents';
-import { Platform, TouchableHighlight } from 'react-native';
 import { PlayIcon, TranslateIcon } from 'linguin-shared/components/Icons';
+import { useRnTouchableContext } from 'linguin-shared/context/rnTouchableContext';
 
 interface TranslatedTextProps {
     translatedText: TranslatedText;
@@ -23,6 +23,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
     const translatedWords: Array<JSX.Element> = [];
     const storyId = useContext(StoryIdContext);
     const { onReadUsageEvent } = useReadUsageContext();
+    const { addToResetterFunctions } = useRnTouchableContext();
 
     if (props.translatedText.translationJson !== undefined) {
         for (var i = 0; i < props.translatedText.content.length; i++) {
@@ -40,6 +41,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
     }
 
     const handleTranslateClick = () => {
+        addToResetterFunctions(() => setShowWholeTranslation(false));
         setShowWholeTranslation(true);
         onReadUsageEvent();
         posthog.capture("view_sentence_translation", {

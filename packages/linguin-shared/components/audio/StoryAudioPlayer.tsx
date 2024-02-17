@@ -6,7 +6,7 @@ import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
 import posthog from 'posthog-js';
 import { useEffect, useRef, useState, useContext } from 'react';
 import { Platform, Text } from 'react-native';
-import Icon from 'react-native-vector-icons/dist/MaterialIcons';
+import { PlayCircleIcon, PauseCircleIcon } from 'linguin-shared/components/Icons';
 
 interface StoryAudioPlayerProps {
     src: string;
@@ -156,17 +156,17 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     useEffect(() => {
         const currentAudioPercentageTime = Math.floor((currentAudioTime / duration) * 100);
         if (Platform.OS === 'web') {
-        if (audioRef.current && Math.abs(currentAudioTime - audioRef.current.currentTime) > 2) {
-            audioRef.current.currentTime = currentAudioTime;
-            setProgressBarWidth(`${currentAudioPercentageTime}%`);
+            if (audioRef.current && Math.abs(currentAudioTime - audioRef.current.currentTime) > 2) {
+                audioRef.current.currentTime = currentAudioTime;
+                setProgressBarWidth(`${currentAudioPercentageTime}%`);
+            }
+        } else {
+            //TODO
+            setProgressBarWidth((currentAudioPercentageTime * rnProgressBarWidth) / 100);
+            console.log("currentAudioPercentageTime* rnProgressBarWidth) / 100 = ", ((currentAudioPercentageTime * rnProgressBarWidth) / 100));
+            console.log("currentAudioPercentageTime = ", currentAudioPercentageTime);
+            console.log("rnProgressBarWidth = ", rnProgressBarWidth);
         }
-    } else {
-        //TODO
-        setProgressBarWidth((currentAudioPercentageTime* rnProgressBarWidth) / 100);
-        console.log("currentAudioPercentageTime* rnProgressBarWidth) / 100 = ", ((currentAudioPercentageTime* rnProgressBarWidth) / 100));
-        console.log("currentAudioPercentageTime = ", currentAudioPercentageTime);
-        console.log("rnProgressBarWidth = ", rnProgressBarWidth);
-    }
     }, [currentAudioTime, duration]);
 
     useEffect(() => {
@@ -177,11 +177,11 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
         <Div className='bg-white fixed bottom-0 left-0 right-0 drop-shadow-xl border'>
             <Btn
                 className='h-2 bg-gray-200 cursor-pointer'
-                style={{ width : "100%" }}
+                style={{ width: "100%" }}
                 onClick={handleProgressBarClick}
                 onLayout={(e) => setRnProgressBarWidth(e.nativeEvent.layout.width)}
             >
-                <Div className='bg-cyan-600 h-2' style={{ width: progressBarWidth}}></Div>
+                <Div className='bg-cyan-600 h-2' style={{ width: progressBarWidth }}></Div>
             </Btn>
             {Platform.OS === 'web' &&
                 <audio
@@ -193,7 +193,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
                     <source src={props.src} type="audio/mpeg" />
                     Your browser does not support the audio element.
                 </audio>}
-            <Btn className='w-full justify-center flex my-1 rounded-full' onClick={togglePlayPause}>
+            <Btn className='flex my-1 rounded-full mx-auto' onClick={togglePlayPause}>
                 {_PlayButton(isPlayingAudio)}
             </Btn>
         </Div>
@@ -207,5 +207,7 @@ function _PlayButton(isPlayingAudio): JSX.Element {
             ? <PauseIcon className='rounded-full border-4 border-slate-600 text-slate-600 w-12 h-12' />
             : <PlayIcon className='rounded-full border-4 pl-1 border-slate-600 text-slate-600 w-12 h-12' />;
     }
-    return <Text>ASDASD</Text>;
+    return isPlayingAudio
+        ? <PauseCircleIcon />
+        : <PlayCircleIcon />;
 }

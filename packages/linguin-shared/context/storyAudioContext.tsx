@@ -3,12 +3,12 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 export interface StoryAudioContextType {
-    isPlayingAudio: boolean;
-    setIsPlayingAudio: (isPlayingAudio: boolean) => void;
     hasPlayedAudio: boolean;
     setHasPlayedAudio: (hasPlayedAudio: boolean) => void;
-    currentAudioTime: number;
-    setCurrentAudioTime: (currentAudioTime: number) => void;
+    updateIsPlayingAudio: (isPlayingAudio: boolean) => void;
+    addIsPlayingAudioUpdateFunction: (isPlayingAudioUpdateFunction: (isPlayingAudio: boolean) => void) => void;
+    updateAudioTimes: ((audioTime: number) => void);
+    addAudioTimeUpdateFunction: (audioTimeUpdateFunction: (audioTime: number) => void) => void;
 }
 
 export const StoryAudioContext = createContext<StoryAudioContextType | null>(null);
@@ -19,22 +19,35 @@ export interface StoryAudioContextProviderProps {
 }
 
 export default function StoryAudioContextProvider({ children }: StoryAudioContextProviderProps): JSX.Element {
-    const [currentAudioTime, setCurrentAudioTime] = useState(0);
-    const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+    const [isPlayingAudioUpdateFunctions] = useState<((isPlayingAudio: boolean) => void)[]>([]);
     const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
+    const [audioTimeUpdateFunctions] = useState<((audioTime: number) => void)[]>([]);
 
-    useEffect(() => {
-        if (isPlayingAudio) setHasPlayedAudio(true);
-    }, [isPlayingAudio]);
+
+    const addIsPlayingAudioUpdateFunction = (isPlayingAudioUpdateFunction: (isPlayingAudio: boolean) => void) => {
+        isPlayingAudioUpdateFunctions.push(isPlayingAudioUpdateFunction);
+    }
+
+    const updateIsPlayingAudio = (isPlayingAudio: boolean) => {
+        isPlayingAudioUpdateFunctions.forEach((isPlayingAudioUpdateFunction) => isPlayingAudioUpdateFunction(isPlayingAudio));
+    }
+
+    const addAudioTimeUpdateFunction = (audioTimeUpdateFunction: (audioTime: number) => void) => {
+        audioTimeUpdateFunctions.push(audioTimeUpdateFunction);
+    }
+
+    const updateAudioTimes = (audioTime: number) => {
+        audioTimeUpdateFunctions.forEach((audioTimeUpdateFunction) => audioTimeUpdateFunction(audioTime));
+    }
 
     return (
         <StoryAudioContext.Provider value={{
-            currentAudioTime,
-            setCurrentAudioTime,
-            isPlayingAudio,
-            setIsPlayingAudio,
+            updateIsPlayingAudio,
+            addIsPlayingAudioUpdateFunction,
             hasPlayedAudio,
-            setHasPlayedAudio
+            setHasPlayedAudio,
+            updateAudioTimes,
+            addAudioTimeUpdateFunction
         }}>
             {children}
         </StoryAudioContext.Provider>

@@ -2,9 +2,10 @@ import { PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
 import { Audio, Btn, Div } from 'linguin-shared/components/RnTwComponents';
 import { useStoryAudioContext } from 'linguin-shared/context/storyAudioContext';
 import { useReadUsageContext } from 'linguin-shared/context/trackReadContext';
+import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
 import posthog from 'posthog-js';
-import { useEffect, useRef, useState } from 'react';
-import { Platform } from 'react-native';
+import { useEffect, useRef, useState, useContext } from 'react';
+import { Platform, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
 
 interface StoryAudioPlayerProps {
@@ -12,33 +13,79 @@ interface StoryAudioPlayerProps {
 }
 
 export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
-    const [duration, setDuration] = useState(0);
+    const [duration, setDuration] = useState(-1);
+    const [rnAudio, setRnAudio] = useState<any>(null);
+    const [currentAudioTime, setCurrentAudioTime] = useState(0);
+    const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+    const [rnProgressBarWidth, setRnProgressBarWidth] = useState(0);
     const audioRef = useRef<HTMLAudioElement>(null);
-    const [progressBarWidth, setProgressBarWidth] = useState('0%');
+    const [progressBarWidth, setProgressBarWidth] = useState<string | number>('0%');
     const { onReadUsageEvent } = useReadUsageContext();
+    const RnSound = useContext(RnSoundContext);
+
+    var rnAudioUpdateInterval: any;
+
+    useEffect(() => {
+        if (!rnAudio || rnAudioUpdateInterval) return;
+        rnAudioUpdateInterval = setInterval(() => {
+            rnAudio.getCurrentTime((seconds) => {
+                updateAudioTimes(seconds);
+            });
+        }, 2000);
+        return () => clearInterval(rnAudioUpdateInterval);
+    }, [rnAudio]);
 
     const {
-        currentAudioTime,
-        setCurrentAudioTime,
-        isPlayingAudio,
-        setIsPlayingAudio,
-        hasPlayedAudio,
-        setHasPlayedAudio
+        updateIsPlayingAudio,
+        addIsPlayingAudioUpdateFunction,
+        updateAudioTimes,
+        addAudioTimeUpdateFunction
     } = useStoryAudioContext();
 
+
+    const playRnAudio = () => {
+        if (!RnSound) return;
+        let rnSound = new RnSound(props.src, '', (error) => {
+            if (error) return
+            rnSound.setCurrentTime(currentAudioTime);
+            rnSound.play();
+            setDuration(rnSound.getDuration());
+        });
+        return rnSound;
+    }
+
     const play = () => {
-        if (audioRef.current) {
-            audioRef.current.play();
-            setIsPlayingAudio(true);
+        if (Platform.OS === 'web') {
+            if (audioRef.current) {
+                audioRef.current.play();
+                updateIsPlayingAudio(true);
+                onReadUsageEvent();
+            }
+        } else {
+            setRnAudio(playRnAudio());
+            updateIsPlayingAudio(true);
             onReadUsageEvent();
         }
     };
 
+    useEffect(() => {
+        addIsPlayingAudioUpdateFunction((isPlayingAudio: boolean) => {
+            console.log("UPDATE IS PLAYING AUDIO", isPlayingAudio);
+            setIsPlayingAudio(isPlayingAudio);
+        });
+        addAudioTimeUpdateFunction((audioTime: number) => {
+            setCurrentAudioTime(audioTime);
+        });
+    }, []);
+
     const pause = () => {
         if (audioRef.current) {
             audioRef.current.pause();
-            setIsPlayingAudio(false);
         }
+        if (rnAudio) {
+            rnAudio.pause();
+        }
+        updateIsPlayingAudio(false);
     };
 
     const togglePlayPause = () => {
@@ -54,11 +101,12 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     };
 
     useEffect(() => {
-        if (!audioRef.current) return;
         if (isPlayingAudio) {
-            audioRef.current.play();
+            if (rnAudio) rnAudio.play();
+            if (audioRef.current) audioRef.current.play();
         } else {
-            audioRef.current.pause();
+            if (rnAudio) rnAudio.pause();
+            if (audioRef.current) audioRef.current.pause();
         }
     }, [isPlayingAudio]);
 
@@ -66,10 +114,10 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
         const audio = audioRef.current;
         if (!audio) return;
 
-        const onPlay = () => setIsPlayingAudio(true);
+        const onPlay = () => updateIsPlayingAudio(true);
         audio.addEventListener('play', onPlay);
 
-        const onPause = () => setIsPlayingAudio(false);
+        const onPause = () => updateIsPlayingAudio(false);
         audio.addEventListener('pause', onPause);
 
         setDuration(audio.duration);
@@ -83,42 +131,68 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
 
     const handleTimeUpdate = (e: React.SyntheticEvent<HTMLAudioElement>) => {
         const audioElement = e.target as HTMLAudioElement;
-        setCurrentAudioTime(audioElement.currentTime);
+        updateAudioTimes(audioElement.currentTime);
     };
 
-    const handleProgressBarClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        const progressBar = e.currentTarget;
-        const clickX = e.clientX - progressBar.getBoundingClientRect().left;
-        const newTime = (clickX / progressBar.offsetWidth) * (audioRef.current?.duration || 0);
-        if (audioRef.current) {
-            audioRef.current.currentTime = newTime;
-            setCurrentAudioTime(newTime);
+    const handleProgressBarClick = (e) => {
+        if (Platform.OS === 'web') {
+            const progressBar = e.currentTarget;
+            const clickX = e.clientX - progressBar.getBoundingClientRect().left;
+            const newTime = (clickX / progressBar.offsetWidth) * (audioRef.current?.duration || 0);
+            if (audioRef.current) {
+                audioRef.current.currentTime = newTime;
+            }
+            updateAudioTimes(newTime);
+        } else {
+            if (!rnAudio) return;
+            const clickX = e.nativeEvent.locationX;
+            const newTime = (clickX / rnProgressBarWidth) * duration;
+            rnAudio.setCurrentTime(newTime);
+            updateAudioTimes(newTime);
+            setProgressBarWidth(Math.floor(clickX));
         }
     };
 
     useEffect(() => {
-        console.log("asdasd: ", currentAudioTime, " ", duration);
+        const currentAudioPercentageTime = Math.floor((currentAudioTime / duration) * 100);
+        if (Platform.OS === 'web') {
         if (audioRef.current && Math.abs(currentAudioTime - audioRef.current.currentTime) > 2) {
             audioRef.current.currentTime = currentAudioTime;
+            setProgressBarWidth(`${currentAudioPercentageTime}%`);
         }
-        setProgressBarWidth(`${(currentAudioTime / duration) * 100}%`);
+    } else {
+        //TODO
+        setProgressBarWidth((currentAudioPercentageTime* rnProgressBarWidth) / 100);
+        console.log("currentAudioPercentageTime* rnProgressBarWidth) / 100 = ", ((currentAudioPercentageTime* rnProgressBarWidth) / 100));
+        console.log("currentAudioPercentageTime = ", currentAudioPercentageTime);
+        console.log("rnProgressBarWidth = ", rnProgressBarWidth);
+    }
     }, [currentAudioTime, duration]);
+
+    useEffect(() => {
+        console.log(progressBarWidth)
+    }, [progressBarWidth]);
 
     return (
         <Div className='bg-white fixed bottom-0 left-0 right-0 drop-shadow-xl border'>
-            <Div
-                className='w-full h-2 bg-gray-200 cursor-pointer'
+            <Btn
+                className='h-2 bg-gray-200 cursor-pointer'
+                style={{ width : "100%" }}
                 onClick={handleProgressBarClick}
+                onLayout={(e) => setRnProgressBarWidth(e.nativeEvent.layout.width)}
             >
-                <Div className='bg-cyan-600 h-2' style={{ width: progressBarWidth }}></Div>
-            </Div>
-            <Audio
-                onEnded={onEnded}
-                audioRef={audioRef}
-                onTimeUpdate={handleTimeUpdate}
-                onLoadedMetadata={handleTimeUpdate}
-                src={props.src}
-                alt="Your browser does not support the audio element."/>
+                <Div className='bg-cyan-600 h-2' style={{ width: progressBarWidth}}></Div>
+            </Btn>
+            {Platform.OS === 'web' &&
+                <audio
+                    onEnded={onEnded}
+                    ref={audioRef}
+                    onTimeUpdate={handleTimeUpdate}
+                    onLoadedMetadata={handleTimeUpdate}
+                >
+                    <source src={props.src} type="audio/mpeg" />
+                    Your browser does not support the audio element.
+                </audio>}
             <Btn className='w-full justify-center flex my-1 rounded-full' onClick={togglePlayPause}>
                 {_PlayButton(isPlayingAudio)}
             </Btn>
@@ -133,7 +207,5 @@ function _PlayButton(isPlayingAudio): JSX.Element {
             ? <PauseIcon className='rounded-full border-4 border-slate-600 text-slate-600 w-12 h-12' />
             : <PlayIcon className='rounded-full border-4 pl-1 border-slate-600 text-slate-600 w-12 h-12' />;
     }
-    return isPlayingAudio
-    ? <Icon name="pause" className='rounded-full border-4 border-slate-600 text-slate-600 w-12 h-12' />
-    : <Icon name="play_arrow" className='rounded-full border-4 pl-1 border-slate-600 text-slate-600 w-12 h-12' />;
+    return <Text>ASDASD</Text>;
 }

@@ -2,20 +2,33 @@ import { Br } from "linguin-shared/components/RnTwComponents";
 import TranslatedTextRender from "linguin-shared/components/text/TranslatedTextRender";
 import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
 import { AudioSentenceTime, StoryText, TermTranslation, TranslationJson } from "linguin-shared/model/translations";
+import { useState, useEffect } from "react";
 
 export interface StoryTextRenderProps {
     story: StoryText;
 }
 
 export default function StoryTextRender(props: StoryTextRenderProps): JSX.Element {
+    const [currentAudioTime, setCurrentAudioTime] = useState(0);
+    const [isPlayingAudio, setIsPlayingAudio] = useState(false);
     const {
-        currentAudioTime,
-        setCurrentAudioTime,
-        isPlayingAudio,
-        setIsPlayingAudio,
+        updateIsPlayingAudio,
+        addIsPlayingAudioUpdateFunction,
         hasPlayedAudio,
-        setHasPlayedAudio
+        setHasPlayedAudio,
+        updateAudioTimes,
+        addAudioTimeUpdateFunction
     } = useStoryAudioContext();
+
+
+    useEffect(() => {
+        addIsPlayingAudioUpdateFunction((isPlayingAudio: boolean) => {
+            setIsPlayingAudio(isPlayingAudio);
+        });
+        addAudioTimeUpdateFunction((audioTime: number) => {
+            setCurrentAudioTime(audioTime);
+        });
+    }, []);
 
     const lines = props.story.content.split("\n");
     var nonSentenceLinesSeen = 0;
@@ -43,7 +56,7 @@ export default function StoryTextRender(props: StoryTextRenderProps): JSX.Elemen
         return (<TranslatedTextRender translatedText={{ content: line, translationJson: lineTranslationJson }}
             isHighlighted={hasPlayedAudio && currentAudioTime < audioEndTime - 0.0001 && currentAudioTime >= audioStartTime - 0.0001}
             isPlayingAudio={isPlayingAudio} hasAudio={props.story.audioUrl !== null && props.story.audioUrl !== undefined}
-            onPlayAudio={() => { setCurrentAudioTime(audioStartTime - 0.00001); setIsPlayingAudio(true) }} />);
+            onPlayAudio={() => { updateAudioTimes(audioStartTime - 0.00001); updateIsPlayingAudio(true) }} />);
     };
 
     return (<>{props.story.content.split("\n").map(lineToTranslatedTextRender)}</>);

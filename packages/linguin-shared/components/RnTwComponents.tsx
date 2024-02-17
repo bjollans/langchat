@@ -7,6 +7,7 @@ interface DefaultProps {
     className?: string;
     onMouseLeave?: () => void;
     onClick?: (e: any) => void;
+    onLayout?: (e: any) => void;
     style?: any;
 }
 
@@ -68,7 +69,7 @@ export function Btn(props: DefaultProps): JSX.Element {
     }
     const StyledButton = styled(TouchableHighlight);
     return (
-        <StyledButton onPress={props.onClick}>
+        <StyledButton onPress={props.onClick} onLayout={props.onLayout}>
             {Span(props)}
         </StyledButton>
     );

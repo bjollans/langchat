@@ -11,6 +11,7 @@ interface DefaultProps {
     style?: any;
 }
 
+const StyledView = styled(View);
 export function Div(props: DefaultProps): JSX.Element {
     if (Platform.OS === 'web') {
         return (
@@ -22,7 +23,6 @@ export function Div(props: DefaultProps): JSX.Element {
             </div>
         );
     }
-    const StyledView = styled(View);
     return (
         <StyledView style={props.style}>
             {props.children}
@@ -56,6 +56,7 @@ export function Audio(props: AudioProps): JSX.Element {
     return (<Text>TODO</Text>);
 }
 
+const StyledButton = styled(TouchableHighlight);
 export function Btn(props: DefaultProps): JSX.Element {
     if (Platform.OS === 'web') {
         return (
@@ -67,7 +68,6 @@ export function Btn(props: DefaultProps): JSX.Element {
             </button>
         );
     }
-    const StyledButton = styled(TouchableHighlight);
     return (
         <StyledButton onPress={props.onClick} onLayout={props.onLayout}>
             {Span(props)}
@@ -86,6 +86,7 @@ interface ImgProps {
     alt?: string;
 }
 
+const StyledImage = styled(Image);
 export function Img(props: ImgProps): JSX.Element {
     if (Platform.OS === 'web') {
         return (
@@ -93,7 +94,6 @@ export function Img(props: ImgProps): JSX.Element {
         );
     }
 
-    const StyledImage = styled(Image);
     return (
         <StyledImage source={{ uri: props.src }} alt={props.alt} style={props.style} />
     );
@@ -128,11 +128,11 @@ export function Span(props: DefaultProps): JSX.Element {
     return _multiplatformTextElement(webElement, props);
 }
 
+const StyledText = styled(Text);
 function _multiplatformTextElement(webElement: JSX.Element, props: DefaultProps): JSX.Element {
     if (Platform.OS === 'web') {
         return webElement;
     }
-    const StyledText = styled(Text);
     return (
         <StyledText style={props.style}>
             {props.children}

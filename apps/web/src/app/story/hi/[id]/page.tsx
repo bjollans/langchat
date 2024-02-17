@@ -1,6 +1,7 @@
 import Meta from "components/Meta";
 import Story from "components/story/Story";
 import { getStory, getStoryCollections, getVisibleStoryIds } from "util/serverDb";
+import StoryAudioContextProvider from "linguin-shared/context/storyAudioContext";
 
 export async function generateStaticParams() {
     const storyIdObjects = await getVisibleStoryIds();
@@ -27,7 +28,9 @@ async function StoryPage({ params }) {
 
                 <div className="relative flex z-0">
                     <div className={`p-4 my-4 mb-36 rounded-lg border-1 border-black w-full`}>
-                        <Story story={story} />
+                        <StoryAudioContextProvider>
+                            <Story story={story} />
+                        </StoryAudioContextProvider>
                     </div>
                 </div>
             </div>

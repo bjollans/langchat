@@ -72,18 +72,14 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
         const onPause = () => setIsPlayingAudio(false);
         audio.addEventListener('pause', onPause);
 
-        const onLoadedMetadata = () => {
-            setDuration(audio.duration);
-        };
-        audio.addEventListener('loadedmetadata', onLoadedMetadata);
+        setDuration(audio.duration);
 
         // Remove event listeners on cleanup
         return () => {
             audio.removeEventListener('play', onPlay);
             audio.removeEventListener('pause', onPause);
-            audio.removeEventListener('loadedmetadata', onLoadedMetadata);
         };
-    }, []);
+    }, [audioRef]);
 
     const handleTimeUpdate = (e: React.SyntheticEvent<HTMLAudioElement>) => {
         const audioElement = e.target as HTMLAudioElement;
@@ -101,6 +97,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     };
 
     useEffect(() => {
+        console.log("asdasd: ", currentAudioTime, " ", duration);
         if (audioRef.current && Math.abs(currentAudioTime - audioRef.current.currentTime) > 2) {
             audioRef.current.currentTime = currentAudioTime;
         }

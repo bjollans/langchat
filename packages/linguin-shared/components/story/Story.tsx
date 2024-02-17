@@ -3,7 +3,6 @@
 import { Div, H3, Img, P } from "linguin-shared/components/RnTwComponents";
 import StoryAudioPlayer from "linguin-shared/components/audio/StoryAudioPlayer";
 //import SuggestedStories from "components/engagement/SuggestedStories";
-import StoryAudioContextProvider from "linguin-shared/context/storyAudioContext";
 import { StoryIdContext } from "linguin-shared/context/storyIdContext";
 import { TargetLanguageContext } from "linguin-shared/context/targetLanguageContext";
 import ReadUsageContextProvider from "linguin-shared/context/trackReadContext";
@@ -40,7 +39,7 @@ function Story({ story }: StoryProps): JSX.Element {
         <StoryIdContext.Provider value={story.id}>
             <TargetLanguageContext.Provider value={story?.targetLanguage}>
                 <ReadUsageContextProvider story={story}>
-                    <StoryAudioContextProvider>
+                    
                         {story?.targetLanguage == "hi" && Platform.OS === 'web' &&
                             <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
                         }
@@ -53,7 +52,7 @@ function Story({ story }: StoryProps): JSX.Element {
                         <StoryQuestionsSection storyId={story.id} />
                         {isPayWallOpen && story?.audioUrl &&
                             <StoryAudioPlayer src={story.audioUrl} />}
-                    </StoryAudioContextProvider>
+                    
                 </ReadUsageContextProvider>
             </TargetLanguageContext.Provider>
             {isPayWallOpen && <SuggestedStories />}

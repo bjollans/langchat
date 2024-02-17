@@ -10,13 +10,13 @@ export default function Main() {
   const { data: story, isSuccess: loaded } = useStory("d02258d7-e59c-4c5a-9c08-a627187ab6ae");
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <RnSoundContext.Provider value={Sound}>
+      <RnSoundContext.Provider value={Sound}>
+        <ScrollView contentContainerStyle={styles.container}>
           <RnTouchableContextProvider>
-          {loaded && <Story story={story} />}
+            {loaded && <Story story={story} />}
           </RnTouchableContextProvider>
-        </RnSoundContext.Provider>
-      </ScrollView>
+        </ScrollView>
+      </RnSoundContext.Provider>
     </SafeAreaView>
   );
 }

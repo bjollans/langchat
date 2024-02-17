@@ -48,7 +48,9 @@ export default function RnTouchableContextProvider({ children }: RnTouchableCont
 export function useRnTouchableContext(): RnTouchableContextType {
     const context = useContext(RnTouchableContext);
     if (context === null) {
-        throw new Error('useRnTouchableContext must be used within a RnTouchableContextProvider');
+        return {
+            addToResetterFunctions: () => { }
+        }
     }
     return context;
 }

@@ -20,6 +20,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     const { addToResetterFunctions } = useRnTouchableContext();
 
     const playRnAudio = () => {
+        if (!RnSound) return;
         let fileName = "";
         for (let i = 0; i < props.termTranslation.text.length; i++) {
             fileName += props.termTranslation.text.charCodeAt(i) + (i < props.termTranslation.text.length - 1 ? "-" : "");

@@ -31,7 +31,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                 termTranslation.position <= i && termTranslation.position + termTranslation.text.length > i
             )));
             if (termAtThisPosition && termAtThisPosition.length > 0) {
-                translatedWords.push((<TranslatedTerm termTranslation={termAtThisPosition[0]} />));
+                translatedWords.push((<TranslatedTerm termTranslation={termAtThisPosition[0]} isHighlighted={props.isHighlighted} />));
                 i = termAtThisPosition[0].position + termAtThisPosition[0].text.length - 1;
             }
             else {

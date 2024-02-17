@@ -10,6 +10,7 @@ import { useRnTouchableContext } from "linguin-shared/context/rnTouchableContext
 
 export interface TranslatedTermProps {
     termTranslation: TermTranslation;
+    isHighlighted?: boolean;
 }
 
 export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element {
@@ -50,7 +51,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
             onMouseLeave={() => setShowTranslation(false)}
             className="cursor-pointer relative mx-0.5 text-2xl underline decoration-dotted hover:text-indigo-500 cursor-pointer">
             {showTranslation && <TranslatedWordHoverBox termTranslation={props.termTranslation} />}
-            <Span>
+            <Span className={props.isHighlighted ? "text-cyan-600" : "text-black"}>
                 {props.termTranslation.text}
             </Span>
         </Btn>

@@ -9,13 +9,11 @@ export interface StoryTextRenderProps {
 }
 
 export default function StoryTextRender(props: StoryTextRenderProps): JSX.Element {
-    const [currentAudioTime, setCurrentAudioTime] = useState(0);
+    const [currentAudioTime, setCurrentAudioTime] = useState(-1);
     const [isPlayingAudio, setIsPlayingAudio] = useState(false);
     const {
         updateIsPlayingAudio,
         addIsPlayingAudioUpdateFunction,
-        hasPlayedAudio,
-        setHasPlayedAudio,
         updateAudioTimes,
         addAudioTimeUpdateFunction
     } = useStoryAudioContext();
@@ -54,7 +52,7 @@ export default function StoryTextRender(props: StoryTextRenderProps): JSX.Elemen
         const audioStartTime = lineAudioSentenceTime ? lineAudioSentenceTime.start : 0;
         const audioEndTime = lineAudioSentenceTime ? lineAudioSentenceTime.end : 0;
         return (<TranslatedTextRender translatedText={{ content: line, translationJson: lineTranslationJson }}
-            isHighlighted={hasPlayedAudio && currentAudioTime < audioEndTime - 0.0001 && currentAudioTime >= audioStartTime - 0.0001}
+            isHighlighted={currentAudioTime >=0 && currentAudioTime < audioEndTime - 0.0001 && currentAudioTime >= audioStartTime - 0.0001}
             isPlayingAudio={isPlayingAudio} hasAudio={props.story.audioUrl !== null && props.story.audioUrl !== undefined}
             onPlayAudio={() => { updateAudioTimes(audioStartTime - 0.00001); updateIsPlayingAudio(true) }} />);
     };

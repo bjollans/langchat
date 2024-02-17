@@ -2,14 +2,14 @@ import React, { useEffect } from 'react';
 import { Div } from "linguin-shared/components/RnTwComponents";
 import { Platform } from 'react-native';
 
-interface EqualizerIconProps {
+interface EqualizerIconWebProps {
   isAnimated: boolean;
   onClick: () => void;
 }
 
-export default function EqualizerIcon(props: EqualizerIconProps) {
+export default function EqualizerIconWeb(props: EqualizerIconWebProps) {
   useEffect(() => {
-    if (props.isAnimated && Platform.OS === "web") {
+    if (props.isAnimated) {
       // Define the keyframes as a string
       const keyframes = `
       @keyframes equalize {

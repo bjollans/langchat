@@ -1,5 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import EqualizerIcon from "linguin-shared/components/audio/EqualizerIcon";
+import EqualizerIconWeb from "linguin-shared/components/audio/EqualizerIconWeb";
 import { StoryIdContext } from 'linguin-shared/context/storyIdContext';
 import { useReadUsageContext } from 'linguin-shared/context/trackReadContext';
 import { TermTranslation, TranslatedText } from "linguin-shared/model/translations";
@@ -9,6 +9,8 @@ import TranslatedTerm from "./TranslatedWord";
 import { Div, P, Span, Btn } from 'linguin-shared/components/RnTwComponents';
 import { PlayIcon, TranslateIcon } from 'linguin-shared/components/Icons';
 import { useRnTouchableContext } from 'linguin-shared/context/rnTouchableContext';
+import { Platform, Text } from 'react-native';
+import EqualizerIconRn from "linguin-shared/components/audio/EqualizerIconRn";
 
 interface TranslatedTextProps {
     translatedText: TranslatedText;
@@ -68,7 +70,11 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                 <Div className="absolute left-0">
                     {props.hasAudio &&
                         (props.isHighlighted
-                            && <EqualizerIcon isAnimated={props.isPlayingAudio} onClick={props.onPlayAudio} />
+                            && (
+                                Platform.OS == "web"
+                                && <EqualizerIconWeb isAnimated={props.isPlayingAudio} onClick={props.onPlayAudio} />
+                                || <EqualizerIconRn isAnimated={props.isPlayingAudio} onClick={props.onPlayAudio} />
+                            )
                             || <Btn onClick={props.onPlayAudio}><PlayIcon /></Btn>)
                     }
                 </Div>

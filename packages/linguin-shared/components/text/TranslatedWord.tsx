@@ -43,7 +43,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
         <Btn
             onClick={handleClick}
             onMouseLeave={() => setShowTranslation(false)}
-            className="cursor-pointer relative mx-0.5 underline decoration-dotted hover:text-indigo-500 cursor-pointer">
+            className="cursor-pointer relative mx-0.5 text-2xl underline decoration-dotted hover:text-indigo-500 cursor-pointer">
             {showTranslation && <TranslatedWordHoverBox termTranslation={props.termTranslation} />}
             <Span>
                 {props.termTranslation.text}

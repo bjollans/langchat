@@ -43,7 +43,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
             isPlayingClojureState = isPlayingAudio;
             setIsPlayingAudio(isPlayingClojureState);
         });
-        
+
         var isHighlightedClojureState = false;
         addAudioTimeUpdateFunction((audioTime: number) => {
             if (audioTime >= 0 && audioTime < props.audioEndTime - 0.0001 && audioTime >= props.audioStartTime - 0.000) {
@@ -62,6 +62,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
 
 
     const onPlayAudio = () => { updateAudioTimes(props.audioStartTime - 0.00001); updateIsPlayingAudio(true) };
+    const onTogglePlayAudio = () => { updateIsPlayingAudio(!isPlayingAudio) };
 
     if (props.translatedText.translationJson !== undefined) {
         for (var i = 0; i < props.translatedText.content.length; i++) {
@@ -108,8 +109,8 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                         (isHighlighted
                             && (
                                 Platform.OS == "web"
-                                && <EqualizerIconWeb isAnimated={isPlayingAudio} onClick={onPlayAudio} />
-                                || <EqualizerIconRn isAnimated={isPlayingAudio} onClick={onPlayAudio} />
+                                && <EqualizerIconWeb isAnimated={isPlayingAudio} onClick={onTogglePlayAudio} />
+                                || <EqualizerIconRn isAnimated={isPlayingAudio} onClick={onTogglePlayAudio} />
                             )
                             || <Btn onClick={onPlayAudio}><PlayIcon /></Btn>)
                     }

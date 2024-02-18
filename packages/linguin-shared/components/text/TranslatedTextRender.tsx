@@ -2,22 +2,23 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import EqualizerIconWeb from "linguin-shared/components/audio/EqualizerIconWeb";
 import { StoryIdContext } from 'linguin-shared/context/storyIdContext';
 import { useReadUsageContext } from 'linguin-shared/context/trackReadContext';
-import { TermTranslation, TranslatedText } from "linguin-shared/model/translations";
+import { AudioSentenceTime, StoryText, TermTranslation, TranslatedText } from "linguin-shared/model/translations";
 import posthog from 'posthog-js';
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import TranslatedTerm from "./TranslatedWord";
 import { Div, P, Span, Btn } from 'linguin-shared/components/RnTwComponents';
 import { PlayIcon, TranslateIcon } from 'linguin-shared/components/Icons';
 import { useRnTouchableContext } from 'linguin-shared/context/rnTouchableContext';
 import { Platform, Text } from 'react-native';
 import EqualizerIconRn from "linguin-shared/components/audio/EqualizerIconRn";
+import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
 
 interface TranslatedTextProps {
+    story: StoryText;
     translatedText: TranslatedText;
-    isHighlighted: boolean;
-    isPlayingAudio: boolean;
     hasAudio: boolean;
-    onPlayAudio: () => void;
+    audioStartTime: number;
+    audioEndTime: number;
 }
 
 export default function TranslatedTextRender(props: TranslatedTextProps): JSX.Element {
@@ -26,6 +27,29 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
     const storyId = useContext(StoryIdContext);
     const { onReadUsageEvent } = useReadUsageContext();
     const { addToResetterFunctions } = useRnTouchableContext();
+    const [currentAudioTime, setCurrentAudioTime] = useState(-1);
+    const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+    const {
+        updateIsPlayingAudio,
+        addIsPlayingAudioUpdateFunction,
+        updateAudioTimes,
+        addAudioTimeUpdateFunction
+    } = useStoryAudioContext();
+
+
+    useEffect(() => {
+        addIsPlayingAudioUpdateFunction((isPlayingAudio: boolean) => {
+            setIsPlayingAudio(isPlayingAudio);
+        });
+        addAudioTimeUpdateFunction((audioTime: number) => {
+            setCurrentAudioTime(audioTime);
+        });
+    }, []);
+
+
+    const onPlayAudio=() => { updateAudioTimes(props.audioStartTime - 0.00001); updateIsPlayingAudio(true) };
+
+    const isHighlighted=currentAudioTime >=0 && currentAudioTime < props.audioEndTime - 0.0001 && currentAudioTime >= props.audioStartTime - 0.0001
 
     if (props.translatedText.translationJson !== undefined) {
         for (var i = 0; i < props.translatedText.content.length; i++) {
@@ -33,7 +57,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                 termTranslation.position <= i && termTranslation.position + termTranslation.text.length > i
             )));
             if (termAtThisPosition && termAtThisPosition.length > 0) {
-                translatedWords.push((<TranslatedTerm termTranslation={termAtThisPosition[0]} isHighlighted={props.isHighlighted} />));
+                translatedWords.push((<TranslatedTerm termTranslation={termAtThisPosition[0]} isHighlighted={isHighlighted} />));
                 i = termAtThisPosition[0].position + termAtThisPosition[0].text.length - 1;
             }
             else {
@@ -66,16 +90,16 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                     }
                 </Div>
             </Div>
-            <Div className={`relative flex flex-row flex-wrap text-2xl items-start ${props.isHighlighted ? "text-cyan-600" : "text-black"}`}>
+            <Div className={`relative flex flex-row flex-wrap text-2xl items-start ${isHighlighted ? "text-cyan-600" : "text-black"}`}>
                 <Div className="absolute left-0">
                     {props.hasAudio &&
-                        (props.isHighlighted
+                        (isHighlighted
                             && (
                                 Platform.OS == "web"
-                                && <EqualizerIconWeb isAnimated={props.isPlayingAudio} onClick={props.onPlayAudio} />
-                                || <EqualizerIconRn isAnimated={props.isPlayingAudio} onClick={props.onPlayAudio} />
+                                && <EqualizerIconWeb isAnimated={isPlayingAudio} onClick={onPlayAudio} />
+                                || <EqualizerIconRn isAnimated={isPlayingAudio} onClick={onPlayAudio} />
                             )
-                            || <Btn onClick={props.onPlayAudio}><PlayIcon /></Btn>)
+                            || <Btn onClick={onPlayAudio}><PlayIcon /></Btn>)
                     }
                 </Div>
                 <Div className="mx-8 flex flex-row items-center justify-between">

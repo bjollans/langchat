@@ -46,7 +46,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
 
         var isHighlightedClojureState = false;
         addAudioTimeUpdateFunction((audioTime: number) => {
-            if (audioTime >= 0 && audioTime < props.audioEndTime - 0.0001 && audioTime >= props.audioStartTime - 0.000) {
+            if (audioTime > 0 && audioTime < props.audioEndTime - 0.0001 && audioTime >= props.audioStartTime - 0.000) {
                 if (!isHighlightedClojureState) {
                     isHighlightedClojureState = true;
                     setIsHighlighted(isHighlightedClojureState);

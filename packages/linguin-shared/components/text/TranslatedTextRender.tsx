@@ -74,7 +74,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
                 i = termAtThisPosition[0].position + termAtThisPosition[0].text.length - 1;
             }
             else {
-                translatedWords.push(<Span>{props.translatedText.content[i]}</Span>);
+                translatedWords.push(<Span className={`relative mx-0.5 text-2xl ${isHighlighted ? "text-cyan-600" : "text-black"}`}>{props.translatedText.content[i]}</Span>);
             }
         }
     }

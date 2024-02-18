@@ -41,16 +41,19 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
         addAudioTimeUpdateFunction
     } = useStoryAudioContext();
 
+    useEffect(() => {
+        const rnAudio = new RnSound(props.src, '', (error) => {
+            if (error) return;
+            setDuration(rnAudio.getDuration());
+        });
+        setRnAudio(rnAudio);
+    }, []);
+
 
     const playRnAudio = () => {
         if (!RnSound) return;
-        let rnSound = new RnSound(props.src, '', (error) => {
-            if (error) return;
-            rnSound.setCurrentTime(currentAudioTime);
-            rnSound.play();
-            setDuration(rnSound.getDuration());
-        });
-        return rnSound;
+        rnAudio.setCurrentTime(currentAudioTime);
+        rnAudio.play();
     }
 
     const play = () => {
@@ -61,7 +64,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
                 onReadUsageEvent();
             }
         } else {
-            setRnAudio(playRnAudio());
+            playRnAudio();
             updateIsPlayingAudio(true);
             onReadUsageEvent();
         }

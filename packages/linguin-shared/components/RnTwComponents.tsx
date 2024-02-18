@@ -70,7 +70,15 @@ export function Btn(props: DefaultProps): JSX.Element {
     }
     return (
         <StyledButton onPress={props.onClick} onLayout={props.onLayout}>
-            {Span(props)}
+            <Span
+                className={props.className}
+                onMouseLeave={props.onMouseLeave}
+                onClick={props.onClick}
+                onLayout={props.onLayout}
+                style={[props.style, {pointerEvents: "none"}]}
+            >
+                {props.children}
+            </Span>
         </StyledButton>
     );
 }

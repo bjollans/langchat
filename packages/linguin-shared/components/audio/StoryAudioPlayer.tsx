@@ -78,6 +78,16 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
         });
     }, []);
 
+    useEffect(() => {
+        if (rnAudio) {
+            addAudioTimeUpdateFunction((audioTime: number) => {
+                rnAudio.getCurrentTime((seconds) => { 
+                    if (Math.abs(audioTime - seconds) > 1) rnAudio?.setCurrentTime(audioTime);
+                });
+            });
+        }
+    }, [rnAudio]);
+
     const pause = () => {
         if (audioRef.current) {
             audioRef.current.pause();

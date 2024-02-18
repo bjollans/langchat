@@ -3,8 +3,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 export interface StoryAudioContextType {
-    hasPlayedAudio: boolean;
-    setHasPlayedAudio: (hasPlayedAudio: boolean) => void;
     updateIsPlayingAudio: (isPlayingAudio: boolean) => void;
     addIsPlayingAudioUpdateFunction: (isPlayingAudioUpdateFunction: (isPlayingAudio: boolean) => void) => void;
     updateAudioTimes: ((audioTime: number) => void);
@@ -20,7 +18,6 @@ export interface StoryAudioContextProviderProps {
 
 export default function StoryAudioContextProvider({ children }: StoryAudioContextProviderProps): JSX.Element {
     const [isPlayingAudioUpdateFunctions] = useState<((isPlayingAudio: boolean) => void)[]>([]);
-    const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
     const [audioTimeUpdateFunctions] = useState<((audioTime: number) => void)[]>([]);
 
 
@@ -44,8 +41,6 @@ export default function StoryAudioContextProvider({ children }: StoryAudioContex
         <StoryAudioContext.Provider value={{
             updateIsPlayingAudio,
             addIsPlayingAudioUpdateFunction,
-            hasPlayedAudio,
-            setHasPlayedAudio,
             updateAudioTimes,
             addAudioTimeUpdateFunction
         }}>

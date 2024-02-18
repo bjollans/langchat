@@ -7,6 +7,7 @@ import { useContext, useState, useEffect } from "react";
 import TranslatedWordHoverBox from "./TranslatedWordHoverBox";
 import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
 import { useRnTouchableContext } from "linguin-shared/context/rnTouchableContext";
+import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
 
 export interface TranslatedTermProps {
     termTranslation: TermTranslation;
@@ -15,13 +16,24 @@ export interface TranslatedTermProps {
 
 export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element {
     const [showTranslation, setShowTranslation] = useState(false);
+    const [isPlayingStoryAudio, setIsPlayingStoryAudio] = useState(false);
     const storyId = useContext(StoryIdContext);
     const { onReadUsageEvent } = useReadUsageContext();
     const RnSound = useContext(RnSoundContext);
     const { addToResetterFunctions } = useRnTouchableContext();
 
+    const {
+        addIsPlayingAudioUpdateFunction,
+    } = useStoryAudioContext();
+
+    useEffect(() => {
+        addIsPlayingAudioUpdateFunction((isPlayingAudio: boolean) => {
+            setIsPlayingStoryAudio(isPlayingAudio);
+        });
+    }, []);
+
     const playRnAudio = () => {
-        if (!RnSound) return;
+        if (!RnSound || isPlayingStoryAudio) return;
         let fileName = "";
         for (let i = 0; i < props.termTranslation.text.length; i++) {
             fileName += props.termTranslation.text.charCodeAt(i) + (i < props.termTranslation.text.length - 1 ? "-" : "");

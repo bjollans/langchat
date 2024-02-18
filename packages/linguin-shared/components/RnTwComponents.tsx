@@ -1,5 +1,4 @@
-import { View, Text, Image, Platform, TouchableHighlight } from 'react-native';
-import { styled } from 'nativewind';
+import { Image, Platform, Text, TouchableHighlight, View } from 'react-native';
 
 
 interface DefaultProps {
@@ -11,7 +10,6 @@ interface DefaultProps {
     style?: any;
 }
 
-const StyledView = styled(View);
 export function Div(props: DefaultProps): JSX.Element {
     if (Platform.OS === 'web') {
         return (
@@ -24,9 +22,9 @@ export function Div(props: DefaultProps): JSX.Element {
         );
     }
     return (
-        <StyledView style={props.style}>
+        <View style={props.style}>
             {props.children}
-        </StyledView>
+        </View>
     );
 }
 
@@ -56,7 +54,6 @@ export function Audio(props: AudioProps): JSX.Element {
     return (<Text>TODO</Text>);
 }
 
-const StyledButton = styled(TouchableHighlight);
 export function Btn(props: DefaultProps): JSX.Element {
     if (Platform.OS === 'web') {
         return (
@@ -69,7 +66,7 @@ export function Btn(props: DefaultProps): JSX.Element {
         );
     }
     return (
-        <StyledButton onPress={props.onClick} onLayout={props.onLayout}>
+        <TouchableHighlight onPress={props.onClick} onLayout={props.onLayout}>
             <Span
                 className={props.className}
                 onMouseLeave={props.onMouseLeave}
@@ -79,7 +76,7 @@ export function Btn(props: DefaultProps): JSX.Element {
             >
                 {props.children}
             </Span>
-        </StyledButton>
+        </TouchableHighlight>
     );
 }
 
@@ -94,7 +91,6 @@ interface ImgProps {
     alt?: string;
 }
 
-const StyledImage = styled(Image);
 export function Img(props: ImgProps): JSX.Element {
     if (Platform.OS === 'web') {
         return (
@@ -103,7 +99,7 @@ export function Img(props: ImgProps): JSX.Element {
     }
 
     return (
-        <StyledImage source={{ uri: props.src }} alt={props.alt} style={props.style} />
+        <Image source={{ uri: props.src }} alt={props.alt} style={props.style} />
     );
 }
 
@@ -136,14 +132,13 @@ export function Span(props: DefaultProps): JSX.Element {
     return _multiplatformTextElement(webElement, props);
 }
 
-const StyledText = styled(Text);
 function _multiplatformTextElement(webElement: JSX.Element, props: DefaultProps): JSX.Element {
     if (Platform.OS === 'web') {
         return webElement;
     }
     return (
-        <StyledText style={props.style}>
+        <Text style={props.style}>
             {props.children}
-        </StyledText>
+        </Text>
     );
 }

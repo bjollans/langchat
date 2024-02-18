@@ -27,7 +27,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
     const storyId = useContext(StoryIdContext);
     const { onReadUsageEvent } = useReadUsageContext();
     const { addToResetterFunctions } = useRnTouchableContext();
-    const [currentAudioTime, setCurrentAudioTime] = useState(-1);
+    const [isHighlighted, setIsHighlighted] = useState(false);
     const [isPlayingAudio, setIsPlayingAudio] = useState(false);
     const {
         updateIsPlayingAudio,
@@ -38,18 +38,30 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
 
 
     useEffect(() => {
+        var isPlayingClojureState = false;
         addIsPlayingAudioUpdateFunction((isPlayingAudio: boolean) => {
-            setIsPlayingAudio(isPlayingAudio);
+            isPlayingClojureState = isPlayingAudio;
+            setIsPlayingAudio(isPlayingClojureState);
         });
+        
+        var isHighlightedClojureState = false;
         addAudioTimeUpdateFunction((audioTime: number) => {
-            setCurrentAudioTime(audioTime);
+            if (audioTime >= 0 && audioTime < props.audioEndTime - 0.0001 && audioTime >= props.audioStartTime - 0.000) {
+                if (!isHighlightedClojureState) {
+                    isHighlightedClojureState = true;
+                    setIsHighlighted(isHighlightedClojureState);
+                }
+            } else {
+                if (isHighlightedClojureState) {
+                    isHighlightedClojureState = false;
+                    setIsHighlighted(isHighlightedClojureState);
+                }
+            }
         });
     }, []);
 
 
-    const onPlayAudio=() => { updateAudioTimes(props.audioStartTime - 0.00001); updateIsPlayingAudio(true) };
-
-    const isHighlighted=currentAudioTime >=0 && currentAudioTime < props.audioEndTime - 0.0001 && currentAudioTime >= props.audioStartTime - 0.0001
+    const onPlayAudio = () => { updateAudioTimes(props.audioStartTime - 0.00001); updateIsPlayingAudio(true) };
 
     if (props.translatedText.translationJson !== undefined) {
         for (var i = 0; i < props.translatedText.content.length; i++) {

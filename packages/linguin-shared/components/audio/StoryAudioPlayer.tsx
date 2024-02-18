@@ -69,12 +69,15 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     };
 
     useEffect(() => {
+        var isPlayingAudioClojureState = isPlayingAudio;
         addIsPlayingAudioUpdateFunction((isPlayingAudio: boolean) => {
-            console.log("UPDATE IS PLAYING AUDIO", isPlayingAudio);
-            setIsPlayingAudio(isPlayingAudio);
+            isPlayingAudioClojureState = isPlayingAudio;
+            setIsPlayingAudio(isPlayingAudioClojureState);
         });
+        var currentAudioTimeClojureState = currentAudioTime;
         addAudioTimeUpdateFunction((audioTime: number) => {
-            setCurrentAudioTime(audioTime);
+            currentAudioTimeClojureState = audioTime;
+            setCurrentAudioTime(currentAudioTimeClojureState);
         });
     }, []);
 
@@ -179,9 +182,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
         }
     }, [currentAudioTime, duration]);
 
-    useEffect(() => {
-        console.log(progressBarWidth)
-    }, [progressBarWidth]);
+    console.log("Storyaudioplayer render")
 
     return (
         <Div className='bg-white fixed bottom-0 left-0 right-0 drop-shadow-xl border'>

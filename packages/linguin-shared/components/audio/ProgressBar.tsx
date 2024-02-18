@@ -1,12 +1,7 @@
-import { PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
-import { Audio, Btn, Div } from 'linguin-shared/components/RnTwComponents';
+import { Btn } from 'linguin-shared/components/RnTwComponents';
 import { useStoryAudioContext } from 'linguin-shared/context/storyAudioContext';
-import { useReadUsageContext } from 'linguin-shared/context/trackReadContext';
-import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
-import posthog from 'posthog-js';
-import { useEffect, useRef, useState, useContext } from 'react';
-import { Platform, Text } from 'react-native';
-import { PlayCircleIcon, PauseCircleIcon } from 'linguin-shared/components/Icons';
+import { useEffect, useState } from 'react';
+import { Platform } from 'react-native';
 
 interface ProgressBarProps {
     duration: number;
@@ -47,27 +42,26 @@ export default function ProgressBar(props: ProgressBarProps) {
             const clickX = e.nativeEvent.locationX;
             const newTime = (clickX / rnProgressBarWidth) * props.duration;
             updateAudioTimes(newTime);
-            setProgressBarWidth(Math.floor(clickX));
         }
     };
 
     useEffect(() => {
-        const currentAudioPercentageTime = Math.floor((currentAudioTime / props.duration) * 100);
+        const currentAudioPercentageTime = (currentAudioTime / props.duration);
         if (Platform.OS === 'web') {
-            setProgressBarWidth(`${currentAudioPercentageTime}%`);
+            setProgressBarWidth(`${currentAudioPercentageTime * 100}%`);
         } else {
-            setProgressBarWidth((currentAudioPercentageTime * rnProgressBarWidth) / 100);
+            setProgressBarWidth(Math.floor(currentAudioPercentageTime * rnProgressBarWidth) as number);
         }
     }, [currentAudioTime, props.duration]);
 
     return (
         <Btn
             className='h-2 bg-gray-200 cursor-pointer'
-            style={{ width: "100%" }}
             onClick={handleProgressBarClick}
             onLayout={(e) => setRnProgressBarWidth(e.nativeEvent.layout.width)}
         >
-            <Div className='bg-cyan-600 h-2' style={{ width: progressBarWidth }}></Div>
+            <Btn className='bg-cyan-600 shadow-lg h-2' style={{ width: progressBarWidth }}
+                onClick={handleProgressBarClick} />
         </Btn>
     )
 }

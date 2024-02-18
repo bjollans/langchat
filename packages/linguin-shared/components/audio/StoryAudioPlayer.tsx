@@ -30,7 +30,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
             rnAudio.getCurrentTime((seconds) => {
                 updateAudioTimes(seconds);
             });
-        }, 2000);
+        }, 500);
         return () => clearInterval(rnAudioUpdateInterval);
     }, [rnAudio]);
 
@@ -45,7 +45,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     const playRnAudio = () => {
         if (!RnSound) return;
         let rnSound = new RnSound(props.src, '', (error) => {
-            if (error) return
+            if (error) return;
             rnSound.setCurrentTime(currentAudioTime);
             rnSound.play();
             setDuration(rnSound.getDuration());

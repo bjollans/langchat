@@ -7,6 +7,7 @@ import posthog from 'posthog-js';
 import { useEffect, useRef, useState, useContext } from 'react';
 import { Platform, Text } from 'react-native';
 import { PlayCircleIcon, PauseCircleIcon } from 'linguin-shared/components/Icons';
+import ProgressBar from './ProgressBar';
 
 interface StoryAudioPlayerProps {
     src: string;
@@ -17,9 +18,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     const [rnAudio, setRnAudio] = useState<any>(null);
     const [currentAudioTime, setCurrentAudioTime] = useState(0);
     const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-    const [rnProgressBarWidth, setRnProgressBarWidth] = useState(0);
     const audioRef = useRef<HTMLAudioElement>(null);
-    const [progressBarWidth, setProgressBarWidth] = useState<string | number>('0%');
     const { onReadUsageEvent } = useReadUsageContext();
     const RnSound = useContext(RnSoundContext);
 
@@ -84,12 +83,20 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     useEffect(() => {
         if (rnAudio) {
             addAudioTimeUpdateFunction((audioTime: number) => {
-                rnAudio.getCurrentTime((seconds) => { 
+                rnAudio.getCurrentTime((seconds) => {
                     if (Math.abs(audioTime - seconds) > 1) rnAudio?.setCurrentTime(audioTime);
                 });
             });
         }
     }, [rnAudio]);
+
+    useEffect(() => {
+        if (audioRef && audioRef.current) {
+            addAudioTimeUpdateFunction((audioTime: number) => {
+                if (Math.abs(currentAudioTime - audioRef!.current!.currentTime) > 2) audioRef!.current!.currentTime = audioTime;
+            });
+        }
+    }, [audioRef]);
 
     const pause = () => {
         if (audioRef.current) {
@@ -147,53 +154,9 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
         updateAudioTimes(audioElement.currentTime);
     };
 
-    const handleProgressBarClick = (e) => {
-        if (Platform.OS === 'web') {
-            const progressBar = e.currentTarget;
-            const clickX = e.clientX - progressBar.getBoundingClientRect().left;
-            const newTime = (clickX / progressBar.offsetWidth) * (audioRef.current?.duration || 0);
-            if (audioRef.current) {
-                audioRef.current.currentTime = newTime;
-            }
-            updateAudioTimes(newTime);
-        } else {
-            if (!rnAudio) return;
-            const clickX = e.nativeEvent.locationX;
-            const newTime = (clickX / rnProgressBarWidth) * duration;
-            rnAudio.setCurrentTime(newTime);
-            updateAudioTimes(newTime);
-            setProgressBarWidth(Math.floor(clickX));
-        }
-    };
-
-    useEffect(() => {
-        const currentAudioPercentageTime = Math.floor((currentAudioTime / duration) * 100);
-        if (Platform.OS === 'web') {
-            if (audioRef.current && Math.abs(currentAudioTime - audioRef.current.currentTime) > 2) {
-                audioRef.current.currentTime = currentAudioTime;
-                setProgressBarWidth(`${currentAudioPercentageTime}%`);
-            }
-        } else {
-            //TODO
-            setProgressBarWidth((currentAudioPercentageTime * rnProgressBarWidth) / 100);
-            console.log("currentAudioPercentageTime* rnProgressBarWidth) / 100 = ", ((currentAudioPercentageTime * rnProgressBarWidth) / 100));
-            console.log("currentAudioPercentageTime = ", currentAudioPercentageTime);
-            console.log("rnProgressBarWidth = ", rnProgressBarWidth);
-        }
-    }, [currentAudioTime, duration]);
-
-    console.log("Storyaudioplayer render")
-
     return (
         <Div className='bg-white fixed bottom-0 left-0 right-0 drop-shadow-xl border'>
-            <Btn
-                className='h-2 bg-gray-200 cursor-pointer'
-                style={{ width: "100%" }}
-                onClick={handleProgressBarClick}
-                onLayout={(e) => setRnProgressBarWidth(e.nativeEvent.layout.width)}
-            >
-                <Div className='bg-cyan-600 h-2' style={{ width: progressBarWidth }}></Div>
-            </Btn>
+            <ProgressBar duration={Platform.OS == "web" ? audioRef?.current?.duration || 0 : duration} />
             {Platform.OS === 'web' &&
                 <audio
                     onEnded={onEnded}

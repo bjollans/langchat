@@ -5,6 +5,14 @@
         "projectId": "f7ff740c-9367-4910-864b-38950c9afcde"
       }
     },
+    "plugins": [
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"
+        }
+      ]
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

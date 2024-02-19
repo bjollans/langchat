@@ -9,7 +9,7 @@ import StoryAudioContextProvider from 'linguin-shared/context/storyAudioContext'
 import StoryAudioPlayer from 'linguin-shared/components/audio/StoryAudioPlayer';
 import ReadUsageContextProvider from 'linguin-shared/context/trackReadContext';
 
-export default function Main() {
+export default function Story() {
   const { data: story, isSuccess: loaded } = useStory("d02258d7-e59c-4c5a-9c08-a627187ab6ae");
   return (
     <SafeAreaView style={{ flex: 1 }}>

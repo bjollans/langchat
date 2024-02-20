@@ -101,7 +101,7 @@ export async function createVocab(data: Vocab) {
 
 export function useStories() {
   return useQuery(
-    ["stories"],
+    ["allStories"],
     () => supabase
       .from("stories")
       .select()
@@ -116,6 +116,17 @@ export function useVisibleStoryIds() {
     () => supabase
       .from("stories")
       .select("id")
+      .eq("visible", true)
+      .then(handle),
+  );
+}
+
+export function useVisibleStories() {
+  return useQuery(
+    ["visibleStories"],
+    () => supabase
+      .from("stories")
+      .select()
       .eq("visible", true)
       .then(handle),
   );

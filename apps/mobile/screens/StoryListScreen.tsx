@@ -1,26 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, ScrollView, SafeAreaView, TouchableHighlight, TouchableOpacity } from 'react-native';
-import { useStory } from 'linguin-shared/util/clientDb';
-import Story from 'linguin-shared/components/story/Story';
-import { RnSoundContext } from 'linguin-shared/context/rnSoundContext';
-import RnTouchableContextProvider from 'linguin-shared/context/rnTouchableContext';
-import Sound from 'react-native-sound';
-import StoryAudioContextProvider from 'linguin-shared/context/storyAudioContext';
-import StoryAudioPlayer from 'linguin-shared/components/audio/StoryAudioPlayer';
-import ReadUsageContextProvider from 'linguin-shared/context/trackReadContext';
 import StoryListElement from 'linguin-shared/components/story/StoryListElement';
-import { useContext } from 'react';
-import { Btn } from 'linguin-shared/components/RnTwComponents';
+import { useVisibleStories } from 'linguin-shared/util/clientDb';
+import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native';
 
 
 export default function StoryListScreen({ navigation }) {
-  const { data: story, isSuccess: loaded } = useStory("d02258d7-e59c-4c5a-9c08-a627187ab6ae");
+  const { data: stories, isSuccess: loaded } = useVisibleStories();
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {loaded &&
-        <TouchableOpacity onPress={() => navigation.navigate("Story", {storyId: story.id, storyTitle: story.title})}>
-          <StoryListElement story={story} />
-        </TouchableOpacity>}
+        <FlatList
+          data={stories}
+          renderItem={({ item: story, separators }) =>
+            <TouchableOpacity className="bg-white border-b border-gray-200"
+             onPress={() => navigation.navigate("Story", { storyId: story.id, storyTitle: story.title })}>
+              <StoryListElement story={story} />
+            </TouchableOpacity>}
+          keyExtractor={item => item.id}
+        />
+      }
     </SafeAreaView>
   );
 }

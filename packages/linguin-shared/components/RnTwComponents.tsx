@@ -67,7 +67,6 @@ export function Btn(props: DefaultProps): JSX.Element {
             </button>
         );
     }
-    console.log("style", props.style);
     return (
         <TouchableHighlight onPress={props.onClick} onLayout={props.onLayout}>
             <Span

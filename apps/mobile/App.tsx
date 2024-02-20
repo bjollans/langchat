@@ -7,7 +7,8 @@ import 'react-native-url-polyfill/auto';
 import AuthForm from './components/AuthForm';
 import StoryListScreen from './screens/StoryListScreen';
 import Story from './screens/StoryScreen';
-import supabase from './util/supabaseAuth';
+import supabase from 'linguin-shared/util/supabase';
+import { AuthProvider } from 'linguin-shared/util/auth';
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null)
@@ -28,21 +29,23 @@ export default function App() {
 
   return (
     <QueryClientProvider>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{
-headerTitleStyle: {
-  fontWeight: 'bold',
-  fontSize: 32,
-}
-        }}>
-          <Stack.Screen name="StoryList" component={StoryListScreen} options={{ title: "🇮🇳 Hindi Stories" }} />
-          <Stack.Screen name="Story" component={Story}
-            options={({ route }) => ({
-              title: (route.params as any).storyTitle,
-              headerBackTitle: "Stories"
-            })} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <AuthProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{
+            headerTitleStyle: {
+              fontWeight: 'bold',
+              fontSize: 32,
+            }
+          }}>
+            <Stack.Screen name="StoryList" component={StoryListScreen} options={{ title: "🇮🇳 Hindi Stories" }} />
+            <Stack.Screen name="Story" component={Story}
+              options={({ route }) => ({
+                title: (route.params as any).storyTitle,
+                headerBackTitle: "Stories"
+              })} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

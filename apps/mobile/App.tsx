@@ -1,10 +1,9 @@
 import { Session } from '@supabase/supabase-js';
 import { QueryClientProvider } from 'linguin-shared/util/clientDb';
+import supabase from 'linguin-shared/util/supabase';
 import { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
 import 'react-native-url-polyfill/auto';
 import AuthForm from './components/AuthForm';
-import supabase from 'linguin-shared/util/supabase';
 import Story from './screens/story';
 
 export default function App() {
@@ -18,7 +17,7 @@ export default function App() {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
     })
-  }, [])
+  }, []);
   
   return (
     <QueryClientProvider>
@@ -26,12 +25,3 @@ export default function App() {
     </QueryClientProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

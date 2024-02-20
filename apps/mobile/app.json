@@ -11,6 +11,9 @@
         {
           "iosUrlScheme": "com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"
         }
+      ],
+      [
+        "./rn-app-auth-plugin"
       ]
     ],
     "version": "1.0.0",
@@ -25,9 +28,17 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "scheme": ["com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.bjolly.linguin"
+      "bundleIdentifier": "com.bjolly.linguin",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": ["com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"]
+          }
+        ]
+      }
     },
     "android": {
       "adaptiveIcon": {

@@ -1,22 +1,35 @@
-import React, { useState } from 'react'
-import { Alert, StyleSheet, View } from 'react-native'
-import supabase from 'linguin-shared/util/supabase'
-import { Button, Input } from 'react-native-elements'
-import {
-    GoogleSignin,
-    GoogleSigninButton,
-    statusCodes,
-} from '@react-native-google-signin/google-signin'
+import React, { useEffect, useState } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
+import supabase from 'linguin-shared/util/supabase';
+import { Button, Input } from 'react-native-elements';
+
+import { authorize } from 'react-native-app-auth';
 
 export default function AuthForm() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false);
-    GoogleSignin.configure({
-        // only need to read the email
-        scopes: ['https://www.googleapis.com/auth/userinfo.email'],
-        webClientId: '501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3.apps.googleusercontent.com',
-    })
+
+
+    async function authGoogle() {
+        const config = {
+            issuer: 'https://accounts.google.com',
+            clientId: '501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3.apps.googleusercontent.com',
+            redirectUrl: 'com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3:/oauth2redirect/google',
+            scopes: ['email'],
+            useNonce: false,
+        };
+        try {
+            const authState = await authorize(config);
+            // result includes accessToken, accessTokenExpirationDate and refreshToken
+            const { data, error } = await supabase.auth.signInWithIdToken({
+                provider: 'google',
+                token: authState.idToken,
+            })
+        } catch (error) {
+            Alert.alert('Something went wrong, please try again later');
+        }
+    }
 
     async function signInWithEmail() {
         setLoading(true)
@@ -73,35 +86,10 @@ export default function AuthForm() {
             <View style={styles.verticallySpaced}>
                 <Button title="Sign up" disabled={loading} onPress={() => signUpWithEmail()} />
             </View>
-            <GoogleSigninButton
-                size={GoogleSigninButton.Size.Wide}
-                color={GoogleSigninButton.Color.Dark}
-                onPress={async () => {
-                    try {
-                        await GoogleSignin.hasPlayServices()
-                        const userInfo = await GoogleSignin.signIn()
-                        if (userInfo.idToken) {
-                            const { data, error } = await supabase.auth.signInWithIdToken({
-                                provider: 'google',
-                                token: userInfo.idToken,
-                            })
-                            console.log(error, data)
-                        } else {
-                            throw new Error('no ID token present!')
-                        }
-                    } catch (error: any) {
-                        if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                            // user cancelled the login flow
-                        } else if (error.code === statusCodes.IN_PROGRESS) {
-                            // operation (e.g. sign in) is in progress already
-                        } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-                            // play services not available or outdated
-                        } else {
-                            // some other error happened
-                        }
-                    }
-                }}
-            />
+            <View style={styles.verticallySpaced}>
+                <Button title="[G] Sign in with Google" disabled={loading} onPress={() => authGoogle()} />
+            </View>
+
         </View>
     )
 }

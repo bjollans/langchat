@@ -43,7 +43,9 @@ function Story({ story }: StoryProps): JSX.Element {
                 }
                 <Img className="h-96 lg:w-2/5 w-[90%] md:w-1/2 sm:w-2/3 mx-auto object-cover rounded-lg shadow-sm shadow-black flex-none" src={story?.imageUrl} alt="" />
                 <Div className="border-b border-gray-200 pb-5 my-8 flex items-end">
-                    <H3 className="mx-6 text-base text-4xl py-3 mx-auto font-semibold leading-6 text-gray-900">{story?.title}</H3>
+                    {Platform.OS == "web" &&
+                        <H3 className="mx-6 text-base text-4xl py-3 mx-auto font-semibold leading-6 text-gray-900">{story?.title}</H3>
+                    }
                 </Div>
                 <StoryPayWall story={story} isPayWallOpen={isPayWallOpen} setIsPayWallOpen={setIsPayWallOpen} />
                 <StoryTextRender story={story} />

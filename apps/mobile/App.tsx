@@ -24,14 +24,23 @@ export default function App() {
     })
   }, []);
 
-  if(!session || !session.user) return <AuthForm />;
+  if (!session || !session.user) return <AuthForm />;
 
   return (
     <QueryClientProvider>
       <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="StoryList" component={StoryListScreen} options={{title: "🇮🇳 Hindi Mini Stories"}} />
-          <Stack.Screen name="Story" component={Story} />
+        <Stack.Navigator screenOptions={{
+headerTitleStyle: {
+  fontWeight: 'bold',
+  fontSize: 32,
+}
+        }}>
+          <Stack.Screen name="StoryList" component={StoryListScreen} options={{ title: "🇮🇳 Hindi Stories" }} />
+          <Stack.Screen name="Story" component={Story}
+            options={({ route }) => ({
+              title: (route.params as any).storyTitle,
+              headerBackTitle: "Stories"
+            })} />
         </Stack.Navigator>
       </NavigationContainer>
     </QueryClientProvider>

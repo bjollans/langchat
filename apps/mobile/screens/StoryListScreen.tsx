@@ -18,7 +18,7 @@ export default function StoryListScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {loaded &&
-        <TouchableOpacity onPress={() => navigation.navigate("Story", {storyId: story.id})}>
+        <TouchableOpacity onPress={() => navigation.navigate("Story", {storyId: story.id, storyTitle: story.title})}>
           <StoryListElement story={story} />
         </TouchableOpacity>}
     </SafeAreaView>

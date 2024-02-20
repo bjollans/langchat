@@ -7,6 +7,7 @@ interface DefaultProps {
     onMouseLeave?: () => void;
     onClick?: (e: any) => void;
     onLayout?: (e: any) => void;
+    ref?: any;
     style?: any;
 }
 
@@ -16,13 +17,14 @@ export function Div(props: DefaultProps): JSX.Element {
             <div className={props.className}
                 onMouseLeave={props.onMouseLeave}
                 onClick={props.onClick}
+                ref={props.ref}
                 style={props.style}>
                 {props.children}
             </div>
         );
     }
     return (
-        <View style={props.style}>
+        <View style={props.style} ref={props.ref}>
             {props.children}
         </View>
     );
@@ -65,6 +67,7 @@ export function Btn(props: DefaultProps): JSX.Element {
             </button>
         );
     }
+    console.log("style", props.style);
     return (
         <TouchableHighlight onPress={props.onClick} onLayout={props.onLayout}>
             <Span

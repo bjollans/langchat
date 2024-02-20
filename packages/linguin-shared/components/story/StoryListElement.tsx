@@ -6,6 +6,7 @@ import { UserStoryStatistics, useUserStoryStatistics } from "linguin-shared/util
 import StoryCompletedCheckMark from "./StoryCompletedCheckMark";
 import { useInView } from 'react-intersection-observer';
 import { trackStat } from "linguin-shared/util/storyStatistics";
+import { Div, Span, P, Btn, Img } from "linguin-shared/components/RnTwComponents";
 
 export interface StoryListElementProps {
     story: StoryText;
@@ -39,66 +40,62 @@ export default function StoryListElement(props: StoryListElementProps) {
     const storyFilterChangeCalls: StoryFilterChangeCalls | undefined = useContext(StoryListFilterContext);
 
     return (
-        <a href={`/story/hi/${props.story.id}`} className="w-full h-full"
-            ref={visibilityRef} onClick={() => trackStat(props.story.id, "clicks")}>
-            <li key={props.story.title} className="flex px-4 gap-x-4 py-5 hover:bg-slate-100 items-center">
-                <img className="w-24 flex-none rounded-full bg-gray-50" src={props.story.previewImageUrl} alt="" />
-                <div>
-                    <div className="min-w-0">
-                        <div className="flex space-x-2">
-                            <p className="text-lg font-semibold leading-6 text-gray-900">{props.story.title}</p>
-                            {isNew && <span className="inline-flex items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                New
-                            </span>}
-                        </div>
-                        <div className="sm:flex items-end justify-between gap-x-8">
-                            <div>
-                                <ul className="flex space-x-2">
-                                    <li className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">
-                                        Words:
-                                        <span className="mt-1 truncate text-xs leading-5 text-gray-400"> {props.story.wordCount}</span>
-                                    </li>
-                                    {!userStoryStatistics.hasRead && <li className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">
-                                        New:
-                                        <span className="mt-1 truncate text-xs leading-5 text-gray-400"> {userStoryStatistics.newWords} ({userStoryStatistics.newWordsPercentage}%)</span>
-                                    </li>}
-                                </ul>
-                                <p className="mt-1 truncate italic text-xs leading-5 text-gray-400">{props.story.content?.slice(0, 30) + '....'}</p>
-                            </div>
-                            <StoryCompletedCheckMark storyId={props.story.id} />
-                        </div>
-                    </div>
-                    <div className="flex mt-4 text-sm leading-5 text-gray-500">
-                        <button key={`${props.story.id}-difficulty`}
-                            className={"mr-2 inline-flex items-center rounded-full px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset "
-                                + difficultyColor[props.story.difficulty.toLowerCase()]}
-                            onClick={(e) => {
-                                if (!storyFilterChangeCalls) return;
-                                e.preventDefault();
-                                if (storyFilterChangeCalls!.difficulties.includes(props.story.difficulty)) {
-                                    storyFilterChangeCalls!.onDifficultyRemove(props.story.difficulty);
-                                    return;
-                                }
-                                storyFilterChangeCalls!.onDifficultyAdd(props.story.difficulty);
-                            }}
-                        >
-                            {props.story.difficulty}
-                        </button>
-                        {props.story.collections?.map((collectionName: any) => <button key={props.story.title + collectionName}
-                            className="mr-2 inline-flex items-center rounded-full bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-500 ring-1 ring-inset ring-gray-500/10"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                if (storyFilterChangeCalls!.collections.includes(collectionName)) {
-                                    storyFilterChangeCalls!.onCollectionRemove(collectionName);
-                                    return;
-                                }
-                                storyFilterChangeCalls!.onCollectionAdd(collectionName);
-                            }}>
-                            {collectionName}
-                        </button>)}
-                    </div>
-                </div>
-            </li>
-        </a>
+        <Div key={props.story.title} className="flex flex-row px-4 gap-x-4 py-5 hover:bg-slate-100 items-center" ref={visibilityRef} onClick={() => trackStat(props.story.id, "clicks")}>
+            <Img className="w-24 rounded-full h-24 object-cover" src={props.story.previewImageUrl} alt="" />
+            <Div style={{flex:1}}>
+                <Div className="min-w-0">
+                    <Div className="flex flex-row space-x-2">
+                        <P className="text-lg font-semibold leading-6 text-gray-900">{props.story.title}</P>
+                        {isNew && <Span className="inline-flex items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                            New
+                        </Span>}
+                    </Div>
+                    <Div className="sm:flex flex-row items-end justify-space-evenly gap-x-8">
+                        <Div>
+                            <Div className="flex flex-row space-x-2">
+                                <P className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">
+                                    Words:
+                                    <Span className="mt-1 truncate text-xs leading-5 text-gray-400"> {props.story.wordCount}</Span>
+                                </P>
+                                {!userStoryStatistics.hasRead && <P className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">
+                                    New:
+                                    <Span className="mt-1 truncate text-xs leading-5 text-gray-400"> {userStoryStatistics.newWords} ({userStoryStatistics.newWordsPercentage}%)</Span>
+                                </P>}
+                            </Div>
+                            <P className="mt-1 truncate italic text-xs leading-5 text-gray-400">{props.story.content?.slice(0, 30) + '....'}</P>
+                        </Div>
+                        <StoryCompletedCheckMark storyId={props.story.id} />
+                    </Div>
+                </Div>
+                <Div className="flex flex-row mt-4 text-sm leading-5 text-gray-500">
+                    <Btn key={`${props.story.id}-difficulty`}
+                        className={`rounded-full mr-2 inline-flex flex-row items-center  px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset ${difficultyColor[props.story.difficulty.toLowerCase()]}`}
+                        onClick={(e) => {
+                            if (!storyFilterChangeCalls) return;
+                            e.preventDefault();
+                            if (storyFilterChangeCalls!.difficulties.includes(props.story.difficulty)) {
+                                storyFilterChangeCalls!.onDifficultyRemove(props.story.difficulty);
+                                return;
+                            }
+                            storyFilterChangeCalls!.onDifficultyAdd(props.story.difficulty);
+                        }}
+                    >
+                        {props.story.difficulty}
+                    </Btn>
+                    {props.story.collections?.map((collectionName: any) => <Btn key={props.story.title + collectionName}
+                        className="mr-2 inline-flex flex-row items-center rounded-full bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-500 ring-1 ring-inset ring-gray-500/10"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            if (storyFilterChangeCalls!.collections.includes(collectionName)) {
+                                storyFilterChangeCalls!.onCollectionRemove(collectionName);
+                                return;
+                            }
+                            storyFilterChangeCalls!.onCollectionAdd(collectionName);
+                        }}>
+                        {collectionName}
+                    </Btn>)}
+                </Div>
+            </Div>
+        </Div>
     );
 }

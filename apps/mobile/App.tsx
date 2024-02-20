@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import 'react-native-url-polyfill/auto';
 import AuthForm from './components/AuthForm';
 import Story from './screens/story';
+import StoryListScreen from './screens/storyList';
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null)
@@ -21,7 +22,8 @@ export default function App() {
   
   return (
     <QueryClientProvider>
-      {session && session.user ? <Story /> : <AuthForm />}
+      {/*session && session.user ? <Story /> : <AuthForm />*/}
+      <StoryListScreen />
     </QueryClientProvider>
   );
 }

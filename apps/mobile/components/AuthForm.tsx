@@ -6,8 +6,8 @@ import { Button, Input } from 'react-native-elements';
 import { authorize } from 'react-native-app-auth';
 
 export default function AuthForm() {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
 

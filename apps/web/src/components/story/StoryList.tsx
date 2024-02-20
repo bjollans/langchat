@@ -1,7 +1,7 @@
 "use client";
 
 import { StoryText } from "model/translations";
-import StoryListElement from "linguin-shared/components/story/StoryListElement";
+import StoryListElementWeb from "linguin-shared/components/story/StoryListElementWeb";
 import { useState } from "react";
 import StoryFilters, { BooleanFilter, Filter } from "components/StoryFilters";
 import { StoryListFilterContext, StoryFilterChangeCalls } from "context/storyListFilterContext";
@@ -73,7 +73,7 @@ export default function StoryList(props: StoryListProps) {
                             .filter((story: StoryText) => difficulties.length == 0 || difficulties.includes(story.difficulty))
                             .filter((story: StoryText) => collectionNames.length == 0 || story.collections && story.collections.filter((collection: string) => collectionNames.includes(collection)).length > 0)
                             .filter((story: StoryText) => showRead || !storyIdsRead?.includes(story.id))
-                            .map((story: any) => <StoryListElement key={story.id} story={story} />)}
+                            .map((story: any) => <StoryListElementWeb key={story.id} story={story} />)}
                     </ul>
                 </div>
             </StoryListFilterContext.Provider>

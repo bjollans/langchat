@@ -42,6 +42,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     } = useStoryAudioContext();
 
     useEffect(() => {
+        if (Platform.OS === 'web') return;
         const rnAudio = new RnSound(props.src, '', (error) => {
             if (error) return;
             setDuration(rnAudio.getDuration());
@@ -96,7 +97,9 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     useEffect(() => {
         if (audioRef && audioRef.current) {
             addAudioTimeUpdateFunction((audioTime: number) => {
-                if (Math.abs(currentAudioTime - audioRef!.current!.currentTime) > 2) audioRef!.current!.currentTime = audioTime;
+                if (Math.abs(audioTime - audioRef!.current!.currentTime) > 2) {
+                    audioRef!.current!.currentTime = audioTime;
+                }
             });
         }
     }, [audioRef]);

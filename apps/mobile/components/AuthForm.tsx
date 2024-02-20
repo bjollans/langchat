@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import supabase from 'linguin-shared/util/supabase';
+import supabase from '../util/supabaseAuth';
 import { Button, Input } from 'react-native-elements';
 
 import { authorize } from 'react-native-app-auth';

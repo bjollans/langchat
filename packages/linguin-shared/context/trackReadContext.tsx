@@ -1,3 +1,5 @@
+"use client";
+
 import { StoryText } from "linguin-shared/model/translations";
 import posthog from "posthog-js";
 import { createContext, useContext, useEffect, useState } from "react";

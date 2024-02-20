@@ -56,7 +56,7 @@ export default function ProgressBar(props: ProgressBarProps) {
 
     return (
         <Btn
-            className='h-2 bg-gray-200 cursor-pointer'
+            className='h-2 bg-gray-200 cursor-pointer w-full items-start flex'
             onClick={handleProgressBarClick}
             onLayout={(e) => setRnProgressBarWidth(e.nativeEvent.layout.width)}
         >

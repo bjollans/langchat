@@ -1,6 +1,6 @@
 import { Session } from '@supabase/supabase-js';
 import { QueryClientProvider } from 'linguin-shared/util/clientDb';
-import supabase from 'linguin-shared/util/supabase';
+import supabase from './util/supabaseAuth';
 import { useEffect, useState } from 'react';
 import 'react-native-url-polyfill/auto';
 import AuthForm from './components/AuthForm';

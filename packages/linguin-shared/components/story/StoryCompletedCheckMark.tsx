@@ -16,7 +16,7 @@ export default function StoryCompletedCheckMark(props: StoryCompletedCheckMark) 
     const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics({ userId: auth?.user?.id, storyId: props.storyId });
     const [showTooltip, setShowTooltip] = useState(false);
 
-    return (<Div className="flex flex-row items-baseline gap-x-2">
+    return (<Div className="flex flex-row items-baseline gap-x-2 ml-2">
         <Tooltip
             showTooltip={showTooltip}
             setShowTooltip={setShowTooltip}
@@ -25,14 +25,14 @@ export default function StoryCompletedCheckMark(props: StoryCompletedCheckMark) 
             {userStoryStatistics.hasRead
                 ? <Span className="text-sm font-semibold flex flex-row items-center"><_CheckIcon />
                     Read</Span>
-                : <Span className={`${Platform.OS == "web" ? "text-xs" : "text-s"} italic text-slate-300 flex flex-row items-center`}><_NoSymbolIcon /> Not Read</Span>}
+                : <Span className={`${Platform.OS == "web" ? "text-xs" : "text-sm"} italic text-slate-300 flex flex-row items-center`}><_NoSymbolIcon /> Not Read</Span>}
         </Tooltip>
     </Div>
     )
 }
 
 function _CheckIcon() {
-    return Platform.OS === 'web' ? <CheckIcon className="h-4 w-4 text-green-500 mr-1" /> : <Svg height="12" viewBox="0 -960 960 960" width="12"><Path fill="#22c55e" d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" /></Svg>
+    return Platform.OS === 'web' ? <CheckIcon className="h-4 w-4 text-green-500 mr-1" /> : <Svg height="20" viewBox="0 -960 960 960" width="16"><Path fill="#22c55e" d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" /></Svg>
 }
 
 function _NoSymbolIcon() {

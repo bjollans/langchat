@@ -9,8 +9,9 @@ import StoryAudioContextProvider from 'linguin-shared/context/storyAudioContext'
 import StoryAudioPlayer from 'linguin-shared/components/audio/StoryAudioPlayer';
 import ReadUsageContextProvider from 'linguin-shared/context/trackReadContext';
 
-export default function StoryScreen() {
-  const { data: story, isSuccess: loaded } = useStory("d02258d7-e59c-4c5a-9c08-a627187ab6ae");
+export default function StoryScreen({ route, navigation }) {
+  const { storyId } = route.params;
+  const { data: story, isSuccess: loaded } = useStory(storyId);
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <RnSoundContext.Provider value={Sound}>

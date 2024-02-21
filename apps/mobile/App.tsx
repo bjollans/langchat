@@ -40,7 +40,7 @@ export default function App() {
             <Stack.Screen name="StoryList" component={StoryListScreen}
               options={({ route }) => ({
                 title: "🇮🇳 Hindi Stories",
-                headerRight: (route.params as any).filterButton
+                headerRight: (route.params as any)?.filterButton
               })} />
             <Stack.Screen name="Story" component={Story}
               options={({ route }) => ({

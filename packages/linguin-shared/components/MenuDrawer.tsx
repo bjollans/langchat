@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, Animated, StyleSheet, TouchableOpacity } from 'react-native';
 
-const MenuDrawer = ({ isOpen, setIsOpen }) => {
+const MenuDrawer = ({ isOpen, setIsOpen, children }) => {
   const drawerAnimation = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const MenuDrawer = ({ isOpen, setIsOpen }) => {
         height: "100%",
         zIndex: 1,
       }} onTouchStart={() => setIsOpen(false)} />}
-      <Animated.View className="absolute z-50 flex flex-row items-start space-x-2"
+      <Animated.View className="absolute z-50 h-full flex-wrap p-4"
         style={[{
           right: -250,
           top: 0,
@@ -49,7 +49,7 @@ const MenuDrawer = ({ isOpen, setIsOpen }) => {
         },
         ]}
       >
-        <Text>I'm the menu drawer!</Text>
+        {children}
       </Animated.View>
     </>
   );

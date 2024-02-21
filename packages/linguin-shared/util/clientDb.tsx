@@ -156,6 +156,27 @@ export function useStory(storyId: string): UseQueryResult<StoryText> {
   );
 }
 
+export function useCollectionNames() {
+  return useQuery(
+    ["collectionNames"],
+    () => supabase
+      .from("collections")
+      .select('name')
+      .then(handle),
+  );
+}
+
+export function getAvailableStoryDifficultyLevels() {
+  return supabase.rpc("get_available_story_difficulty_levels").then(handle);
+}
+
+export function useAvailableStoryDifficultyLevels() {
+  return useQuery(
+    ["availableStoryDifficultyLevels"],
+    () => getAvailableStoryDifficultyLevels(),
+  );
+}
+
 /*************************/
 /**** User Statistics ****/
 /*************************/

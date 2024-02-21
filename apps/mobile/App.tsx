@@ -30,14 +30,18 @@ export default function App() {
   return (
     <QueryClientProvider>
       <AuthProvider>
-        <NavigationContainer>
+        <NavigationContainer className="relative z-80">
           <Stack.Navigator screenOptions={{
             headerTitleStyle: {
               fontWeight: 'bold',
               fontSize: 32,
             }
           }}>
-            <Stack.Screen name="StoryList" component={StoryListScreen} options={{ title: "🇮🇳 Hindi Stories" }} />
+            <Stack.Screen name="StoryList" component={StoryListScreen}
+              options={({ route }) => ({
+                title: "🇮🇳 Hindi Stories",
+                headerRight: (route.params as any).filterButton
+              })} />
             <Stack.Screen name="Story" component={Story}
               options={({ route }) => ({
                 title: (route.params as any).storyTitle,

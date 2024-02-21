@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, ScrollView, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, ScrollView, SafeAreaView, View } from 'react-native';
 import { useStory } from 'linguin-shared/util/clientDb';
 import Story from 'linguin-shared/components/story/Story';
 import { RnSoundContext } from 'linguin-shared/context/rnSoundContext';
@@ -8,6 +8,7 @@ import Sound from 'react-native-sound';
 import StoryAudioContextProvider from 'linguin-shared/context/storyAudioContext';
 import StoryAudioPlayer from 'linguin-shared/components/audio/StoryAudioPlayer';
 import ReadUsageContextProvider from 'linguin-shared/context/trackReadContext';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function StoryScreen({ route, navigation }) {
   const { storyId } = route.params;
@@ -15,17 +16,25 @@ export default function StoryScreen({ route, navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <RnSoundContext.Provider value={Sound}>
-        <ReadUsageContextProvider story={story}>
-          <StoryAudioContextProvider>
-            <ScrollView contentContainerStyle={styles.container}>
-              <RnTouchableContextProvider>
-                {loaded && <Story story={story} />}
-              </RnTouchableContextProvider>
-            </ScrollView>
-            {loaded &&
-              <StoryAudioPlayer src={story.audioUrl} />}
-          </StoryAudioContextProvider>
-        </ReadUsageContextProvider>
+        {loaded &&
+          <ReadUsageContextProvider story={story}>
+            <StoryAudioContextProvider>
+              <ScrollView contentContainerStyle={styles.container}>
+                <RnTouchableContextProvider>
+                  {loaded && <Story story={story} />}
+                </RnTouchableContextProvider>
+              </ScrollView>
+              {loaded &&
+                <StoryAudioPlayer src={story.audioUrl} />}
+            </StoryAudioContextProvider>
+          </ReadUsageContextProvider>
+          ||
+          <Spinner
+            visible={true}
+            textContent={'Loading...'}
+            textStyle={{ color: '#FFF' }}
+          />
+        }
       </RnSoundContext.Provider>
     </SafeAreaView>
   );

@@ -8,7 +8,7 @@ import Svg, { Path } from 'react-native-svg';
 import { useAuth } from 'linguin-shared/util/auth';
 import { CheckBox } from 'react-native-elements';
 import UserStatistics from 'linguin-shared/components/user/UserStatistics';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export interface Filter {
     id: string;
@@ -102,6 +102,13 @@ export default function StoryList({ navigation }) {
         };
     });
 
+    if (!loaded) {
+        return <Spinner
+            visible={true}
+            textContent={'Loading...'}
+            textStyle={{ color: '#FFF' }}
+        />;
+    }
     return (
         <>
             <MenuDrawer isOpen={isOpen} setIsOpen={setIsOpen}>

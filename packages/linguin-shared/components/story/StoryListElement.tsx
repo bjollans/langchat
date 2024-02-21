@@ -86,7 +86,7 @@ export default function StoryListElement(props: StoryListElementProps) {
                         className="mr-2 inline-flex flex-row items-center rounded-full bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-500 ring-1 ring-inset ring-gray-500/10"
                         onClick={(e) => {
                             e.preventDefault();
-                            if (storyFilterChangeCalls!.collections.includes(collectionName)) {
+                            if (storyFilterChangeCalls!.collectionNames.includes(collectionName)) {
                                 storyFilterChangeCalls!.onCollectionRemove(collectionName);
                                 return;
                             }

@@ -5,26 +5,26 @@ import PurchasedTracker from "components/tracking/PurchasedTracker";
 import UserStatistics from "components/user/UserStatistics";
 import { StoryText, StoryToCollection } from "model/translations";
 import { getAvailableStoryDifficultyLevels, getCollectionNames, getStoriesCollections, getStoriesOrderedByCustom } from "util/serverDb";
-import { requireAuth } from "util/requireAuth";
+import StoryListFilterContextProvider from "@linguin-shared/context/storyListFilterContext";
 
 async function getPropsForStoryIndexPage() {
     const stories = await getStoriesOrderedByCustom('title', false);
-    const filterDifficulties = await getAvailableStoryDifficultyLevels();
+    const allDifficulties = await getAvailableStoryDifficultyLevels();
     const storyIds = stories.map((story: any) => story.id);
     const storyCollections = await getStoriesCollections(storyIds);
     stories.forEach((story: StoryText) =>
         story.collections = storyCollections.filter((collection: StoryToCollection) =>
             collection.storyId == story.id).map((collection: StoryToCollection) =>
                 collection.collectionName));
-    
+
     const randomizedStories = stories.sort(() => Math.random() - 0.5);
 
-    const filterCollectionNames = await getCollectionNames().then((collections: any) => collections.map((collection: any) => collection.name));
+    const allCollectionNames = await getCollectionNames().then((collections: any) => collections.map((collection: any) => collection.name));
     return {
-            stories: randomizedStories,
-            filterDifficulties,
-            filterCollectionNames,
-        };
+        stories: randomizedStories,
+        allDifficulties,
+        allCollectionNames,
+    };
 }
 
 async function StoryIndexPage() {
@@ -37,7 +37,9 @@ async function StoryIndexPage() {
                 <div className="mx-auto max-w-3xl">
                     <BrandedWelcome />
                     <UserStatistics />
-                    <StoryList {...propsForStoryIndexPage as StoryListProps} />
+                    <StoryListFilterContextProvider>
+                        <StoryList {...propsForStoryIndexPage as StoryListProps} />
+                    </StoryListFilterContextProvider>
                 </div>
             </div>
         </>

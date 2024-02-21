@@ -30,6 +30,7 @@
     ],
     "scheme": ["com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"],
     "ios": {
+      "icon": "./assets/icon.png",
       "supportsTablet": true,
       "bundleIdentifier": "com.bjolly.linguin",
       "infoPlist": {
@@ -41,6 +42,7 @@
       }
     },
     "android": {
+      "icon": "./assets/icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

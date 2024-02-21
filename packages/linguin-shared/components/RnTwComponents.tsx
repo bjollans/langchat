@@ -1,4 +1,4 @@
-import { Image, Platform, Text, TouchableHighlight, View } from 'react-native';
+import { Image, Platform, Text, TouchableOpacity, View } from 'react-native';
 
 
 interface DefaultProps {
@@ -68,7 +68,7 @@ export function Btn(props: DefaultProps): JSX.Element {
         );
     }
     return (
-        <TouchableHighlight onPress={props.onClick} onLayout={props.onLayout}>
+        <TouchableOpacity onPress={props.onClick} onLayout={props.onLayout}>
             <Span
                 className={props.className}
                 onMouseLeave={props.onMouseLeave}
@@ -78,7 +78,33 @@ export function Btn(props: DefaultProps): JSX.Element {
             >
                 {props.children}
             </Span>
-        </TouchableHighlight>
+        </TouchableOpacity>
+    );
+}
+
+export function SingleLayerBtn(props: DefaultProps): JSX.Element {
+    if (Platform.OS === 'web') {
+        return (
+            <button className={props.className}
+                onMouseLeave={props.onMouseLeave}
+                onClick={props.onClick}
+                style={props.style}>
+                {props.children}
+            </button>
+        );
+    }
+    return (
+        <TouchableOpacity onPress={props.onClick} onLayout={props.onLayout} style={props.style}>
+            <Span
+                className={props.className}
+                onMouseLeave={props.onMouseLeave}
+                onClick={props.onClick}
+                onLayout={props.onLayout}
+                style={[{pointerEvents: "none"}]}
+            >
+                {props.children}
+            </Span>
+        </TouchableOpacity>
     );
 }
 

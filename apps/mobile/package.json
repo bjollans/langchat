@@ -10,6 +10,11 @@
   },
   "dependencies": {
     "@expo/config-plugins": "~7.8.0",
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-brands-svg-icons": "^6.5.1",
+    "@fortawesome/free-regular-svg-icons": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
+    "@fortawesome/react-native-fontawesome": "^0.3.0",
     "@react-native-async-storage/async-storage": "1.21.0",
     "@react-native-google-signin/google-signin": "^11.0.0",
     "@react-navigation/native": "^6.1.10",

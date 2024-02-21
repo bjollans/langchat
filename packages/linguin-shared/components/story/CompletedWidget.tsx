@@ -4,6 +4,8 @@ import ConfettiExplosion from 'react-confetti-explosion';
 import { Platform } from "react-native";
 import { Div, Span } from "linguin-shared/components/RnTwComponents";
 import Icon from 'react-native-vector-icons/dist/MaterialIcons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faTrophy } from '@fortawesome/free-solid-svg-icons/faTrophy';
 
 export interface CompletedWidgetProps {
     isOpen: boolean;
@@ -55,17 +57,17 @@ export default function CompletedWidget(props: CompletedWidgetProps) {
             {props.animateSuccess && Platform.OS == "web" && <ConfettiExplosion height={200} width={300} duration={1500}
                 colors={['#a3e635', '#22d3ee', '#6366f1', '#fde047']}
                 particleSize={6} particleCount={50} />}
-            <Div className="flex items-center mb-2 text-lg tracking-tight font-semibold">
+            <Div className="flex items-center mb-2 ">
                 <_TrophyIcon />
-                <Span>
+                <Span className="text-lg tracking-tight font-semibold">
                     Story Completed!
                 </Span>
             </Div>
-            {props.animateSuccess && <Div className="tracking-tighter font-bold text-sm grid grid-cols-2 min-w-2/3 gap-x-2 justify-items-start">
-                {rowsShown >= 1 && <Span>New Words:</Span>}
-                {rowsShown >= 1 && <Span className="text-indigo-400">{newWordDisplayCount}</Span>}
-                {rowsShown >= 2 && <Span>Revised Words:</Span>}
-                {rowsShown >= 2 && <Span className="text-indigo-400">{revisedWordDisplayCount}</Span>}
+            {props.animateSuccess && <Div className="grid grid-cols-2 min-w-2/3 gap-x-2 justify-items-start">
+                {rowsShown >= 1 && <Span className="tracking-tighter font-bold text-sm ">New Words:</Span>}
+                {rowsShown >= 1 && <Span className="text-indigo-400 tracking-tighter font-bold text-sm ">{newWordDisplayCount}</Span>}
+                {rowsShown >= 2 && <Span className="tracking-tighter font-bold text-sm ">Revised Words:</Span>}
+                {rowsShown >= 2 && <Span className="text-indigo-400 tracking-tighter font-bold text-sm ">{revisedWordDisplayCount}</Span>}
             </Div>}
         </Div>
     );
@@ -75,5 +77,5 @@ function _TrophyIcon() {
     if (Platform.OS == "web") {
         return <TrophyIcon className="h-5 w-5 mr-2 text-indigo-400" />
     }
-    return <Icon name="trophy" size={24} color="#6366f1" />
+    return <FontAwesomeIcon icon={faTrophy} color="#818cf8" size={24} />
 }

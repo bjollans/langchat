@@ -6,9 +6,13 @@ import { UserReadStatistics, UserStoryStatistics, useUpdatedUserReadStatistics, 
 import CompletedWidget from "./CompletedWidget";
 import StoryQuestion from "./StoryQuestion";
 import posthog from "posthog-js";
-import { trackStat } from "linguin-shared/util/storyStatistics";
-import { P, Div, Btn } from "linguin-shared/components/RnTwComponents";
+import { P, Div, SingleLayerBtn, Span } from "linguin-shared/components/RnTwComponents";
+import Svg, { Path } from "react-native-svg";
+import { Platform } from "react-native";
 var _ = require('lodash');
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons/faArrowsRotate'
+import { trackStat } from "linguin-shared/util/storyStatistics";
 
 
 export interface StoryQuestionsSectionProps {
@@ -20,7 +24,7 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
 
     const auth = useAuth();
     const { data: storyQuestions, isSuccess } = useStoryQuestions(props.storyId);
-    const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics({userId: auth?.user?.id ?? null, storyId: props.storyId, isInSingleStoryContext: true});
+    const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics({ userId: auth?.user?.id ?? null, storyId: props.storyId, isInSingleStoryContext: true });
     const updatedUserReadStatistics: UserReadStatistics = useUpdatedUserReadStatistics(auth?.user?.id ?? null, props.storyId);
 
     const [triedQuestionIndices, setTriedQuestionIndices] = useState<Array<number>>([]);
@@ -88,17 +92,17 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
         newQuestionIndex();
     }
 
-    const tryAgainButton = <Btn
-        className="hover:bg-indigo-100 text-gray-900 py-2 px-4 border border-indigo-400 rounded shadow flex items-center text-sm text-indigo-400 tracking-wide"
+    const tryAgainButton = <SingleLayerBtn
+        className="py-2 px-4 border border-indigo-400 rounded shadow flex flex-row text-sm text-indigo-400 tracking-wide hover:bg-indigo-100  justify-center items-center shrink self-center block"
         onClick={resetQuestions}
     >
-        <Div><ArrowPathIcon className="h-5 w-5 mr-2 text-indigo-400" /> <P>Try Again</P></Div>
-    </Btn>;
+        <_RefreshIcon /> <Span className="text-indigo-400 text-md tracking-wide">Try Again</Span>
+    </SingleLayerBtn>;
 
     return isSuccess && (storyQuestions.length > 0 || userStoryStatistics.hasRead)
         ? (
             <Div className="flex items-center border-t justify-center items-baseline gap-x-2 mt-12">
-                <Div className="flex-col flex place-items-center sm:rounded-lg lg:px-24 sm:px-12 px-4 py-4 max-w-2xl">
+                <Div className="flex-col flex place-items-center sm:rounded-lg lg:px-24 sm:px-12 px-4 py-4 max-w-2xl w-full">
                     {(!userStoryStatistics.hasRead || answeredAllCorrectly) &&
                         (<>
                             <Div className="mt-1 max-w-xl text-lg text-gray-500">
@@ -121,4 +125,11 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
             </Div>)
         : <P>...loading</P>
         ;
+}
+
+
+export function _RefreshIcon() {
+    return Platform.OS == "web"
+        ? <ArrowPathIcon className="h-5 w-5 mr-2 text-indigo-400" />
+        : <FontAwesomeIcon icon={ faArrowsRotate } size={12} color="#818cf8" />;
 }

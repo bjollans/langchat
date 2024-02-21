@@ -35,39 +35,42 @@ export default function StoryQuestion(props: StoryQuestionProps) {
     }
 
     return (
-        <Div className="px-4 py-5 sm:p-6 w-full">
+        <Div className="px-4 py-5 sm:p-6">
             <H3 className="mt-4 text-base font-semibold leading-6 text-gray-900">{props.storyQuestionData.question}</H3>
             <Div className="mt-4">
-                {getAnswersInRandomOrder(props.storyQuestionData).map((option, i) => {
-                    const borderDefault = "divide-indigo-200 ring-inset ring-indigo-200";
-                    const borderCorrect = "divide-green-500 ring-inset ring-green-500";
-                    const borderIncorrect = "divide-red-500 ring-inset ring-red-500";
-
-                    const answerIsCorrect = option == props.storyQuestionData.correctAnswer;
-                    const answerWasGiven = givenAnswer != null;
-                    const answerIsChoice = option == givenAnswer;
-                    const border = !answerWasGiven ? borderDefault
-                        : answerIsCorrect ? borderCorrect
-                            : answerIsChoice ? borderIncorrect : borderDefault;
-                    return (<Div>
-                        <Btn
-                            className={border + " text-sm text-gray-900 ring-2 ring-inset w-full mt-2 rounded-md bg-slate-50 flex hover:bg-white"}
-                            onClick={() => evaluateAnswer(option)}
-                        >
-                            <Div className="flex divide-x-2">
-                                <P className="text-sm text-gray-900 px-3 py-2">{String.fromCharCode(i + 65)}</P>
-                                <P className="text-sm text-gray-900 px-3 py-2 flex justify-between w-full items-center">{option}
-                                    {answerWasGiven && answerIsCorrect &&
-                                        <Span className="text-xs text-green-500" >Correct Answer</Span>}
-                                    {answerWasGiven && answerIsChoice && !answerIsCorrect &&
-                                        <Span className="text-xs text-red-500" >Your Answer</Span>}
-                                </P>
-                            </Div>
-                        </Btn>
-                    </Div>);
-                })}
+                {getAnswersInRandomOrder(props.storyQuestionData).map((option, i) => <_Options key={i} option={option} i={i} givenAnswer={givenAnswer} evaluateAnswer={evaluateAnswer} correctAnswer={props.storyQuestionData.correctAnswer} />)}
             </Div>
         </Div>
 
     )
+}
+
+function _Options({option, i, givenAnswer, evaluateAnswer, correctAnswer}) {
+        const borderDefault = "divide-indigo-200 border border-indigo-200";
+        const borderCorrect = "divide-green-500 border border-green-500";
+        const borderIncorrect = "divide-red-500 border border-red-500";
+
+        const answerIsCorrect = option == correctAnswer;
+        const answerWasGiven = givenAnswer != null;
+        const answerIsChoice = option == givenAnswer;
+        const border = !answerWasGiven ? borderDefault
+            : answerIsCorrect ? borderCorrect
+                : answerIsChoice ? borderIncorrect : borderDefault;
+        return (<Div>
+            <Btn
+                className={" text-sm text-gray-900 ring-2 ring-inset w-full mt-2 bg-slate-50 flex flex-row hover:bg-white"}
+                onClick={() => evaluateAnswer(option)}
+            >
+                <Div className={border + " w-full flex flex-row grow-0 divide-x-2"}>
+                    <P className="text-sm text-gray-900 px-3 py-2">{String.fromCharCode(i + 65)}</P>
+                    <Div className="text-sm text-gray-900 px-3 py-2 shrink flex flex-row flex-wrap justify-between items-center w-full">
+                        <Span>{option}</Span>
+                        {answerWasGiven && answerIsCorrect &&
+                            <Span className="text-xs text-green-500" >Correct Answer</Span>}
+                        {answerWasGiven && answerIsChoice && !answerIsCorrect &&
+                            <Span className="text-xs text-red-500" >Your Answer</Span>}
+                    </Div>
+                </Div>
+            </Btn>
+        </Div>);
 }

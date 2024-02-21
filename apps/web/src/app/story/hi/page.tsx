@@ -2,7 +2,7 @@ import Meta from "components/Meta";
 import BrandedWelcome from "components/brand/BrandedWelcome";
 import StoryList, { StoryListProps } from "components/story/StoryList";
 import PurchasedTracker from "components/tracking/PurchasedTracker";
-import UserStatistics from "components/user/UserStatistics";
+import UserStatistics from "linguin-shared/components/user/UserStatistics";
 import { StoryText, StoryToCollection } from "model/translations";
 import { getAvailableStoryDifficultyLevels, getCollectionNames, getStoriesCollections, getStoriesOrderedByCustom } from "util/serverDb";
 import StoryListFilterContextProvider from "@linguin-shared/context/storyListFilterContext";

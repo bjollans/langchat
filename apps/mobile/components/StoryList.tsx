@@ -7,6 +7,7 @@ import { FlatList, SectionList, Text, TouchableOpacity, View } from 'react-nativ
 import Svg, { Path } from 'react-native-svg';
 import { useAuth } from 'linguin-shared/util/auth';
 import { CheckBox } from 'react-native-elements';
+import UserStatistics from 'linguin-shared/components/user/UserStatistics';
 
 
 export interface Filter {
@@ -45,7 +46,7 @@ export default function StoryList({ navigation }) {
         setAllCollectionNames(allCollectionNames);
     }, []);
 
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
         var isOpenClosureState = false;
@@ -82,7 +83,7 @@ export default function StoryList({ navigation }) {
             activeValues: difficulties,
             setActiveValues: setDifficulties,
             options:
-                allDifficulties.map((difficulty: string) => { return { value: difficulty, label: difficulty }; })
+                allDifficulties?.map((difficulty: string) => { return { value: difficulty, label: difficulty }; })
         },
         {
             id: 'collection',
@@ -90,7 +91,7 @@ export default function StoryList({ navigation }) {
             activeValues: collectionNames,
             setActiveValues: setCollectionNames,
             options:
-                allCollectionNames.map((collectionName: string) => { return { value: collectionName, label: collectionName }; })
+                allCollectionNames?.map((collectionName: string) => { return { value: collectionName, label: collectionName }; })
         }
     ];
 
@@ -121,7 +122,7 @@ export default function StoryList({ navigation }) {
                             keyExtractor={item => item.id}
                         />
                         <SectionList
-                        className="w-full"
+                            className="w-full"
                             sections={sections}
                             renderItem={({ item, section }) => (
                                 <FilterCheckboxItem filter={filters.find((f) => f.name == section.title)} item={item} />
@@ -136,15 +137,18 @@ export default function StoryList({ navigation }) {
                 }
             </MenuDrawer>
             {loaded &&
-                <FlatList
-                    data={filteredStories}
-                    renderItem={({ item: story, separators }) =>
-                        <TouchableOpacity className="bg-white border-b border-gray-200"
-                            onPress={() => navigation.navigate("Story", { storyId: story.id, storyTitle: story.title })}>
-                            <StoryListElement story={story} />
-                        </TouchableOpacity>}
-                    keyExtractor={item => item.id}
-                />
+                <>
+                    <UserStatistics />
+                    <FlatList
+                        data={filteredStories}
+                        renderItem={({ item: story, separators }) =>
+                            <TouchableOpacity className="bg-white border-b border-gray-200"
+                                onPress={() => navigation.navigate("Story", { storyId: story.id, storyTitle: story.title })}>
+                                <StoryListElement story={story} />
+                            </TouchableOpacity>}
+                        keyExtractor={item => item.id}
+                    />
+                </>
             }
         </>
     );

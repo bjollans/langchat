@@ -1,4 +1,4 @@
-import { Br } from "linguin-shared/components/RnTwComponents";
+import { Br, Div } from "linguin-shared/components/RnTwComponents";
 import TranslatedTextRender from "linguin-shared/components/text/TranslatedTextRender";
 import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
 import { useState, useEffect } from "react";
@@ -37,5 +37,5 @@ export default function StoryTextRender(props: StoryTextRenderProps): JSX.Elemen
             hasAudio={props.story.audioUrl !== null && props.story.audioUrl !== undefined} />);
     };
 
-    return (<>{props.story.content.split("\n").map(lineToTranslatedTextRender)}</>);
+    return (<Div className="max-w-4xl mx-auto">{props.story.content.split("\n").map(lineToTranslatedTextRender)}</Div>);
 }

@@ -25,6 +25,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     var rnAudioUpdateInterval: any;
     
     useEffect(() => {
+        if (Platform.OS === 'web') return;
         RnSound.setCategory('Playback');
     }, []);
 

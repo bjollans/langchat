@@ -1,6 +1,6 @@
 import Meta from "components/Meta";
 
-function LegalPrivacy() {
+export default function LegalPrivacy() {
   return (
     <>
     <Meta noindex={true} />

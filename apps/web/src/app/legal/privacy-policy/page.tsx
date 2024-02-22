@@ -5,7 +5,7 @@ function LegalPrivacy() {
     <>
     <Meta noindex={true} />
     <div className="prose prose-a:text-blue-600 max-w-none">
-      <h1>PRIVACY POLICY</h1>
+      <h1>PRIVACY POLICY </h1>
       <p>
         Effective date: 04/15/2023
       </p>
@@ -175,4 +175,3 @@ function LegalPrivacy() {
 </>
   );
 }
-export default LegalPrivacy;

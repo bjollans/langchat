@@ -1,4 +1,4 @@
-import { Vocab } from "model/vocab";
+import { Vocab } from "linguin-shared/model/vocab";
 
 const _leitnerBoxToTimeIntervalMs = [
     60_000, // 1 minute

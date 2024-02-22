@@ -1,5 +1,4 @@
-import { View, Text, Image, Platform, TouchableHighlight } from 'react-native';
-import { styled } from 'nativewind';
+import { Image, Platform, Text, TouchableOpacity, View } from 'react-native';
 
 
 interface DefaultProps {
@@ -7,6 +6,8 @@ interface DefaultProps {
     className?: string;
     onMouseLeave?: () => void;
     onClick?: (e: any) => void;
+    onLayout?: (e: any) => void;
+    ref?: any;
     style?: any;
 }
 
@@ -16,16 +17,16 @@ export function Div(props: DefaultProps): JSX.Element {
             <div className={props.className}
                 onMouseLeave={props.onMouseLeave}
                 onClick={props.onClick}
+                ref={props.ref}
                 style={props.style}>
                 {props.children}
             </div>
         );
     }
-    const StyledView = styled(View, props.className ?? "");
     return (
-        <StyledView>
+        <View style={props.style} ref={props.ref}>
             {props.children}
-        </StyledView>
+        </View>
     );
 }
 
@@ -52,7 +53,7 @@ export function Audio(props: AudioProps): JSX.Element {
             </audio>
         );
     }
-    return (<View>TODO</View>);
+    return (<Text>TODO</Text>);
 }
 
 export function Btn(props: DefaultProps): JSX.Element {
@@ -66,11 +67,44 @@ export function Btn(props: DefaultProps): JSX.Element {
             </button>
         );
     }
-    const StyledButton = styled(TouchableHighlight, props.className ?? "");
     return (
-        <StyledButton onPress={props.onClick}>
-            {props.children}
-        </StyledButton>
+        <TouchableOpacity onPress={props.onClick} onLayout={props.onLayout}>
+            <Span
+                className={props.className}
+                onMouseLeave={props.onMouseLeave}
+                onClick={props.onClick}
+                onLayout={props.onLayout}
+                style={[props.style, {pointerEvents: "none"}]}
+            >
+                {props.children}
+            </Span>
+        </TouchableOpacity>
+    );
+}
+
+export function SingleLayerBtn(props: DefaultProps): JSX.Element {
+    if (Platform.OS === 'web') {
+        return (
+            <button className={props.className}
+                onMouseLeave={props.onMouseLeave}
+                onClick={props.onClick}
+                style={props.style}>
+                {props.children}
+            </button>
+        );
+    }
+    return (
+        <TouchableOpacity onPress={props.onClick} onLayout={props.onLayout} style={props.style}>
+            <Span
+                className={props.className}
+                onMouseLeave={props.onMouseLeave}
+                onClick={props.onClick}
+                onLayout={props.onLayout}
+                style={[{pointerEvents: "none"}]}
+            >
+                {props.children}
+            </Span>
+        </TouchableOpacity>
     );
 }
 
@@ -85,16 +119,15 @@ interface ImgProps {
     alt?: string;
 }
 
-export function Img({ className, src, alt }: ImgProps): JSX.Element {
+export function Img(props: ImgProps): JSX.Element {
     if (Platform.OS === 'web') {
         return (
-            <img className={className} src={src} alt={alt} />
+            <img className={props.className} src={props.src} alt={props.alt} />
         );
     }
 
-    const StyledImage = styled(Image, className ?? "");
     return (
-        <StyledImage source={{ uri: src }} alt={alt} />
+        <Image source={{ uri: props.src }} alt={props.alt} style={props.style} />
     );
 }
 
@@ -131,10 +164,9 @@ function _multiplatformTextElement(webElement: JSX.Element, props: DefaultProps)
     if (Platform.OS === 'web') {
         return webElement;
     }
-    const StyledText = styled(Text, props.className ?? "");
     return (
-        <StyledText>
+        <Text style={props.style}>
             {props.children}
-        </StyledText>
+        </Text>
     );
 }

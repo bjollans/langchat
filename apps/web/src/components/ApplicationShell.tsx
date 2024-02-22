@@ -1,3 +1,5 @@
+"use client";
+
 import { Dialog, Transition } from '@headlessui/react'
 import {
     AcademicCapIcon,
@@ -9,7 +11,7 @@ import {
     UserCircleIcon,
     XMarkIcon
 } from '@heroicons/react/24/outline'
-import { useRouter } from 'next/router'
+import { usePathname, useRouter } from 'next/navigation'
 import { Fragment, useState } from 'react'
 import { useAuth } from 'util/auth'
 
@@ -58,7 +60,7 @@ function classNames(...classes) {
 export default function ApplicationShell(props) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const router = useRouter();
-    const currentPath = router.pathname;
+    const pathname = usePathname()
     const auth = useAuth();
 
     return (
@@ -125,7 +127,7 @@ export default function ApplicationShell(props) {
                                                                 <a
                                                                     href={item.href}
                                                                     className={classNames(
-                                                                        item.href == currentPath
+                                                                        item.href == pathname
                                                                             ? 'bg-gray-50 text-indigo-600'
                                                                             : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
                                                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
@@ -133,7 +135,7 @@ export default function ApplicationShell(props) {
                                                                 >
                                                                     <item.icon
                                                                         className={classNames(
-                                                                            item.href == currentPath ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
+                                                                            item.href == pathname ? 'text-indigo-600' : 'text-gray-400 group-hover:text-indigo-600',
                                                                             'h-6 w-6 shrink-0'
                                                                         )}
                                                                         aria-hidden="true"
@@ -159,14 +161,14 @@ export default function ApplicationShell(props) {
                             <span className="sr-only">Open sidebar</span>
                             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
                         </button>
-                        {backLocation(router.pathname)
-                            && <button onClick={() => router.push(backLocation(router.pathname)!)}>
+                        {backLocation(pathname)
+                            && <button onClick={() => router.push(backLocation(pathname)!)}>
                                 <ArrowLeftIcon className="h-6 w-6" />
                             </button>}
                     </div>
                     <div className="min-w-0 flex w-full">
                         <h2 className="text-2xl text-center font-bold mx-auto leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-                            {pageTitles(currentPath)}
+                            {pageTitles(pathname)}
                         </h2>
                     </div>
                     <a href="/auth/signin"

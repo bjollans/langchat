@@ -1,5 +1,5 @@
 import { loadStripe } from "@stripe/stripe-js";
-import { apiRequest } from "./util";
+import { apiRequest } from "../../../../packages/linguin-shared/util/util";
 import { getStripePriceId } from "./prices";
 
 let stripe;

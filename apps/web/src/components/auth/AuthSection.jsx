@@ -1,10 +1,17 @@
+"use client";
+
 import React from "react";
 import Section from "components/Section";
 import SectionHeader from "components/SectionHeader";
 import Auth from "components/auth/Auth";
 import AuthFooter from "components/auth/AuthFooter";
+import { useSearchParams } from "next/navigation";
 
 function AuthSection(props) {
+
+  const searchParams = useSearchParams();
+  const nextLocation = searchParams.get('next');
+
   // Options by auth type
   const optionsByType = {
     signup: {
@@ -70,7 +77,7 @@ function AuthSection(props) {
           type={type}
           buttonAction={options.buttonAction}
           providers={props.providers}
-          afterAuthPath={props.afterAuthPath}
+          afterAuthPath={nextLocation?.includes("/") ? nextLocation : "/"}
           key={type}
         />
 

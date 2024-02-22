@@ -1,6 +1,8 @@
 import { Dialog, Disclosure, Menu, Popover, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { useStoryFilterContext } from '@linguin-shared/context/storyListFilterContext';
+import { useAuth } from '@linguin-shared/util/auth';
 import { Fragment, useState } from 'react'
 
 export interface Filter {
@@ -32,10 +34,48 @@ export interface StoryFiltersProps {
     booleanFilters: Array<BooleanFilter>;
 }
 
-export default function StoryFiters(props: StoryFiltersProps) {
+export default function StoryFiters() {
+    const auth = useAuth();
+    const {
+        difficulties, setDifficulties,
+        collectionNames, setCollectionNames,
+        showRead, setShowRead,
+        allCollectionNames, allDifficulties
+    } = useStoryFilterContext();
+
     const [open, setOpen] = useState(false);
 
-    const activeFilters = props.filters.map(filter => filter.activeValues).flat();
+    const booleanFilters: Array<BooleanFilter> = [];
+
+    if (auth?.user) {
+        booleanFilters.push({
+            id: 'showRead',
+            name: 'Show Read',
+            activeValue: showRead,
+            setActiveValue: setShowRead,
+        });
+    }
+
+    const filters: Array<Filter> = [
+        {
+            id: 'difficulty',
+            name: 'Difficulty',
+            activeValues: difficulties,
+            setActiveValues: setDifficulties,
+            options:
+                allDifficulties.map((difficulty: string) => { return { value: difficulty, label: difficulty }; })
+        },
+        {
+            id: 'collection',
+            name: 'Topic',
+            activeValues: collectionNames,
+            setActiveValues: setCollectionNames,
+            options:
+                allCollectionNames.map((collectionName: string) => { return { value: collectionName, label: collectionName }; })
+        }
+    ];
+
+    const activeFilters = filters.map(filter => filter.activeValues).flat();
 
     return (
         <div className="bg-white">
@@ -79,7 +119,7 @@ export default function StoryFiters(props: StoryFiltersProps) {
 
                                 {/* Filters */}
                                 <form className="mt-4">
-                                    {props.booleanFilters.map((filter) => (
+                                    {booleanFilters.map((filter) => (
                                         <div key={filter.name} className="border-t border-gray-200 px-4 py-4 flex items-center justify-between">
                                             <div className="flex items-center">
                                                 <h3 className="text-sm font-medium text-gray-900">{filter.name}</h3>
@@ -96,7 +136,7 @@ export default function StoryFiters(props: StoryFiltersProps) {
                                             </div>
                                         </div>
                                     ))}
-                                    {props.filters.map((filter) => (
+                                    {filters.map((filter) => (
                                         <Disclosure as="div" key={filter.name} className="border-t border-gray-200 px-4 py-6">
                                             {({ open }) => (
                                                 <>
@@ -174,7 +214,7 @@ export default function StoryFiters(props: StoryFiltersProps) {
                                                     type="button"
                                                     className="ml-2 inline-flex h-4 w-4 flex-shrink-0 rounded-full p-1 text-gray-400 hover:bg-gray-200 hover:text-gray-500"
                                                     onClick={() => {
-                                                        props.filters.forEach((filter) => {
+                                                        filters.forEach((filter) => {
                                                             if (filter.activeValues.includes(activeFilter)) {
                                                                 filter.setActiveValues(filter.activeValues.filter((v) => v != activeFilter));
                                                             }
@@ -217,7 +257,7 @@ export default function StoryFiters(props: StoryFiltersProps) {
                         <div className="hidden sm:block">
                             <div className="flow-root">
                                 <Popover.Group className="-mx-4 flex items-center divide-x divide-gray-200">
-                                    {props.booleanFilters.map((filter) => (
+                                    {booleanFilters.map((filter) => (
                                         <div>
                                             <input
                                                 id={`filter-${filter.id}`}
@@ -235,7 +275,7 @@ export default function StoryFiters(props: StoryFiltersProps) {
                                             </label>
                                         </div>
                                     ))}
-                                    {props.filters.map((filter, filterIdx) => (
+                                    {filters.map((filter, filterIdx) => (
                                         <Popover key={filter.name} className="relative inline-block px-4 text-left">
                                             <Popover.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                                                 <span>{filter.name}</span>

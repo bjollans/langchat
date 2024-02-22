@@ -1,0 +1,56 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "f7ff740c-9367-4910-864b-38950c9afcde"
+      }
+    },
+    "plugins": [
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"
+        }
+      ],
+      [
+        "./rn-app-auth-plugin"
+      ]
+    ],
+    "version": "1.0.2",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "scheme": ["com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"],
+    "ios": {
+      "icon": "./assets/icon.png",
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bjolly.linguin",
+      "infoPlist": {
+        "CFBundleURLTypes": [
+          {
+            "CFBundleURLSchemes": ["com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"]
+          }
+        ]
+      }
+    },
+    "android": {
+      "icon": "./assets/icon.png",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.bjolly.linguin"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}

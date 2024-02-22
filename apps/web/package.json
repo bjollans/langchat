@@ -1,12 +1,11 @@
 {
-  "name": "my-divjoy-project",
+  "name": "linguin-web",
   "version": "0.1.0",
   "private": true,
   "keywords": [
     "divjoy"
   ],
   "dependencies": {
-    "linguin-shared": "1.0.0",
     "@analytics/mixpanel": "0.4.0",
     "@expo/metro-runtime": "~3.1.1",
     "@expo/next-adapter": "^6.0.0",
@@ -19,7 +18,9 @@
     "@tailwindcss/typography": "0.5.10",
     "analytics": "0.8.9",
     "autoprefixer": "10.4.16",
+    "cookies-next": "^4.1.1",
     "eslint-config-next": "^13.5.6",
+    "linguin-shared": "1.0.0",
     "lodash": "^4.17.21",
     "metro-config": "^0.80.5",
     "nativewind": "^2.0.11",
@@ -37,6 +38,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "7.48.2",
     "react-intersection-observer": "^9.5.3",
+    "react-native-web": "^0.19.10",
     "react-query": "3.39.3",
     "stripe": "8.132.0",
     "tailwindcss": "3.3.3"

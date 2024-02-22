@@ -1,0 +1,11 @@
+/// <reference types="nativewind/types" />
+
+{
+  "compilerOptions": {},
+  "extends": "expo/tsconfig.base",
+  "paths": {
+    "@linguin-shared/*": [
+      "../../packages/linguin-shared/*"
+    ],
+  }
+}

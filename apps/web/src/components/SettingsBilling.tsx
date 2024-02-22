@@ -1,5 +1,7 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import LoadingIcon from "components/LoadingIcon";
 import { useAuth } from "util/auth";
 import { redirectToBilling } from "util/stripe";

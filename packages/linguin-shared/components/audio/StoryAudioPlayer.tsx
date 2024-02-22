@@ -23,6 +23,10 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     const RnSound = useContext(RnSoundContext);
 
     var rnAudioUpdateInterval: any;
+    
+    useEffect(() => {
+        RnSound.setCategory('Playback');
+    }, []);
 
     useEffect(() => {
         if (!rnAudio || rnAudioUpdateInterval) return;

@@ -1,6 +1,6 @@
 import supabase from 'linguin-shared/util/supabase';
 import React, { useState } from 'react';
-import { Alert, Image, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, StyleSheet, Text, View, Platform } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
 import { authorize } from 'react-native-app-auth';
@@ -17,8 +17,12 @@ export default function AuthForm() {
     async function authGoogle() {
         const config = {
             issuer: 'https://accounts.google.com',
-            clientId: '501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3.apps.googleusercontent.com',
-            redirectUrl: 'com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3:/oauth2redirect/google',
+            clientId: Platform.OS == "ios"
+                ? '501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3.apps.googleusercontent.com'
+                : "501061996944-j5a2isahmbe72ca7qfftp8j0dqr227md.apps.googleusercontent.com",
+            redirectUrl: Platform.OS == "ios"
+                ? 'com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3:/oauth2redirect/google'
+                : 'com.googleusercontent.apps.501061996944-j5a2isahmbe72ca7qfftp8j0dqr227md:/oauth2redirect/google',
             scopes: ['email'],
             useNonce: false,
         };
@@ -28,7 +32,7 @@ export default function AuthForm() {
             const { data, error } = await supabase.auth.signInWithIdToken({
                 provider: 'google',
                 token: authState.idToken,
-            })
+            });
         } catch (error) {
             Alert.alert('Something went wrong, please try again later');
         }

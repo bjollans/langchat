@@ -22,7 +22,7 @@
     "@react-navigation/native": "^6.1.10",
     "@react-navigation/native-stack": "^6.9.18",
     "@supabase/supabase-js": "^2.39.3",
-    "react-native-app-auth": "^7.1.2",
+    "react-native-app-auth": "7.1.2",
     "react-native-elements": "^3.4.3",
     "react-native-heroicons": "^4.0.0",
     "react-native-loading-spinner-overlay": "^3.0.1",

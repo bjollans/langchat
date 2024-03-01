@@ -43,7 +43,7 @@ export default function StoryListElement(props: StoryListElementProps) {
     return (
         <Div key={props.story.title} className="flex flex-row px-4 gap-x-4 py-5 hover:bg-slate-100 items-center" ref={visibilityRef} onClick={() => trackStat(props.story.id, "clicks")} style={{ backgroundColor: 'transparent', overflow: 'hidden' }}>
             <View className="rounded-full overflow-hidden">
-                <Img className="w-24 h-24 object-cover" src={props.story.previewImageUrl} alt="" />
+                <Img className="w-24 h-24 object-cover rounded-full" src={props.story.previewImageUrl} alt="" />
             </View>
             <Div style={{ flex: 1 }}>
                 <Div className="min-w-0">

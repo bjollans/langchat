@@ -1,5 +1,5 @@
 import { PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
-import { Audio, Btn, Div } from 'linguin-shared/components/RnTwComponents';
+import { Div, SingleLayerBtn } from 'linguin-shared/components/RnTwComponents';
 import { useStoryAudioContext } from 'linguin-shared/context/storyAudioContext';
 import { useReadUsageContext } from 'linguin-shared/context/trackReadContext';
 import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
@@ -178,9 +178,9 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
                     <source src={props.src} type="audio/mpeg" />
                     Your browser does not support the audio element.
                 </audio>}
-            <Btn className='flex my-1 rounded-full mx-auto' onClick={togglePlayPause}>
+            <SingleLayerBtn className='flex my-1 rounded-full mx-auto' onClick={togglePlayPause}>
                 {_PlayButton(isPlayingAudio)}
-            </Btn>
+            </SingleLayerBtn>
         </Div>
     )
 }

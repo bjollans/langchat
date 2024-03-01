@@ -1,4 +1,4 @@
-import { Btn } from 'linguin-shared/components/RnTwComponents';
+import { SingleLayerBtn } from 'linguin-shared/components/RnTwComponents';
 import { useStoryAudioContext } from 'linguin-shared/context/storyAudioContext';
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
@@ -55,13 +55,13 @@ export default function ProgressBar(props: ProgressBarProps) {
     }, [currentAudioTime, props.duration]);
 
     return (
-        <Btn
+        <SingleLayerBtn
             className='h-2 bg-gray-200 cursor-pointer w-full items-start flex'
             onClick={handleProgressBarClick}
             onLayout={(e) => setRnProgressBarWidth(e.nativeEvent.layout.width)}
         >
-            <Btn className='bg-cyan-600 shadow-lg h-2' style={{ width: progressBarWidth }}
+            <SingleLayerBtn className='bg-cyan-600 shadow-lg h-2' style={{ width: progressBarWidth }}
                 onClick={handleProgressBarClick} />
-        </Btn>
+        </SingleLayerBtn>
     )
 }

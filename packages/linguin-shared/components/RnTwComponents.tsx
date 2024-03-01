@@ -74,7 +74,7 @@ export function Btn(props: DefaultProps): JSX.Element {
                 onMouseLeave={props.onMouseLeave}
                 onClick={props.onClick}
                 onLayout={props.onLayout}
-                style={[props.style, {pointerEvents: "none"}]}
+                style={[props.style, { pointerEvents: "none" }]}
             >
                 {props.children}
             </Span>
@@ -95,15 +95,7 @@ export function SingleLayerBtn(props: DefaultProps): JSX.Element {
     }
     return (
         <TouchableOpacity onPress={props.onClick} onLayout={props.onLayout} style={props.style}>
-            <Span
-                className={props.className}
-                onMouseLeave={props.onMouseLeave}
-                onClick={props.onClick}
-                onLayout={props.onLayout}
-                style={[{pointerEvents: "none"}]}
-            >
-                {props.children}
-            </Span>
+            {props.children}
         </TouchableOpacity>
     );
 }

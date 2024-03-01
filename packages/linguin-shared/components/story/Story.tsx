@@ -21,9 +21,10 @@ import { styled } from 'nativewind';
 
 interface StoryProps {
     story: StoryText;
+    navigation: any;
 }
 
-function Story({ story }: StoryProps): JSX.Element {
+function Story({ story, navigation }: StoryProps): JSX.Element {
     const [isPayWallOpen, setIsPayWallOpen] = useState(true);
 
     useEffect(() => {
@@ -53,7 +54,7 @@ function Story({ story }: StoryProps): JSX.Element {
                 {isPayWallOpen && Platform.OS == "web" && story?.audioUrl &&
                     <StoryAudioPlayer src={story.audioUrl} />}
             </TargetLanguageContext.Provider>
-            {isPayWallOpen && <SuggestedStories />}
+            {isPayWallOpen && <SuggestedStories navigation={navigation} />}
         </StoryIdContext.Provider>
     );
 }

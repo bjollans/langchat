@@ -21,7 +21,7 @@ export default function StoryScreen({ route, navigation }) {
             <StoryAudioContextProvider>
               <ScrollView contentContainerStyle={styles.container}>
                 <RnTouchableContextProvider>
-                  {loaded && <Story story={story} />}
+                  {loaded && <Story story={story} navigation={navigation} />}
                 </RnTouchableContextProvider>
               </ScrollView>
               {loaded &&

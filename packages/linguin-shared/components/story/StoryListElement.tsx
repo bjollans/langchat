@@ -7,6 +7,7 @@ import StoryCompletedCheckMark from "./StoryCompletedCheckMark";
 import { useInView } from 'react-intersection-observer';
 import { trackStat } from "linguin-shared/util/storyStatistics";
 import { Div, Span, P, Btn, Img } from "linguin-shared/components/RnTwComponents";
+import { View } from "react-native";
 
 export interface StoryListElementProps {
     story: StoryText;
@@ -40,9 +41,11 @@ export default function StoryListElement(props: StoryListElementProps) {
     const storyFilterChangeCalls: StoryFilterChangeCalls | undefined = useContext(StoryListFilterContext);
 
     return (
-        <Div key={props.story.title} className="flex flex-row px-4 gap-x-4 py-5 hover:bg-slate-100 items-center" ref={visibilityRef} onClick={() => trackStat(props.story.id, "clicks")}>
-            <Img className="w-24 rounded-full h-24 object-cover" src={props.story.previewImageUrl} alt="" />
-            <Div style={{flex:1}}>
+        <Div key={props.story.title} className="flex flex-row px-4 gap-x-4 py-5 hover:bg-slate-100 items-center" ref={visibilityRef} onClick={() => trackStat(props.story.id, "clicks")} style={{ backgroundColor: 'transparent', overflow: 'hidden' }}>
+            <View className="rounded-full overflow-hidden">
+                <Img className="w-24 h-24 object-cover" src={props.story.previewImageUrl} alt="" />
+            </View>
+            <Div style={{ flex: 1 }}>
                 <Div className="min-w-0">
                     <Div className="flex flex-row space-x-2">
                         <P className="text-lg font-semibold leading-6 text-gray-900">{props.story.title}</P>
@@ -67,7 +70,7 @@ export default function StoryListElement(props: StoryListElementProps) {
                         <StoryCompletedCheckMark storyId={props.story.id} />
                     </Div>
                 </Div>
-                <Div className="flex flex-row mt-4 text-sm leading-5 text-gray-500">
+                <Div className="flex flex-row mt-4 text-sm leading-5 text-gray-500 rounded-full overflow-hidden">
                     <Btn key={`${props.story.id}-difficulty`}
                         className={`rounded-full mr-2 inline-flex flex-row items-center  px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset ${difficultyColor[props.story.difficulty.toLowerCase()]}`}
                         onClick={(e) => {

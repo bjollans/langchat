@@ -21,7 +21,7 @@ import { styled } from 'nativewind';
 
 interface StoryProps {
     story: StoryText;
-    navigation: any;
+    navigation?: any;
 }
 
 function Story({ story, navigation }: StoryProps): JSX.Element {

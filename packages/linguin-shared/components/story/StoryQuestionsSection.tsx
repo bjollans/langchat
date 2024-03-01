@@ -96,7 +96,7 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
         className="py-2 px-4 border border-indigo-400 rounded shadow flex flex-row text-sm text-indigo-400 tracking-wide hover:bg-indigo-100  justify-center items-center shrink self-center block"
         onClick={resetQuestions}
     >
-        <_RefreshIcon /> <Span className="text-indigo-400 text-md tracking-wide">Try Again</Span>
+        <Span className="text-indigo-400 text-md tracking-wide">Try Again</Span>
     </SingleLayerBtn>;
 
     return isSuccess && (storyQuestions.length > 0 || userStoryStatistics.hasRead)

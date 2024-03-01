@@ -1,6 +1,6 @@
 import { StoryQuestionData } from "model/translations";
 import { useEffect, useState } from "react";
-import { P, Div, Btn, Span, H3 } from "linguin-shared/components/RnTwComponents";
+import { P, Div, Btn, Span, H3, SingleLayerBtn } from "linguin-shared/components/RnTwComponents";
 
 export interface StoryQuestionProps {
     storyQuestionData: StoryQuestionData;
@@ -57,7 +57,7 @@ function _Options({option, i, givenAnswer, evaluateAnswer, correctAnswer}) {
             : answerIsCorrect ? borderCorrect
                 : answerIsChoice ? borderIncorrect : borderDefault;
         return (<Div>
-            <Btn
+            <SingleLayerBtn
                 className={" text-sm text-gray-900 ring-2 ring-inset w-full mt-2 bg-slate-50 flex flex-row hover:bg-white"}
                 onClick={() => evaluateAnswer(option)}
             >
@@ -71,6 +71,6 @@ function _Options({option, i, givenAnswer, evaluateAnswer, correctAnswer}) {
                             <Span className="text-xs text-red-500" >Your Answer</Span>}
                     </Div>
                 </Div>
-            </Btn>
+            </SingleLayerBtn>
         </Div>);
 }

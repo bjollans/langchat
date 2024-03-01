@@ -7,7 +7,7 @@ import { useVisibleStoryIds, useUserStoriesRead } from "linguin-shared/util/clie
 import { getStoriesByIds } from "linguin-shared/util/serverDb";
 import { Div, H2 } from "linguin-shared/components/RnTwComponents";
 
-export default function SuggestedStories() {
+export default function SuggestedStories({navigation}) {
     const STORY_AMOUNT = 3;
 
     const auth = useAuth();

@@ -1,5 +1,5 @@
 import { useAuth } from "util/auth";
-import TooltipButton from "./TooltipButton";
+import TooltipButton from "linguin-shared/components/TooltipButton";
 
 interface RequireAuthButtonProps {
     onClick: () => void,

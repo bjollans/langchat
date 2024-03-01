@@ -109,6 +109,7 @@ interface ImgProps {
     className?: string;
     src?: string;
     alt?: string;
+    style?: any;
 }
 
 export function Img(props: ImgProps): JSX.Element {

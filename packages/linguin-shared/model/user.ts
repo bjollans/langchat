@@ -1,4 +1,4 @@
-interface LinguinUser {
+export interface LinguinUser {
     id?: string;
     name?: string;
     email?: string;

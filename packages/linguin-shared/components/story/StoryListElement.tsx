@@ -7,7 +7,7 @@ import StoryCompletedCheckMark from "./StoryCompletedCheckMark";
 import { useInView } from 'react-intersection-observer';
 import { trackStat } from "linguin-shared/util/storyStatistics";
 import { Div, Span, P, Btn, Img } from "linguin-shared/components/RnTwComponents";
-import { Platform, View } from "react-native";
+import { Platform } from "react-native";
 
 export interface StoryListElementProps {
     story: StoryText;
@@ -44,9 +44,9 @@ export default function StoryListElement(props: StoryListElementProps) {
         <Div key={props.story.title} className="flex flex-row px-4 gap-x-4 py-5 hover:bg-slate-100 items-center" ref={visibilityRef} onClick={() => trackStat(props.story.id, "clicks")} style={{ backgroundColor: 'transparent', overflow: 'hidden' }}>
             {Platform.OS === 'web' &&
                 <Img className="w-24 h-24 object-cover rounded-full overflow-hidden" src={props.story.previewImageUrl} alt="" />
-                || <View className="rounded-full overflow-hidden">
+                || <Div className="rounded-full overflow-hidden">
                     <Img className="w-24 h-24 object-cover rounded-full" src={props.story.previewImageUrl} alt="" />
-                </View>
+                </Div>
             }
             <Div style={{ flex: 1 }}>
                 <Div className="min-w-0">

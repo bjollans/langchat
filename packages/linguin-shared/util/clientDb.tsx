@@ -13,6 +13,7 @@ import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-j
 import { Message, StoryQuestionData, StoryText } from "model/translations";
 import { Vocab } from "model/vocab";
 import { UserReadStatistics } from "util/userStatistics";
+import { LinguinUser } from "linguin-shared/model/user";
 
 // React Query client
 const client = new QueryClient();

@@ -66,7 +66,7 @@ export default function AuthForm() {
 
     return (
         <View className="bg-sky-300 h-full items-center">
-            <Image source={require('../assets/logoWithTransparency.png')} style={{ height: "10%", resizeMode: 'contain', alignSelf: 'center', marginTop: 100 }} />
+            <Image source={require('../assets/logoWithTransparency.png')} style={{ height: "10%", resizeMode: 'contain', alignSelf: 'center', marginTop: "20%" }} />
             <Text className="my-6 text-4xl font-bold tracking-tight">Welcome to Linguin!</Text>
             <View className="p-4 bg-white border rounded-md m-12 mt-6 w-[80%]">
                 <View style={[styles.verticallySpaced, styles.mt20]}>

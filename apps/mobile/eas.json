@@ -17,7 +17,14 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "env": {
+        "EXPO_PUBLIC_POSTHOG_HOST": "https://app.posthog.com",
+        "EXPO_PUBLIC_POSTHOG_KEY": "phc_OfspuwCER13Izk59m4tzBdCiVCRFIipw0b6GlLfx2AY",
+        "EXPO_PUBLIC_SUPABASE_URL": "https://backend.linguin.co",
+        "EXPO_PUBLIC_SUPABASE_PUBLIC_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpocnV2cmFiZmV1ZmFwZ2VkY3FyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTk5NTU4ODQsImV4cCI6MjAxNTUzMTg4NH0.xQPtyGdmkEF3xH2-P_w01WE189Q4qDKaLAPoxv_JLME"
+      }
+    }
   },
   "submit": {
     "production": {

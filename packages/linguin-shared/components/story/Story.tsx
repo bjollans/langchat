@@ -1,23 +1,20 @@
 "use client";
 
-import { Div, H3, Img, P } from "linguin-shared/components/RnTwComponents";
+import { Div, H3, Img } from "linguin-shared/components/RnTwComponents";
 import StoryAudioPlayer from "linguin-shared/components/audio/StoryAudioPlayer";
 //import SuggestedStories from "components/engagement/SuggestedStories";
+import SuggestedStories from "linguin-shared/components/engagement/SuggestedStories";
+import StoryTextRender from "linguin-shared/components/story/StoryTextRender";
 import { StoryIdContext } from "linguin-shared/context/storyIdContext";
 import { TargetLanguageContext } from "linguin-shared/context/targetLanguageContext";
-import ReadUsageContextProvider from "linguin-shared/context/trackReadContext";
 import { StoryText } from "linguin-shared/model/translations";
+import { trackStat } from "linguin-shared/util/storyStatistics";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { Platform } from 'react-native';
-import { trackStat } from "linguin-shared/util/storyStatistics";
 import { StoryPayWall } from "./StoryPayWall";
 import StoryQuestionsSection from "./StoryQuestionsSection";
-import StoryTextRender from "linguin-shared/components/story/StoryTextRender";
-import SuggestedStories from "linguin-shared/components/engagement/SuggestedStories";
-import { Text, Image } from "react-native";
 
-import { styled } from 'nativewind';
 
 interface StoryProps {
     story: StoryText;
@@ -48,7 +45,7 @@ function Story({ story, navigation }: StoryProps): JSX.Element {
                         <H3 className="mx-6 text-base text-4xl py-3 mx-auto font-semibold leading-6 text-gray-900">{story?.title}</H3>
                     }
                 </Div>
-                <StoryPayWall story={story} isPayWallOpen={isPayWallOpen} setIsPayWallOpen={setIsPayWallOpen} />
+                {Platform.OS == "web" && <StoryPayWall story={story} isPayWallOpen={isPayWallOpen} setIsPayWallOpen={setIsPayWallOpen} />}
                 <StoryTextRender story={story} />
                 <StoryQuestionsSection storyId={story.id} />
                 {isPayWallOpen && Platform.OS == "web" && story?.audioUrl &&

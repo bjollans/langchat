@@ -16,7 +16,7 @@
         "./rn-app-auth-plugin"
       ]
     ],
-    "version": "1.0.11",
+    "version": "1.0.12",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -28,7 +28,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "scheme": ["com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"],
+    "scheme": [
+      "com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"
+    ],
     "ios": {
       "icon": "./assets/icon.png",
       "supportsTablet": false,
@@ -39,18 +41,23 @@
       "infoPlist": {
         "CFBundleURLTypes": [
           {
-            "CFBundleURLSchemes": ["com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"]
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"
+            ]
           }
         ]
       }
     },
     "android": {
-      "versionCode": 8,
+      "versionCode": 9,
       "icon": "./assets/icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": [
+        "com.android.vending.BILLING"
+      ],
       "package": "com.bjolly.linguin"
     },
     "web": {

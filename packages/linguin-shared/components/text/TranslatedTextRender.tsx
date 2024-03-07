@@ -25,7 +25,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
     const [showWholeTranslation, setShowWholeTranslation] = useState(false);
     const translatedWords: Array<JSX.Element> = [];
     const storyId = useContext(StoryIdContext);
-    const { onReadUsageEvent } = useReadUsageContext();
+    const { registerReadUsageEvent } = useReadUsageContext();
     const { addToResetterFunctions } = useRnTouchableContext();
     const [isHighlighted, setIsHighlighted] = useState(false);
     const [isPlayingAudio, setIsPlayingAudio] = useState(false);
@@ -82,7 +82,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
     const handleTranslateClick = () => {
         addToResetterFunctions(() => setShowWholeTranslation(false));
         setShowWholeTranslation(true);
-        onReadUsageEvent();
+        registerReadUsageEvent();
         posthog.capture("view_sentence_translation", {
             storyId: storyId,
         });

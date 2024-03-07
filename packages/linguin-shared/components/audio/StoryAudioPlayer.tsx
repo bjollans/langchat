@@ -19,7 +19,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     const [currentAudioTime, setCurrentAudioTime] = useState(0);
     const [isPlayingAudio, setIsPlayingAudio] = useState(false);
     const audioRef = useRef<HTMLAudioElement>(null);
-    const { onReadUsageEvent } = useReadUsageContext();
+    const { registerReadUsageEvent } = useReadUsageContext();
     const RnSound = useContext(RnSoundContext);
 
     var rnAudioUpdateInterval: any;
@@ -67,12 +67,12 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
             if (audioRef.current) {
                 audioRef.current.play();
                 updateIsPlayingAudio(true);
-                onReadUsageEvent();
+                registerReadUsageEvent();
             }
         } else {
             playRnAudio();
             updateIsPlayingAudio(true);
-            onReadUsageEvent();
+            registerReadUsageEvent();
         }
     };
 

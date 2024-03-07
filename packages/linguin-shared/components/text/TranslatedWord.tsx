@@ -18,7 +18,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     const [showTranslation, setShowTranslation] = useState(false);
     const [isPlayingStoryAudio, setIsPlayingStoryAudio] = useState(false);
     const storyId = useContext(StoryIdContext);
-    const { onReadUsageEvent } = useReadUsageContext();
+    const { registerReadUsageEvent } = useReadUsageContext();
     const RnSound = useContext(RnSoundContext);
     const { addToResetterFunctions } = useRnTouchableContext();
 
@@ -50,7 +50,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
         addToResetterFunctions(() => setShowTranslation(false));
         setShowTranslation(true);
         playRnAudio();
-        onReadUsageEvent();
+        registerReadUsageEvent();
         posthog.capture("view_word_translation", {
             vocab: props.termTranslation.text,
             storyId: storyId,

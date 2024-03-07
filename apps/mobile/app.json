@@ -14,6 +14,14 @@
       ],
       [
         "./rn-app-auth-plugin"
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 24
+          }
+        }
       ]
     ],
     "version": "1.0.12",
@@ -55,13 +63,13 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "com.android.vending.BILLING"
-      ],
       "package": "com.bjolly.linguin"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     }
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-8807034955415313~7786679964"
   }
 }

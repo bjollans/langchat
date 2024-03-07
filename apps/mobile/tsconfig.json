@@ -7,5 +7,8 @@
     "@linguin-shared/*": [
       "../../packages/linguin-shared/*"
     ],
+    "components/*": [
+      "components/*"
+    ],
   }
 }

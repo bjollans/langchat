@@ -12,7 +12,7 @@ export interface StoryPayWallProps {
     setIsPayWallOpen: (isPayWallOpen: boolean) => void;
 }
 
-export function StoryPayWall({ story, isPayWallOpen, setIsPayWallOpen }: StoryPayWallProps): JSX.Element {
+export default function StoryPayWall({ story, isPayWallOpen, setIsPayWallOpen }: StoryPayWallProps): JSX.Element {
     const auth = useAuth();
     const { data: userStoriesRead } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
     const { data: userStoriesReadLast7Days } = useUserStoriesReadAutomaticLast7Days(auth?.user?.uid ?? null);

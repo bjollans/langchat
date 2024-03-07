@@ -12,7 +12,7 @@ import { trackStat } from "linguin-shared/util/storyStatistics";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { Platform } from 'react-native';
-import { StoryPayWall } from "./StoryPayWall";
+import StoryPayWall from 'linguin-shared/components/story/StoryPayWall';
 import StoryQuestionsSection from "./StoryQuestionsSection";
 
 

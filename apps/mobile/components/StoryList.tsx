@@ -1,10 +1,13 @@
 import StoryListElement from 'linguin-shared/components/story/StoryListElement';
 import UserStatistics from 'linguin-shared/components/user/UserStatistics';
 import { useFilteredStories } from 'linguin-shared/context/storyListFilterContext';
-import { useVisibleStories } from 'linguin-shared/util/clientDb';
+import { useUserStoriesReadAutomatic, useVisibleStories } from 'linguin-shared/util/clientDb';
 import { FlatList, TouchableOpacity } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import StoryListFilterMenu from './StoryListFilterMenu';
+import { useSubscribedContext } from 'linguin-shared/context/subscribedContext';
+import { useStoriesAvailable } from 'linguin-shared/context/rnStoriesAvailableContext';
+import { useAuth } from 'linguin-shared/util/auth';
 
 export interface Filter {
     id: string;
@@ -28,10 +31,15 @@ export interface FilterOption {
 
 
 export default function StoryList({ navigation }) {
+    const auth = useAuth();
     const { data: stories, isSuccess: loaded } = useVisibleStories();
     const filteredStories = useFilteredStories(stories ?? []);
+    const { subscribed, subscribedLoaded } = useSubscribedContext();
+    const { storiesAvailable, storiesAvailableLoaded } = useStoriesAvailable();
+    const { data: userStoriesRead, isSuccess: userStoriesReadLoaded } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
+    const hasStories = storiesAvailable > 0 || subscribed;
 
-    if (!loaded) {
+    if (!loaded || !subscribedLoaded || !storiesAvailableLoaded || !userStoriesReadLoaded) {
         return <Spinner
             visible={true}
             textContent={'Loading...'}
@@ -48,7 +56,11 @@ export default function StoryList({ navigation }) {
                         data={filteredStories}
                         renderItem={({ item: story, separators }) =>
                             <TouchableOpacity className="bg-white border-b border-gray-200"
-                                onPress={() => navigation.navigate("Story", { storyId: story.id, storyTitle: story.title })}>
+                                onPress={() => {
+                                    console.log('story', story.id, story.title);
+                                    const hasAlreadyReadStory = userStoriesRead?.map(x => x.storyId).includes(story.id);
+                                    navigation.navigate(hasStories || hasAlreadyReadStory ? "Story" : "StoryPaywall", { storyId: story.id, storyTitle: story.title });
+                                }}>
                                 <StoryListElement story={story} />
                             </TouchableOpacity>}
                         keyExtractor={item => item.id}

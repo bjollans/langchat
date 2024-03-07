@@ -1,8 +1,8 @@
 import StoryListElement from 'linguin-shared/components/story/StoryListElement';
 import UserStatistics from 'linguin-shared/components/user/UserStatistics';
 import { useFilteredStories } from 'linguin-shared/context/storyListFilterContext';
-import { useUserStoriesReadAutomatic, useVisibleStories } from 'linguin-shared/util/clientDb';
-import { FlatList, TouchableOpacity } from 'react-native';
+import { useUserStoriesReadAutomatic, useVisibleStoriesInfinite } from 'linguin-shared/util/clientDb';
+import { FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import StoryListFilterMenu from './StoryListFilterMenu';
 import { useSubscribedContext } from 'linguin-shared/context/subscribedContext';
@@ -32,38 +32,48 @@ export interface FilterOption {
 
 export default function StoryList({ navigation }) {
     const auth = useAuth();
-    const { data: stories, isSuccess: loaded } = useVisibleStories();
-    const filteredStories = useFilteredStories(stories ?? []);
+    const {
+        data: stories,
+        isLoading,
+        isError,
+        fetchNextPage,
+        hasNextPage,
+    } = useVisibleStoriesInfinite();
+    const filteredStories = useFilteredStories(stories?.pages?.flat() ?? []);
     const { subscribed, subscribedLoaded } = useSubscribedContext();
     const { storiesAvailable, storiesAvailableLoaded } = useStoriesAvailable();
     const { data: userStoriesRead, isSuccess: userStoriesReadLoaded } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
     const hasStories = storiesAvailable > 0 || subscribed;
 
-    if (!loaded || !subscribedLoaded || !storiesAvailableLoaded || !userStoriesReadLoaded) {
-        return <Spinner
-            visible={true}
-            textContent={'Loading...'}
-            textStyle={{ color: '#FFF' }}
-        />;
+    if (isLoading || !subscribedLoaded || !storiesAvailableLoaded || !userStoriesReadLoaded) {
+        return <ActivityIndicator size="large" color="#0000ff" />;
     }
     return (
         <>
             <StoryListFilterMenu navigation={navigation} />
-            {loaded &&
+            {!isLoading &&
                 <>
                     <UserStatistics />
                     <FlatList
                         data={filteredStories}
-                        renderItem={({ item: story, separators }) =>
-                            <TouchableOpacity className="bg-white border-b border-gray-200"
+                        renderItem={({ item: story, separators }) => {
+                            const hasAlreadyReadStory = userStoriesRead?.map(x => x.storyId).includes(story.id);
+                            return <TouchableOpacity className="bg-white border-b border-gray-200"
                                 onPress={() => {
-                                    console.log('story', story.id, story.title);
-                                    const hasAlreadyReadStory = userStoriesRead?.map(x => x.storyId).includes(story.id);
                                     navigation.navigate(hasStories || hasAlreadyReadStory ? "Story" : "StoryPaywall", { storyId: story.id, storyTitle: story.title });
                                 }}>
                                 <StoryListElement story={story} />
-                            </TouchableOpacity>}
+                            </TouchableOpacity>
+                        }}
                         keyExtractor={item => item.id}
+                        onEndReached={() => {
+                            if (hasNextPage) fetchNextPage();
+                        }}
+                        onEndReachedThreshold={0.5}
+                        ListFooterComponent={
+                            hasNextPage ? <ActivityIndicator size="large" color="#0000ff" /> : null
+                        }
+                        removeClippedSubviews={true}
                     />
                 </>
             }

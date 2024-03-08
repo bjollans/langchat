@@ -24,7 +24,7 @@
         }
       ]
     ],
-    "version": "1.1.0",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -57,12 +57,13 @@
       }
     },
     "android": {
-      "versionCode": 10,
+      "versionCode": 11,
       "icon": "./assets/icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": ["com.google.android.gms.permission.AD_ID"],
       "package": "com.bjolly.linguin"
     },
     "web": {

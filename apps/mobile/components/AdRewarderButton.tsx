@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, Text } from 'react-native';
 import { RewardedAd, RewardedAdEventType, TestIds } from 'react-native-google-mobile-ads';
 
-const adUnitId = TestIds.REWARDED;
+const adUnitId = __DEV__ ? TestIds.REWARDED : "ca-app-pub-8807034955415313/2018900855";
 
 const rewarded = RewardedAd.createForAdRequest(adUnitId, {
     keywords: ['fashion', 'clothing'],

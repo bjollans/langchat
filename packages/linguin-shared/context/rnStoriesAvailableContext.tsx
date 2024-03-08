@@ -18,7 +18,6 @@ export default function StoriesAvailableContextProvider({ children }: { children
     const [storiesAvailableLoaded, setStoriesAvailableLoaded] = useState<boolean>(false);
 
     const setStoriesAvailable = async (value: number) => {
-        console.log('setStoriesAvailable', value);
         if (value < 0) {
             value = 0;
         }
@@ -37,7 +36,6 @@ export default function StoriesAvailableContextProvider({ children }: { children
                 if (value !== null) {
                     setStoriesAvailableSync(parseInt(value));
                 }
-                console.log('storiesAvaialbel', value)
                 setStoriesAvailableLoaded(true);
             } catch (e) {
                 setStoriesAvailable(minStoriesUnlockedAtOnce);

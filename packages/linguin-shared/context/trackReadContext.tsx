@@ -41,19 +41,15 @@ export default function ReadUsageContextProvider({ children, story }: ReadUsageC
     }, []);
 
     const markStoryAsRead = () => {
-        console.log("markStoryAsRead");
         if (isStoryRead) return;
         isStoryRead = true;
 
-        console.log("marking story as read 123");
         const currentStoryAlreadyRead = userStoriesRead?.map(x => x.storyId).includes(story.id);
         if (currentStoryAlreadyRead) return;
-        console.log("marking story as read");
 
         markUserStoryReadAutomatic(story.id, auth?.user?.uid ?? null);
 
         if (rnStoriesAvailableContext) {
-            console.log("decrementing stories available");
             rnStoriesAvailableContext.setStoriesAvailable(rnStoriesAvailableContext.storiesAvailable - 1);
         }
 
@@ -67,7 +63,6 @@ export default function ReadUsageContextProvider({ children, story }: ReadUsageC
     }
 
     const incrementUsageEventsCount = () => {
-        console.log("incrementUsageEventsCount");
         usageEventsCount = usageEventsCount + 1;
         if (usageEventsCount >= _MIN_READ_USAGE_EVENTS && !isStoryRead) {
             markStoryAsRead();

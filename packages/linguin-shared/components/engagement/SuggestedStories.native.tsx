@@ -45,7 +45,6 @@ export default function SuggestedStories({ navigation }) {
             {stories && stories.map((story) => (
                 <TouchableOpacity className="bg-white border-b border-gray-200 w-full"
                     onPress={() => {
-                        console.log('story', story.id, story.title);
                         const hasAlreadyReadStory = userStoriesRead?.map(x => x.storyId).includes(story.id);
                         navigation.navigate(hasStories || hasAlreadyReadStory ? "Story" : "StoryPaywall", { storyId: story.id, storyTitle: story.title });
                     }}>

@@ -19,6 +19,9 @@ export default function StoriesAvailableContextProvider({ children }: { children
 
     const setStoriesAvailable = async (value: number) => {
         console.log('setStoriesAvailable', value);
+        if (value < 0) {
+            value = 0;
+        }
         setStoriesAvailableSync(value);
         try {
             await AsyncStorage.setItem(storiesAvailableKey, value.toString());

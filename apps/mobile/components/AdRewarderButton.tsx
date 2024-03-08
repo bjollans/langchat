@@ -21,7 +21,7 @@ export default function AdRewarderButton() {
         const unsubscribeEarned = rewarded.addAdEventListener(
             RewardedAdEventType.EARNED_REWARD,
             reward => {
-                setStoriesAvailable(storiesAvailable + minStoriesUnlockedAtOnce);
+                setStoriesAvailable(Math.max(storiesAvailable + minStoriesUnlockedAtOnce, minStoriesUnlockedAtOnce));
             },
         );
 

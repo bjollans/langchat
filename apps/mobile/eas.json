@@ -27,16 +27,9 @@
     }
   },
   "submit": {
-    "internal": {
-      "android": {
-        "track": "internal"
-      },
-      "ios": {
-      }
-    },
     "production": {
       "android": {
-        "track": "production"
+        "track": "internal"
       },
       "ios": {
       }

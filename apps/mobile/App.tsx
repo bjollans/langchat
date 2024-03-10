@@ -70,13 +70,13 @@ export default function App() {
 
   return (
     <QueryClientProvider>
-      <PostHogProvider apiKey={process.env.EXPO_PUBLIC_POSTHOG_KEY} options={{
-        host: `${process.env.EXPO_PUBLIC_POSTHOG_HOST}`,
-      }}>
-        <AuthProvider>
-          <SubscribedContextProvider>
-            <StoriesAvailableContextProvider>
-              <NavigationContainer className="relative z-80">
+      <AuthProvider>
+        <SubscribedContextProvider>
+          <StoriesAvailableContextProvider>
+            <NavigationContainer className="relative z-80">
+              <PostHogProvider apiKey={process.env.EXPO_PUBLIC_POSTHOG_KEY} options={{
+                host: `${process.env.EXPO_PUBLIC_POSTHOG_HOST}`,
+              }}>
                 <Stack.Navigator screenOptions={{
                   headerTitleStyle: {
                     fontWeight: '700',
@@ -105,12 +105,12 @@ export default function App() {
                       title: "Account"
                     })} />
                 </Stack.Navigator>
-              </NavigationContainer>
-            </StoriesAvailableContextProvider>
-          </SubscribedContextProvider>
-        </AuthProvider>
-      </PostHogProvider>
-    </QueryClientProvider>
+              </PostHogProvider>
+            </NavigationContainer>
+          </StoriesAvailableContextProvider>
+        </SubscribedContextProvider>
+      </AuthProvider>
+    </QueryClientProvider >
   );
 }
 

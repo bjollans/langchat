@@ -45,7 +45,7 @@ export default function SubscribedContextProvider({ children }: SubscribedProvid
 export function useSubscribedContext() {
     const context = useContext(SubscribedContext);
     if (context === undefined) {
-        throw new Error('useStoryFilterContext must be used within a StoryListFilterContextProvider');
+        throw new Error('useSubscribedContext must be used within a SubscribedContextProvider');
     }
     return context;
 }

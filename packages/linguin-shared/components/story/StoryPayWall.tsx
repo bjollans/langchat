@@ -5,6 +5,7 @@ import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { useAuth } from "linguin-shared/util/auth";
 import { useUserStoriesReadAutomatic, useUserStoriesReadAutomaticLast7Days } from "linguin-shared/util/clientDb";
+import { usePostHog } from "posthog-react-native";
 
 export interface StoryPayWallProps {
     story: StoryText;
@@ -14,6 +15,7 @@ export interface StoryPayWallProps {
 
 export default function StoryPayWall({ story, isPayWallOpen, setIsPayWallOpen }: StoryPayWallProps): JSX.Element {
     const auth = useAuth();
+    const posthog = usePostHog()
     const { data: userStoriesRead } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
     const { data: userStoriesReadLast7Days } = useUserStoriesReadAutomaticLast7Days(auth?.user?.uid ?? null);
 
@@ -33,7 +35,7 @@ export default function StoryPayWall({ story, isPayWallOpen, setIsPayWallOpen }:
 
     useEffect(() => {
         if (!isPayWallOpen) {
-            posthog.capture('story_blocked', {
+            posthog?.capture('story_blocked', {
                 story_id: story.id,
                 story_title: story.title,
                 story_target_language: story.targetLanguage,

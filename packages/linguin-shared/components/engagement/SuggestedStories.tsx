@@ -6,10 +6,12 @@ import { useAuth } from "linguin-shared/util/auth";
 import { useVisibleStoryIds, useUserStoriesRead } from "linguin-shared/util/clientDb";
 import { getStoriesByIds } from "linguin-shared/util/serverDb";
 import { Div, H2 } from "linguin-shared/components/RnTwComponents";
+import { usePostHog } from "posthog-react-native";
 
 export default function SuggestedStories({navigation}) {
     const STORY_AMOUNT = 3;
 
+    const posthog = usePostHog()
     const auth = useAuth();
     const { data: storyIds, isSuccess: storyIdsLoaded } = useVisibleStoryIds();
     const { data: storiesRead, isSuccess: storiesReadLoaded } = useUserStoriesRead(auth?.user?.uid ?? null);
@@ -27,7 +29,7 @@ export default function SuggestedStories({navigation}) {
     }, [storyIdsLoaded, storiesReadLoaded]);
 
     const captureClick = () => {
-        posthog.capture('suggested_stories_click', {
+        posthog?.capture('suggested_stories_click', {
             story_ids: stories.map(x => x.id),
         });
     };

@@ -9,9 +9,12 @@ import { Div, H2 } from "linguin-shared/components/RnTwComponents";
 import { TouchableOpacity, View } from "react-native";
 import { useSubscribedContext } from "linguin-shared/context/subscribedContext";
 import { useStoriesAvailable } from "linguin-shared/context/rnStoriesAvailableContext";
+import { usePostHog } from "posthog-react-native";
 
 export default function SuggestedStories({ navigation }) {
     const STORY_AMOUNT = 3;
+
+    const posthog = usePostHog()
 
     const auth = useAuth();
     const { data: storyIds, isSuccess: storyIdsLoaded } = useVisibleStoryIds();
@@ -34,7 +37,7 @@ export default function SuggestedStories({ navigation }) {
     }, [storyIdsLoaded, storiesReadLoaded]);
 
     const captureClick = () => {
-        posthog.capture('suggested_stories_click', {
+        posthog?.capture('suggested_stories_click', {
             story_ids: stories.map(x => x.id),
         });
     };

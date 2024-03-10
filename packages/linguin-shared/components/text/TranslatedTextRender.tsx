@@ -12,6 +12,7 @@ import { useRnTouchableContext } from 'linguin-shared/context/rnTouchableContext
 import { Platform, Text } from 'react-native';
 import EqualizerIconRn from "linguin-shared/components/audio/EqualizerIconRn";
 import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
+import { usePostHog } from 'posthog-react-native';
 
 interface TranslatedTextProps {
     story: StoryText;
@@ -22,6 +23,7 @@ interface TranslatedTextProps {
 }
 
 export default function TranslatedTextRender(props: TranslatedTextProps): JSX.Element {
+    const posthog = usePostHog()
     const [showWholeTranslation, setShowWholeTranslation] = useState(false);
     const storyId = useContext(StoryIdContext);
     const { registerReadUsageEvent } = useReadUsageContext();
@@ -89,7 +91,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
         addToResetterFunctions(() => setShowWholeTranslation(false));
         setShowWholeTranslation(true);
         registerReadUsageEvent();
-        posthog.capture("view_sentence_translation", {
+        posthog?.capture("view_sentence_translation", {
             storyId: storyId,
         });
     }

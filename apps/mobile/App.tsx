@@ -17,6 +17,7 @@ import StoryPaywallScreen from './screens/StoryPaywallScreen';
 import Story from './screens/StoryScreen';
 import AccountScreen from './screens/AccountScreen';
 import Svg, { Path } from 'react-native-svg';
+import { usePostHog, PostHogProvider } from 'posthog-react-native'
 
 const Stack = createNativeStackNavigator();
 
@@ -69,42 +70,46 @@ export default function App() {
 
   return (
     <QueryClientProvider>
-      <AuthProvider>
-        <SubscribedContextProvider>
-          <StoriesAvailableContextProvider>
-            <NavigationContainer className="relative z-80">
-              <Stack.Navigator screenOptions={{
-                headerTitleStyle: {
-                  fontWeight: '700',
-                  fontSize: 18,
-                }
-              }}>
-                <Stack.Screen name="StoryList" component={StoryListScreen}
-                  options={({ route, navigation }) => ({
-                    title: "🇮🇳 Hindi Stories",
-                    headerTitleAlign: 'center',
-                    headerRight: (route.params as any)?.filterButton,
-                    headerLeft: () => <TouchableOpacity onPress={() => navigation.navigate('Account')}><_AccountIcon /></TouchableOpacity>
-                  })} />
-                <Stack.Screen name="StoryPaywall" component={StoryPaywallScreen}
-                  options={({ route }) => ({
-                    title: "No Stories Left",
-                    headerBackTitle: "Back"
-                  })} />
-                <Stack.Screen name="Story" component={Story}
-                  options={({ route }) => ({
-                    title: (route.params as any).storyTitle,
-                    headerBackTitle: "Stories"
-                  })} />
-                <Stack.Screen name="Account" component={AccountScreen}
-                  options={() => ({
-                    title: "Account"
-                  })} />
-              </Stack.Navigator>
-            </NavigationContainer>
-          </StoriesAvailableContextProvider>
-        </SubscribedContextProvider>
-      </AuthProvider>
+      <PostHogProvider apiKey={process.env.EXPO_PUBLIC_POSTHOG_KEY} options={{
+        host: `${process.env.EXPO_PUBLIC_POSTHOG_HOST}`,
+      }}>
+        <AuthProvider>
+          <SubscribedContextProvider>
+            <StoriesAvailableContextProvider>
+              <NavigationContainer className="relative z-80">
+                <Stack.Navigator screenOptions={{
+                  headerTitleStyle: {
+                    fontWeight: '700',
+                    fontSize: 18,
+                  }
+                }}>
+                  <Stack.Screen name="StoryList" component={StoryListScreen}
+                    options={({ route, navigation }) => ({
+                      title: "🇮🇳 Hindi Stories",
+                      headerTitleAlign: 'center',
+                      headerRight: (route.params as any)?.filterButton,
+                      headerLeft: () => <TouchableOpacity onPress={() => navigation.navigate('Account')}><_AccountIcon /></TouchableOpacity>
+                    })} />
+                  <Stack.Screen name="StoryPaywall" component={StoryPaywallScreen}
+                    options={({ route }) => ({
+                      title: "No Stories Left",
+                      headerBackTitle: "Back"
+                    })} />
+                  <Stack.Screen name="Story" component={Story}
+                    options={({ route }) => ({
+                      title: (route.params as any).storyTitle,
+                      headerBackTitle: "Stories"
+                    })} />
+                  <Stack.Screen name="Account" component={AccountScreen}
+                    options={() => ({
+                      title: "Account"
+                    })} />
+                </Stack.Navigator>
+              </NavigationContainer>
+            </StoriesAvailableContextProvider>
+          </SubscribedContextProvider>
+        </AuthProvider>
+      </PostHogProvider>
     </QueryClientProvider>
   );
 }

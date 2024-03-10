@@ -8,6 +8,7 @@ import { useEffect, useRef, useState, useContext } from 'react';
 import { Platform, Text } from 'react-native';
 import { PlayCircleIcon, PauseCircleIcon } from 'linguin-shared/components/Icons';
 import ProgressBar from './ProgressBar';
+import { usePostHog } from 'posthog-react-native'
 
 interface StoryAudioPlayerProps {
     src: string;
@@ -21,6 +22,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     const audioRef = useRef<HTMLAudioElement>(null);
     const { registerReadUsageEvent } = useReadUsageContext();
     const RnSound = useContext(RnSoundContext);
+    const posthog = usePostHog()
 
     var rnAudioUpdateInterval: any;
     
@@ -128,7 +130,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     };
 
     const onEnded = () => {
-        posthog.capture('audio_ended', { src: props.src.split('/').pop() });
+        posthog?.capture('audio_ended', { src: props.src.split('/').pop() });
     };
 
     useEffect(() => {

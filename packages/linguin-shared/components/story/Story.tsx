@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { Platform } from 'react-native';
 import StoryPayWall from 'linguin-shared/components/story/StoryPayWall';
 import StoryQuestionsSection from "./StoryQuestionsSection";
+import { usePostHog } from "posthog-react-native";
 
 
 interface StoryProps {
@@ -23,10 +24,11 @@ interface StoryProps {
 
 function Story({ story, navigation }: StoryProps): JSX.Element {
     const [isPayWallOpen, setIsPayWallOpen] = useState(true);
+    const posthog = usePostHog()
 
     useEffect(() => {
         trackStat(story.id, "opens");
-        posthog.capture('story_view', {
+        posthog?.capture('story_view', {
             story_id: story.id,
             story_title: story?.title,
             story_target_language: story?.targetLanguage,

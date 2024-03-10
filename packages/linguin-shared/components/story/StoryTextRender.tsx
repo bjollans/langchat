@@ -1,7 +1,7 @@
 import { Br, Div } from "linguin-shared/components/RnTwComponents";
 import TranslatedTextRender from "linguin-shared/components/text/TranslatedTextRender";
 import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { AudioSentenceTime, StoryText, TermTranslation, TranslationJson } from "linguin-shared/model/translations";
 
 export interface StoryTextRenderProps {
@@ -37,5 +37,7 @@ export default function StoryTextRender(props: StoryTextRenderProps): JSX.Elemen
             hasAudio={props.story.audioUrl !== null && props.story.audioUrl !== undefined} />);
     };
 
-    return (<Div className="max-w-4xl mx-auto">{props.story.content.split("\n").map(lineToTranslatedTextRender)}</Div>);
+    const renderedLines = useMemo(() => props.story.content.split("\n").map(lineToTranslatedTextRender), [props.story.content]);
+
+    return (<Div className="max-w-4xl mx-auto">{renderedLines}</Div>);
 }

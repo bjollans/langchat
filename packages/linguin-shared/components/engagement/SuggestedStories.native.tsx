@@ -3,18 +3,27 @@ import { StoryText } from "linguin-shared/model/translations";
 import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { useAuth } from "linguin-shared/util/auth";
-import { useVisibleStoryIds, useUserStoriesRead } from "linguin-shared/util/clientDb";
+import { useVisibleStoryIds, useUserStoriesRead, useUserStoriesReadAutomatic } from "linguin-shared/util/clientDb";
 import { getStoriesByIds } from "linguin-shared/util/serverDb";
 import { Div, H2 } from "linguin-shared/components/RnTwComponents";
 import { TouchableOpacity, View } from "react-native";
+import { useSubscribedContext } from "linguin-shared/context/subscribedContext";
+import { useStoriesAvailable } from "linguin-shared/context/rnStoriesAvailableContext";
+import { usePostHog } from "posthog-react-native";
 
 export default function SuggestedStories({ navigation }) {
     const STORY_AMOUNT = 3;
+
+    const posthog = usePostHog()
 
     const auth = useAuth();
     const { data: storyIds, isSuccess: storyIdsLoaded } = useVisibleStoryIds();
     const { data: storiesRead, isSuccess: storiesReadLoaded } = useUserStoriesRead(auth?.user?.uid ?? null);
     const [stories, setStories] = useState<StoryText[]>([]);
+    const { subscribed } = useSubscribedContext();
+    const { storiesAvailable } = useStoriesAvailable();
+    const { data: userStoriesRead } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
+    const hasStories = storiesAvailable > 0 || subscribed;
 
     useEffect(() => {
         if (!storyIdsLoaded || !storiesReadLoaded || storyIds.length < 1) return;
@@ -28,7 +37,7 @@ export default function SuggestedStories({ navigation }) {
     }, [storyIdsLoaded, storiesReadLoaded]);
 
     const captureClick = () => {
-        posthog.capture('suggested_stories_click', {
+        posthog?.capture('suggested_stories_click', {
             story_ids: stories.map(x => x.id),
         });
     };
@@ -38,7 +47,10 @@ export default function SuggestedStories({ navigation }) {
             <H2 className="text-2xl font-bold">Read this next</H2>
             {stories && stories.map((story) => (
                 <TouchableOpacity className="bg-white border-b border-gray-200 w-full"
-                    onPress={() => navigation.navigate("Story", { storyId: story.id, storyTitle: story.title })}>
+                    onPress={() => {
+                        const hasAlreadyReadStory = userStoriesRead?.map(x => x.storyId).includes(story.id);
+                        navigation.navigate(hasStories || hasAlreadyReadStory ? "Story" : "StoryPaywall", { storyId: story.id, storyTitle: story.title });
+                    }}>
                     <StoryListElement key={"suggested-story-" + story.title} story={story} />
                 </TouchableOpacity>
             ))}

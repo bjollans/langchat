@@ -13,6 +13,7 @@ var _ = require('lodash');
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons/faArrowsRotate'
 import { trackStat } from "linguin-shared/util/storyStatistics";
+import { usePostHog } from "posthog-react-native";
 
 
 export interface StoryQuestionsSectionProps {
@@ -22,6 +23,7 @@ export interface StoryQuestionsSectionProps {
 export default function StoryQuestionsSection(props: StoryQuestionsSectionProps) {
     const QUESTION_AMOUNT = 1;
 
+    const posthog = usePostHog()
     const auth = useAuth();
     const { data: storyQuestions, isSuccess } = useStoryQuestions(props.storyId);
     const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics({ userId: auth?.user?.id ?? null, storyId: props.storyId, isInSingleStoryContext: true });
@@ -67,16 +69,16 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
             await upsertUserReadStatistics(auth!.user!.id, updatedUserReadStatistics);
             await markUserStoryReadAutomatic(props.storyId, auth?.user?.uid ?? null);
             await trackStat(props.storyId, "completes")
-            posthog.capture('story_read', {
+            posthog?.capture('story_read', {
                 story_id: props.storyId
             });
-            posthog.capture('story_question_answered_correctly', {
+            posthog?.capture('story_question_answered_correctly', {
                 story_id: props.storyId,
                 story_title: storyQuestions![questionIndex].question,
                 story_target_language: storyQuestions![questionIndex].correctAnswer,
             });
         } else {
-            posthog.capture('story_question_answered_incorrectly', {
+            posthog?.capture('story_question_answered_incorrectly', {
                 story_id: props.storyId,
                 story_title: storyQuestions![questionIndex].question,
                 story_target_language: storyQuestions![questionIndex].correctAnswer,

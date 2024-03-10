@@ -4,12 +4,15 @@ import { StoryText } from "linguin-shared/model/translations";
 import posthog from "posthog-js";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "linguin-shared/util/auth";
-import { markUserStoryReadAutomatic, useUserStoriesReadAutomatic } from "linguin-shared/util/clientDb";
+import { markUserStoryReadAutomatic, useStories, useUserStoriesReadAutomatic } from "linguin-shared/util/clientDb";
 import { trackStat } from "linguin-shared/util/storyStatistics";
+import { StoriesAvailableContext } from "./rnStoriesAvailableContext";
+import { usePostHog } from "posthog-react-native";
 
 
 export interface ReadUsageContextType {
-    onReadUsageEvent: () => void;
+    registerReadUsageEvent: () => void;
+    subscribeToStoryRead: (key: string, callback: () => void) => void;
 }
 
 export const ReadUsageContext = createContext<ReadUsageContextType | null>(null);
@@ -23,12 +26,14 @@ export interface ReadUsageContextProviderProps {
 export default function ReadUsageContextProvider({ children, story }: ReadUsageContextProviderProps): JSX.Element {
     const _MIN_READ_USAGE_EVENTS = 4;
 
+    const posthog = usePostHog()
     const auth = useAuth();
     const { data: userStoriesRead } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
 
     var [usageEventsCount] = useState(0);
     var [isStoryRead] = useState(false);
 
+    const rnStoriesAvailableContext = useContext(StoriesAvailableContext);
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
@@ -46,9 +51,13 @@ export default function ReadUsageContextProvider({ children, story }: ReadUsageC
 
         markUserStoryReadAutomatic(story.id, auth?.user?.uid ?? null);
 
+        if (rnStoriesAvailableContext) {
+            rnStoriesAvailableContext.setStoriesAvailable(rnStoriesAvailableContext.storiesAvailable - 1);
+        }
+
         trackStat(story.id, "reads");
 
-        posthog.capture('story_read', {
+        posthog?.capture('story_read', {
             story_id: story.id,
             story_title: story?.title,
             story_target_language: story?.targetLanguage,
@@ -56,20 +65,20 @@ export default function ReadUsageContextProvider({ children, story }: ReadUsageC
     }
 
     const incrementUsageEventsCount = () => {
-        posthog.capture('read_usage_event', {
-            story_id: story.id,
-            story_title: story.title,
-            story_target_language: story.targetLanguage,
-        });
         usageEventsCount = usageEventsCount + 1;
         if (usageEventsCount >= _MIN_READ_USAGE_EVENTS && !isStoryRead) {
             markStoryAsRead();
         }
+        posthog?.capture('read_usage_event', {
+            story_id: story.id,
+            story_title: story.title,
+            story_target_language: story.targetLanguage,
+        });
     };
 
     return (
         <ReadUsageContext.Provider value={{
-            onReadUsageEvent: incrementUsageEventsCount,
+            registerReadUsageEvent: incrementUsageEventsCount,
         }}>
             {children}
         </ReadUsageContext.Provider>
@@ -81,5 +90,10 @@ export function useReadUsageContext(): ReadUsageContextType {
     if (context === null) {
         throw new Error('useReadUsageContext must be used within a ReadUsageContextProvider');
     }
+    return context;
+}
+
+export function useReadUsageContextNullable(): ReadUsageContextType | null {
+    const context = useContext(ReadUsageContext);
     return context;
 }

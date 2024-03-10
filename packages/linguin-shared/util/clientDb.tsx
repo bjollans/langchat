@@ -2,6 +2,7 @@
 
 import {
   useQuery,
+  useInfiniteQuery,
   QueryClient,
   QueryClientProvider as QueryClientProviderBase,
   QueryClientProviderProps,
@@ -131,6 +132,26 @@ export function useVisibleStories() {
       .eq("visible", true)
       .then(handle),
   );
+}
+
+async function fetchVisibleStoriesPage({ pageParam = 0 }) {
+  const { data, error } = await supabase
+    .from('stories')
+    .select()
+    .eq("visible", true)
+    .range(pageParam, pageParam + 9);
+
+  if (error) throw new Error(error.message);
+  return data;
+};
+
+export function useVisibleStoriesInfinite() {
+  return useInfiniteQuery(['visibleStories'], fetchVisibleStoriesPage, {
+    getNextPageParam: (lastPage, pages) => {
+      if (lastPage.length === 0) return undefined; // No more pages
+      return pages.length * 10; // Adjust according to your pagination logic
+    },
+  });
 }
 
 export function useStoriesOrderedByCustom(property: string, ascending: boolean) {

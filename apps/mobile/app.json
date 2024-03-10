@@ -14,9 +14,18 @@
       ],
       [
         "./rn-app-auth-plugin"
-      ]
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 24
+          }
+        }
+      ],
+      "expo-localization"
     ],
-    "version": "1.0.11",
+    "version": "1.1.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -28,7 +37,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "scheme": ["com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"],
+    "scheme": [
+      "com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"
+    ],
     "ios": {
       "icon": "./assets/icon.png",
       "supportsTablet": false,
@@ -39,22 +50,30 @@
       "infoPlist": {
         "CFBundleURLTypes": [
           {
-            "CFBundleURLSchemes": ["com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"]
+            "CFBundleURLSchemes": [
+              "com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"
+            ]
           }
         ]
       }
     },
     "android": {
-      "versionCode": 8,
+      "versionCode": 13,
       "icon": "./assets/icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "permissions": [
+        "com.google.android.gms.permission.AD_ID"
+      ],
       "package": "com.bjolly.linguin"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     }
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-8807034955415313~7786679964"
   }
 }

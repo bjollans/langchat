@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, ScrollView, SafeAreaView, View } from 'react-native';
+import { StyleSheet, Text, ScrollView, SafeAreaView, View, ActivityIndicator } from 'react-native';
 import { useStory } from 'linguin-shared/util/clientDb';
 import Story from 'linguin-shared/components/story/Story';
 import { RnSoundContext } from 'linguin-shared/context/rnSoundContext';
@@ -29,11 +29,7 @@ export default function StoryScreen({ route, navigation }) {
             </StoryAudioContextProvider>
           </ReadUsageContextProvider>
           ||
-          <Spinner
-            visible={true}
-            textContent={'Loading...'}
-            textStyle={{ color: '#FFF' }}
-          />
+          <ActivityIndicator size="large" color="#0000ff" />
         }
       </RnSoundContext.Provider>
     </SafeAreaView>

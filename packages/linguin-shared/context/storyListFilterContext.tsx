@@ -73,8 +73,7 @@ export function useFilteredStories(stories: any) {
 
     const storyIdsRead = userStoriesRead?.map((userStoryRead) => userStoryRead.storyId);
 
-    return stories.filter((story: StoryText) => story.visible)
-        .filter((story: StoryText) => difficulties.length == 0 || difficulties.includes(story.difficulty))
+    return stories.filter((story: StoryText) => difficulties.length == 0 || difficulties.includes(story.difficulty))
         .filter((story: StoryText) => collectionNames.length == 0 || story.collections && story.collections.filter((collection: string) => collectionNames.includes(collection)).length > 0)
         .filter((story: StoryText) => showRead || !storyIdsRead?.includes(story.id))
 }

@@ -136,12 +136,11 @@ export function useVisibleStories() {
 
 async function fetchVisibleStoriesPage({ pageParam = 0 }) {
   const { data, error } = await supabase
-    .from('stories')
+    .from('ordered_simplified_stories_for_list')
     .select()
-    .eq("visible", true)
     .range(pageParam, pageParam + 9);
 
-  if (error) throw new Error(error.message);
+  if (error) console.log('error', error);
   return data;
 };
 

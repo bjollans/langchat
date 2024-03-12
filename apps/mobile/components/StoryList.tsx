@@ -7,6 +7,7 @@ import { useAuth } from 'linguin-shared/util/auth';
 import { useUserStoriesReadAutomatic, useVisibleStoriesInfinite } from 'linguin-shared/util/clientDb';
 import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import StoryListFilterMenu from './StoryListFilterMenu';
+import { FeedbackModal } from './FeedbackModal';
 
 export interface Filter {
     id: string;
@@ -78,6 +79,7 @@ export default function StoryList({ navigation }) {
                     />
                 </>
             }
+            <FeedbackModal />
         </>
     );
 }

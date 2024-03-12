@@ -4,8 +4,9 @@ import { Linking, SafeAreaView, Text, TouchableOpacity, View } from "react-nativ
 import Purchases from "react-native-purchases";
 import SubscribeButton from "../components/SubscribeButton";
 import UserStatistics from "linguin-shared/components/user/UserStatistics";
+import AuthModal from "../components/AuthModal";
 
-export default function AccountScreen() {
+export default function AccountScreen({navigation}) {
     const auth = useAuth();
     const [customerInfo, setCustomerInfo] = useState(null);
 
@@ -46,6 +47,7 @@ export default function AccountScreen() {
                     <SubscribeButton />
                 </View>
             }
+            <AuthModal visible={!auth?.user} navigation={navigation} />
         </SafeAreaView>
     );
 }

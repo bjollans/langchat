@@ -134,11 +134,12 @@ export function useVisibleStories() {
   );
 }
 
+const PAGE_LENGTH = 5;
 async function fetchVisibleStoriesPage({ pageParam = 0 }) {
   const { data, error } = await supabase
     .from('ordered_simplified_stories_for_list')
     .select()
-    .range(pageParam, pageParam + 9);
+    .range(pageParam, pageParam + PAGE_LENGTH - 1);
 
   if (error) console.log('error', error);
   return data;
@@ -148,7 +149,7 @@ export function useVisibleStoriesInfinite() {
   return useInfiniteQuery(['visibleStories'], fetchVisibleStoriesPage, {
     getNextPageParam: (lastPage, pages) => {
       if (lastPage.length === 0) return undefined; // No more pages
-      return pages.length * 10; // Adjust according to your pagination logic
+      return pages.length * PAGE_LENGTH; // Adjust according to your pagination logic
     },
   });
 }

@@ -17,22 +17,22 @@ export default function PaywallScreen({ navigation, route }) {
   }, [storiesAvailable, storiesAvailableLoaded, subscribed, subscribedLoaded]);
 
   return (
-    <View className="bg-white h-full p-8">
+    <View className="bg-white h-full px-8 py-4">
       <Text className="tracking-tight text-2xl font-bold text-center my-6">
         You have no free stories left
       </Text>
       <View className="p-4">
         <Image source={require('../assets/logoWithTransparency.png')} className="h-24 mx-auto" style={{ resizeMode: 'contain' }} />
       </View>
-      <Text className="tracking-tight text-4xl font-bold text-center mt-8 mb-2">
+      <Text className="tracking-tight text-4xl font-bold text-center mt-2 mb-2">
         Unlimited Reading
       </Text>
       <SubscribeButton />
-      <Text className="tracking-tight text-2xl text-slate-600 font-bold text-center mt-8 mb-2">
+      <Text className="tracking-tight text-2xl text-slate-600 font-bold text-center mt-4 mb-2">
         OR
       </Text>
       <Text className="tracking-tight text-slate-600 text-2xl font-bold text-center mt-2 mb-2">
-        Watch an Ad For 3 More Stories
+        Watch an Ad to Unlock 3 More Stories
       </Text>
       <AdRewarderButton />
     </View>

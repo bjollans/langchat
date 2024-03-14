@@ -25,7 +25,7 @@
       ],
       "expo-localization"
     ],
-    "version": "1.2.3",
+    "version": "1.2.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -58,7 +58,7 @@
       }
     },
     "android": {
-      "versionCode": 17,
+      "versionCode": 18,
       "icon": "./assets/icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -74,6 +74,7 @@
     }
   },
   "react-native-google-mobile-ads": {
-    "android_app_id": "ca-app-pub-8807034955415313~7786679964"
+    "android_app_id": "ca-app-pub-8807034955415313~7786679964",
+    "ios_app_id": "ca-app-pub-8807034955415313~2656747992"
   }
 }

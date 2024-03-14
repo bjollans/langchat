@@ -1,5 +1,5 @@
 import supabase from 'linguin-shared/util/supabase';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Modal, Platform, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
@@ -8,11 +8,13 @@ import { authorize } from 'react-native-app-auth';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons/faGoogle';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Svg, { Path } from 'react-native-svg';
+import { usePostHog } from 'posthog-react-native';
 
 export default function AuthForm({ visible, navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const posthog = usePostHog();
 
     async function authGoogle() {
         const config = {
@@ -33,6 +35,7 @@ export default function AuthForm({ visible, navigation }) {
                 provider: 'google',
                 token: authState.idToken,
             });
+            posthog?.capture("auth_completed", );
         } catch (error) {
             Alert.alert('Something went wrong, please try again later');
         }
@@ -47,22 +50,29 @@ export default function AuthForm({ visible, navigation }) {
 
         if (error) Alert.alert(error.message)
         setLoading(false)
+        posthog?.capture("auth_completed", );
     }
 
     async function signUpWithEmail() {
-        setLoading(true)
+        setLoading(true);
         const {
             data: { session },
             error,
         } = await supabase.auth.signUp({
             email: email,
             password: password,
-        })
+        });
 
-        if (error) Alert.alert(error.message)
-        if (!session && !error) Alert.alert('Please check your inbox for email verification!')
-        setLoading(false)
+        if (error) Alert.alert(error.message);
+        if (!session && !error) Alert.alert('Please check your inbox for email verification!');
+        setLoading(false);
+        posthog?.capture("auth_completed", );
     }
+
+    useEffect(() => {
+        if (visible) posthog?.capture("auth_modal_opened");
+    }, [posthog]);
+
     return (
         <Modal
             animationType="slide"

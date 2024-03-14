@@ -3,12 +3,11 @@ import { Div, SingleLayerBtn } from 'linguin-shared/components/RnTwComponents';
 import { useStoryAudioContext } from 'linguin-shared/context/storyAudioContext';
 import { useReadUsageContext } from 'linguin-shared/context/trackReadContext';
 import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
-import posthog from 'posthog-js';
 import { useEffect, useRef, useState, useContext } from 'react';
 import { Platform, Text } from 'react-native';
 import { PlayCircleIcon, PauseCircleIcon } from 'linguin-shared/components/Icons';
 import ProgressBar from './ProgressBar';
-import { usePostHog } from 'posthog-react-native'
+import usePostHog from 'linguin-shared/util/usePosthog';
 
 interface StoryAudioPlayerProps {
     src: string;
@@ -22,7 +21,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     const audioRef = useRef<HTMLAudioElement>(null);
     const { registerReadUsageEvent } = useReadUsageContext();
     const RnSound = useContext(RnSoundContext);
-    const posthogClient = Platform.OS=="web"? posthog : usePostHog();
+    const posthogClient = usePostHog();
 
     var rnAudioUpdateInterval: any;
     

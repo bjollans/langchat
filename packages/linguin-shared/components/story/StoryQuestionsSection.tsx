@@ -5,7 +5,6 @@ import { markUserStoryRead, markUserStoryReadAutomatic, upsertUserReadStatistics
 import { UserReadStatistics, UserStoryStatistics, useUpdatedUserReadStatistics, useUserStoryStatistics } from "linguin-shared/util/userStatistics";
 import CompletedWidget from "./CompletedWidget";
 import StoryQuestion from "./StoryQuestion";
-import posthog from "posthog-js";
 import { P, Div, SingleLayerBtn, Span } from "linguin-shared/components/RnTwComponents";
 import Svg, { Path } from "react-native-svg";
 import { Platform } from "react-native";
@@ -13,7 +12,7 @@ var _ = require('lodash');
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons/faArrowsRotate'
 import { trackStat } from "linguin-shared/util/storyStatistics";
-import { usePostHog } from "posthog-react-native";
+import usePostHog from 'linguin-shared/util/usePosthog';
 
 
 export interface StoryQuestionsSectionProps {
@@ -23,7 +22,7 @@ export interface StoryQuestionsSectionProps {
 export default function StoryQuestionsSection(props: StoryQuestionsSectionProps) {
     const QUESTION_AMOUNT = 1;
 
-    const posthogClient = Platform.OS == "web" ? posthog : usePostHog();
+    const posthogClient = usePostHog();
     const auth = useAuth();
     const { data: storyQuestions, isSuccess } = useStoryQuestions(props.storyId);
     const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics({ userId: auth?.user?.id ?? null, storyId: props.storyId, isInSingleStoryContext: true });

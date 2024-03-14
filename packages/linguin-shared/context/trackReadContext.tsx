@@ -1,13 +1,12 @@
 "use client";
 
 import { StoryText } from "linguin-shared/model/translations";
-import posthog from "posthog-js";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "linguin-shared/util/auth";
 import { markUserStoryReadAutomatic, useStories, useUserStoriesReadAutomatic } from "linguin-shared/util/clientDb";
 import { trackStat } from "linguin-shared/util/storyStatistics";
 import { StoriesAvailableContext } from "./rnStoriesAvailableContext";
-import { usePostHog } from "posthog-react-native";
+import usePostHog from 'linguin-shared/util/usePosthog';
 import { Platform } from "react-native";
 
 
@@ -27,7 +26,7 @@ export interface ReadUsageContextProviderProps {
 export default function ReadUsageContextProvider({ children, story }: ReadUsageContextProviderProps): JSX.Element {
     const _MIN_READ_USAGE_EVENTS = 4;
 
-    const posthogClient = Platform.OS == "web" ? posthog : usePostHog();
+    const posthogClient = usePostHog();
     const auth = useAuth();
     const { data: userStoriesRead } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
 

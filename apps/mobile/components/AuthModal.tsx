@@ -8,7 +8,7 @@ import { authorize } from 'react-native-app-auth';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons/faGoogle';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Svg, { Path } from 'react-native-svg';
-import { usePostHog } from 'posthog-react-native';
+import usePostHog from 'linguin-shared/util/usePostHog';
 
 export default function AuthForm({ visible, navigation }) {
     const [email, setEmail] = useState('');

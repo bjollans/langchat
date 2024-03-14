@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
 import { Alert, Modal, StyleSheet, Text, Pressable, View, TouchableWithoutFeedback } from 'react-native'
 import InAppReview from 'react-native-in-app-review';
-import { usePostHog } from 'posthog-react-native';
+import usePostHog from 'linguin-shared/util/usePostHog';
 
 import StarRating from 'react-native-star-rating-widget';
 

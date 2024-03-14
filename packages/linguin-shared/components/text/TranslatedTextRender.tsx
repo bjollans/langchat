@@ -23,7 +23,7 @@ interface TranslatedTextProps {
 }
 
 export default function TranslatedTextRender(props: TranslatedTextProps): JSX.Element {
-    const posthog = usePostHog()
+    const posthogClient = Platform.OS == "web" ? posthog : usePostHog();
     const [showWholeTranslation, setShowWholeTranslation] = useState(false);
     const storyId = useContext(StoryIdContext);
     const { registerReadUsageEvent } = useReadUsageContext();
@@ -91,7 +91,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
         addToResetterFunctions(() => setShowWholeTranslation(false));
         setShowWholeTranslation(true);
         registerReadUsageEvent();
-        posthog?.capture("view_sentence_translation", {
+        posthogClient?.capture("view_sentence_translation", {
             storyId: storyId,
         });
     }

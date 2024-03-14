@@ -20,13 +20,13 @@ export default function WordPlayerButton({ word }: WordPlayerButtonProps) {
         }
         return `https://backend.linguin.co/storage/v1/object/public/wordSound/${fileName}.mp3`;
     }, [word]);
-    const posthog = usePostHog()
+    const posthogClient = Platform.OS == "web" ? posthog : usePostHog();
 
     const play = () => {
         if (Platform.OS == "web") {
             if (audioRef.current) {
                 audioRef.current.play();
-                posthog?.capture("play_word_sound", {
+                posthogClient?.capture("play_word_sound", {
                     vocab: word,
                     storyId: storyId,
                 });

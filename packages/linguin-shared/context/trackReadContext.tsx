@@ -8,6 +8,7 @@ import { markUserStoryReadAutomatic, useStories, useUserStoriesReadAutomatic } f
 import { trackStat } from "linguin-shared/util/storyStatistics";
 import { StoriesAvailableContext } from "./rnStoriesAvailableContext";
 import { usePostHog } from "posthog-react-native";
+import { Platform } from "react-native";
 
 
 export interface ReadUsageContextType {
@@ -26,7 +27,7 @@ export interface ReadUsageContextProviderProps {
 export default function ReadUsageContextProvider({ children, story }: ReadUsageContextProviderProps): JSX.Element {
     const _MIN_READ_USAGE_EVENTS = 4;
 
-    const posthog = usePostHog()
+    const posthogClient = Platform.OS == "web" ? posthog : usePostHog();
     const auth = useAuth();
     const { data: userStoriesRead } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
 
@@ -57,7 +58,7 @@ export default function ReadUsageContextProvider({ children, story }: ReadUsageC
 
         trackStat(story.id, "reads");
 
-        posthog?.capture('story_read', {
+        posthogClient?.capture('story_read', {
             story_id: story.id,
             story_title: story?.title,
             story_target_language: story?.targetLanguage,
@@ -69,7 +70,7 @@ export default function ReadUsageContextProvider({ children, story }: ReadUsageC
         if (usageEventsCount >= _MIN_READ_USAGE_EVENTS && !isStoryRead) {
             markStoryAsRead();
         }
-        posthog?.capture('read_usage_event', {
+        posthogClient?.capture('read_usage_event', {
             story_id: story.id,
             story_title: story.title,
             story_target_language: story.targetLanguage,

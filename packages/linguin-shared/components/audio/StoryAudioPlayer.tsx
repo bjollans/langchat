@@ -22,7 +22,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     const audioRef = useRef<HTMLAudioElement>(null);
     const { registerReadUsageEvent } = useReadUsageContext();
     const RnSound = useContext(RnSoundContext);
-    const posthog = usePostHog()
+    const posthogClient = Platform.OS=="web"? posthog : usePostHog();
 
     var rnAudioUpdateInterval: any;
     
@@ -130,7 +130,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     };
 
     const onEnded = () => {
-        posthog?.capture('audio_ended', { src: props.src.split('/').pop() });
+        posthogClient?.capture('audio_ended', { src: props.src.split('/').pop() });
     };
 
     useEffect(() => {

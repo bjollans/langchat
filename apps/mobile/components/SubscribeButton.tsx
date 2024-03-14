@@ -1,6 +1,6 @@
 import Purchases, { PurchasesPackage } from 'react-native-purchases';
 import { useEffect, useState } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { useSubscribedContext } from 'linguin-shared/context/subscribedContext';
 
 export default function SubscribeButton() {
@@ -50,8 +50,12 @@ export default function SubscribeButton() {
         });
     }
 
-    return <TouchableOpacity onPress={checkout} className="rounded-full border bg-green-500 p-4 text-center text-lg">
-        <Text className="text-white text-2xl font-semibold tracking-tight text-center"
-        >Unlock For {priceString}{frequencyString}</Text>
-    </TouchableOpacity>
+    return <View>
+        <TouchableOpacity onPress={checkout} className="rounded-full border bg-green-500 p-4 text-center text-lg">
+            <Text className="text-white text-2xl font-semibold tracking-tight text-center"
+            >Unlock For {priceString}{frequencyString}</Text>
+        </TouchableOpacity>
+        <Text className="text-s italic text-center mt-2">Unlocks unlimited reading and removes ads.</Text>
+        <Text className="text-s italic text-center">Renewed monthly. You can cancel anytime in the account overview.</Text>
+    </View>
 }

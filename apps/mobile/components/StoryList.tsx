@@ -1,13 +1,13 @@
 import StoryListElement from 'linguin-shared/components/story/StoryListElement';
 import UserStatistics from 'linguin-shared/components/user/UserStatistics';
-import { useFilteredStories } from 'linguin-shared/context/storyListFilterContext';
-import { useUserStoriesReadAutomatic, useVisibleStoriesInfinite } from 'linguin-shared/util/clientDb';
-import { FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
-import Spinner from 'react-native-loading-spinner-overlay';
-import StoryListFilterMenu from './StoryListFilterMenu';
-import { useSubscribedContext } from 'linguin-shared/context/subscribedContext';
 import { useStoriesAvailable } from 'linguin-shared/context/rnStoriesAvailableContext';
+import { useFilteredStories } from 'linguin-shared/context/storyListFilterContext';
+import { useSubscribedContext } from 'linguin-shared/context/subscribedContext';
 import { useAuth } from 'linguin-shared/util/auth';
+import { useUserStoriesReadAutomatic, useVisibleStoriesInfinite } from 'linguin-shared/util/clientDb';
+import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
+import StoryListFilterMenu from './StoryListFilterMenu';
+import { FeedbackModal } from './FeedbackModal';
 
 export interface Filter {
     id: string;
@@ -45,15 +45,17 @@ export default function StoryList({ navigation }) {
     const { data: userStoriesRead, isSuccess: userStoriesReadLoaded } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
     const hasStories = storiesAvailable > 0 || subscribed;
 
-    if (isLoading || !subscribedLoaded || !storiesAvailableLoaded || !userStoriesReadLoaded) {
-        return <ActivityIndicator size="large" color="#0000ff" />;
+    if (isLoading) {
+        if (auth?.user && (!subscribedLoaded || !storiesAvailableLoaded || !userStoriesReadLoaded)) {
+            return <ActivityIndicator size="large" color="#0000ff" />;
+        }
     }
     return (
         <>
             <StoryListFilterMenu navigation={navigation} />
             {!isLoading &&
                 <>
-                    <UserStatistics />
+                    {auth?.user && <UserStatistics />}
                     <FlatList
                         data={filteredStories}
                         renderItem={({ item: story, separators }) => {
@@ -77,6 +79,7 @@ export default function StoryList({ navigation }) {
                     />
                 </>
             }
+            <FeedbackModal />
         </>
     );
 }

@@ -1,7 +1,7 @@
 import StoryListFilterContextProvider from 'linguin-shared/context/storyListFilterContext';
 import { SafeAreaView } from 'react-native';
 import StoryList from '../components/StoryList';
-import { usePostHog } from 'posthog-react-native';
+import usePostHog from 'linguin-shared/util/usePostHog';
 import { useAuth } from 'linguin-shared/util/auth';
 import { useEffect } from 'react';
 

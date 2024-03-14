@@ -1,6 +1,5 @@
 import StoryListElement from "linguin-shared/components/story/StoryListElement";
 import { StoryText } from "linguin-shared/model/translations";
-import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { useAuth } from "linguin-shared/util/auth";
 import { useVisibleStoryIds, useUserStoriesRead, useUserStoriesReadAutomatic } from "linguin-shared/util/clientDb";
@@ -9,7 +8,7 @@ import { Div, H2 } from "linguin-shared/components/RnTwComponents";
 import { TouchableOpacity, View } from "react-native";
 import { useSubscribedContext } from "linguin-shared/context/subscribedContext";
 import { useStoriesAvailable } from "linguin-shared/context/rnStoriesAvailableContext";
-import { usePostHog } from "posthog-react-native";
+import usePostHog from 'linguin-shared/util/usePostHog';
 
 export default function SuggestedStories({ navigation }) {
     const STORY_AMOUNT = 3;

@@ -134,22 +134,22 @@ export function useVisibleStories() {
   );
 }
 
+const PAGE_LENGTH = 5;
 async function fetchVisibleStoriesPage({ pageParam = 0 }) {
   const { data, error } = await supabase
-    .from('stories')
+    .from('ordered_simplified_stories_for_list')
     .select()
-    .eq("visible", true)
-    .range(pageParam, pageParam + 9);
+    .range(pageParam, pageParam + PAGE_LENGTH - 1);
 
-  if (error) throw new Error(error.message);
+  if (error) console.log('error', error);
   return data;
 };
 
 export function useVisibleStoriesInfinite() {
   return useInfiniteQuery(['visibleStories'], fetchVisibleStoriesPage, {
     getNextPageParam: (lastPage, pages) => {
-      if (lastPage.length === 0) return undefined; // No more pages
-      return pages.length * 10; // Adjust according to your pagination logic
+      if (!lastPage || lastPage.length === 0) return undefined; // No more pages
+      return pages.length * PAGE_LENGTH; // Adjust according to your pagination logic
     },
   });
 }
@@ -186,6 +186,17 @@ export function useCollectionNames() {
       .select('name')
       .then(handle),
   );
+}
+
+
+export function useStoryCollections(storyId: string) {
+  return useQuery(
+    ["collections", { storyId }],
+    () => supabase
+      .from("storiesToCollections")
+      .select("collectionName")
+      .eq("storyId", storyId)
+      .then(handle));
 }
 
 export function getAvailableStoryDifficultyLevels() {

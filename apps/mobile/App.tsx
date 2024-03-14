@@ -1,52 +1,23 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Session } from '@supabase/supabase-js';
 import StoriesAvailableContextProvider from 'linguin-shared/context/rnStoriesAvailableContext';
 import SubscribedContextProvider from 'linguin-shared/context/subscribedContext';
 import { AuthProvider } from 'linguin-shared/util/auth';
 import { QueryClientProvider } from 'linguin-shared/util/clientDb';
-import supabase from 'linguin-shared/util/supabase';
-import { useEffect, useState } from 'react';
-import { Platform, Touchable, TouchableOpacity } from 'react-native';
+import { PostHogProvider } from 'posthog-react-native';
+import { useEffect } from 'react';
+import { TouchableOpacity } from 'react-native';
 import mobileAds, { MaxAdContentRating } from 'react-native-google-mobile-ads';
-import Purchases from 'react-native-purchases';
+import Svg, { Path } from 'react-native-svg';
 import 'react-native-url-polyfill/auto';
-import AuthForm from './components/AuthForm';
+import AccountScreen from './screens/AccountScreen';
 import StoryListScreen from './screens/StoryListScreen';
 import StoryPaywallScreen from './screens/StoryPaywallScreen';
 import Story from './screens/StoryScreen';
-import AccountScreen from './screens/AccountScreen';
-import Svg, { Path } from 'react-native-svg';
-import { usePostHog, PostHogProvider } from 'posthog-react-native'
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [session, setSession] = useState<Session | null>(null)
-
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    })
-
-    supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    })
-  }, []);
-
-  useEffect(() => {
-    if (session?.user) {
-      const apiKey = Platform.OS == "ios" ? "ios" : "goog_vgtgqumQvpccFSJWpKAzOgZsiHN";
-      try {
-        Purchases.configure({ apiKey: apiKey, appUserID: session.user.email });
-      }
-      catch (e) {
-        console.log('Error configuring purchases: ' + e);
-      }
-    }
-  }, [session?.user]);
-
   useEffect(() => {
     mobileAds()
       .setRequestConfiguration({
@@ -64,9 +35,6 @@ export default function App() {
         // Request config successfully set!
       });
   }, []);
-
-
-  if (!session || !session.user) return <AuthForm />;
 
   return (
     <QueryClientProvider>

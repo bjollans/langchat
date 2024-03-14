@@ -32,6 +32,12 @@ export default function StoryListElement(props: StoryListElementProps) {
         }
     }, [hasBeenSeen]);
 
+    useEffect(() => {
+        if (Platform.OS !== 'web') {
+            trackStat(props.story.id, "views");
+        }
+    }, []);
+
     const difficultyColor = {
         "easy": "ring-green-600/20 bg-green-50 text-green-700",
         "intermediate": "ring-blue-700/10 bg-blue-50 text-blue-700",

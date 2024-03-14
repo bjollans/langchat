@@ -9,12 +9,11 @@ import { StoryIdContext } from "linguin-shared/context/storyIdContext";
 import { TargetLanguageContext } from "linguin-shared/context/targetLanguageContext";
 import { StoryText } from "linguin-shared/model/translations";
 import { trackStat } from "linguin-shared/util/storyStatistics";
-import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { Platform } from 'react-native';
 import StoryPayWall from 'linguin-shared/components/story/StoryPayWall';
 import StoryQuestionsSection from "./StoryQuestionsSection";
-import { usePostHog } from "posthog-react-native";
+import usePostHog from 'linguin-shared/util/usePostHog';
 
 
 interface StoryProps {
@@ -24,11 +23,11 @@ interface StoryProps {
 
 function Story({ story, navigation }: StoryProps): JSX.Element {
     const [isPayWallOpen, setIsPayWallOpen] = useState(true);
-    const posthog = usePostHog()
+    const posthogClient = usePostHog();
 
     useEffect(() => {
         trackStat(story.id, "opens");
-        posthog?.capture('story_view', {
+        posthogClient?.capture('story_view', {
             story_id: story.id,
             story_title: story?.title,
             story_target_language: story?.targetLanguage,

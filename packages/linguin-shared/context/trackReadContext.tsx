@@ -12,7 +12,6 @@ import { Platform } from "react-native";
 
 export interface ReadUsageContextType {
     registerReadUsageEvent: () => void;
-    subscribeToStoryRead: (key: string, callback: () => void) => void;
 }
 
 export const ReadUsageContext = createContext<ReadUsageContextType | null>(null);

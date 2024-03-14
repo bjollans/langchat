@@ -148,7 +148,7 @@ async function fetchVisibleStoriesPage({ pageParam = 0 }) {
 export function useVisibleStoriesInfinite() {
   return useInfiniteQuery(['visibleStories'], fetchVisibleStoriesPage, {
     getNextPageParam: (lastPage, pages) => {
-      if (lastPage.length === 0) return undefined; // No more pages
+      if (!lastPage || lastPage.length === 0) return undefined; // No more pages
       return pages.length * PAGE_LENGTH; // Adjust according to your pagination logic
     },
   });
@@ -186,6 +186,17 @@ export function useCollectionNames() {
       .select('name')
       .then(handle),
   );
+}
+
+
+export function useStoryCollections(storyId: string) {
+  return useQuery(
+    ["collections", { storyId }],
+    () => supabase
+      .from("storiesToCollections")
+      .select("collectionName")
+      .eq("storyId", storyId)
+      .then(handle));
 }
 
 export function getAvailableStoryDifficultyLevels() {

@@ -8,7 +8,7 @@ import { Div, H2 } from "linguin-shared/components/RnTwComponents";
 import { TouchableOpacity, View } from "react-native";
 import { useSubscribedContext } from "linguin-shared/context/subscribedContext";
 import { useStoriesAvailable } from "linguin-shared/context/rnStoriesAvailableContext";
-import usePostHog from 'linguin-shared/util/usePosthog';
+import usePostHog from 'linguin-shared/util/usePostHog';
 
 export default function SuggestedStories({ navigation }) {
     const STORY_AMOUNT = 3;

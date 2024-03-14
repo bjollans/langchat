@@ -3,7 +3,7 @@ import { useContext, useMemo, useRef } from "react";
 import { Platform } from "react-native";
 import { Btn, Div } from "linguin-shared/components/RnTwComponents";
 import { PlayCircleIcon } from "linguin-shared/components/Icons";
-import usePostHog from 'linguin-shared/util/usePosthog';
+import usePostHog from 'linguin-shared/util/usePostHog';
 
 export interface WordPlayerButtonProps {
     word: string;

@@ -7,7 +7,7 @@ import TranslatedWordHoverBox from "./TranslatedWordHoverBox";
 import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
 import { useRnTouchableContext } from "linguin-shared/context/rnTouchableContext";
 import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
-import usePostHog from 'linguin-shared/util/usePosthog';
+import usePostHog from 'linguin-shared/util/usePostHog';
 import { Platform } from "react-native";
 
 export interface TranslatedTermProps {

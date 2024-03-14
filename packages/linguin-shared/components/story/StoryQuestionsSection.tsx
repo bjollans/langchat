@@ -12,7 +12,7 @@ var _ = require('lodash');
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons/faArrowsRotate'
 import { trackStat } from "linguin-shared/util/storyStatistics";
-import usePostHog from 'linguin-shared/util/usePosthog';
+import usePostHog from 'linguin-shared/util/usePostHog';
 
 
 export interface StoryQuestionsSectionProps {

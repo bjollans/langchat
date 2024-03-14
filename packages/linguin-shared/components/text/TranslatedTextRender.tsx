@@ -11,7 +11,7 @@ import { useRnTouchableContext } from 'linguin-shared/context/rnTouchableContext
 import { Platform, Text } from 'react-native';
 import EqualizerIconRn from "linguin-shared/components/audio/EqualizerIconRn";
 import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
-import usePostHog from 'linguin-shared/util/usePosthog';
+import usePostHog from 'linguin-shared/util/usePostHog';
 
 interface TranslatedTextProps {
     story: StoryText;

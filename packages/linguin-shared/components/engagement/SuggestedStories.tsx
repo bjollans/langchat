@@ -5,7 +5,7 @@ import { useAuth } from "linguin-shared/util/auth";
 import { useVisibleStoryIds, useUserStoriesRead } from "linguin-shared/util/clientDb";
 import { getStoriesByIds } from "linguin-shared/util/serverDb";
 import { Div, H2 } from "linguin-shared/components/RnTwComponents";
-import usePostHog from 'linguin-shared/util/usePosthog';
+import usePostHog from 'linguin-shared/util/usePostHog';
 
 export default function SuggestedStories({navigation}) {
     const STORY_AMOUNT = 3;

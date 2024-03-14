@@ -6,7 +6,7 @@ import { useAuth } from "linguin-shared/util/auth";
 import { markUserStoryReadAutomatic, useStories, useUserStoriesReadAutomatic } from "linguin-shared/util/clientDb";
 import { trackStat } from "linguin-shared/util/storyStatistics";
 import { StoriesAvailableContext } from "./rnStoriesAvailableContext";
-import usePostHog from 'linguin-shared/util/usePosthog';
+import usePostHog from 'linguin-shared/util/usePostHog';
 import { Platform } from "react-native";
 
 

@@ -7,7 +7,7 @@ import { useEffect, useRef, useState, useContext } from 'react';
 import { Platform, Text } from 'react-native';
 import { PlayCircleIcon, PauseCircleIcon } from 'linguin-shared/components/Icons';
 import ProgressBar from './ProgressBar';
-import usePostHog from 'linguin-shared/util/usePosthog';
+import usePostHog from 'linguin-shared/util/usePostHog';
 
 interface StoryAudioPlayerProps {
     src: string;

@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { Platform } from 'react-native';
 import StoryPayWall from 'linguin-shared/components/story/StoryPayWall';
 import StoryQuestionsSection from "./StoryQuestionsSection";
-import usePostHog from 'linguin-shared/util/usePosthog';
+import usePostHog from 'linguin-shared/util/usePostHog';
 
 
 interface StoryProps {

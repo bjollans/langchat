@@ -36,7 +36,7 @@ export default function App() {
 
   useEffect(() => {
     if (session?.user) {
-      const apiKey = Platform.OS == "ios" ? "ios" : "goog_vgtgqumQvpccFSJWpKAzOgZsiHN";
+      const apiKey = Platform.OS == "ios" ? "appl_XlxNBuuhOlCAfoGCZelGwgmmRTS" : "goog_vgtgqumQvpccFSJWpKAzOgZsiHN";
       try {
         Purchases.configure({ apiKey: apiKey, appUserID: session.user.email });
       }

@@ -8,6 +8,7 @@ import { trackStat } from "linguin-shared/util/storyStatistics";
 import { StoriesAvailableContext } from "./rnStoriesAvailableContext";
 import usePostHog from 'linguin-shared/util/usePostHog';
 import { Platform } from "react-native";
+import { Callback } from "@react-native-async-storage/async-storage/lib/typescript/types";
 
 
 export interface ReadUsageContextType {
@@ -31,6 +32,7 @@ export default function ReadUsageContextProvider({ children, story }: ReadUsageC
 
     var [usageEventsCount] = useState(0);
     var [isStoryRead] = useState(false);
+    const [incrementUsageEventsCount, setIncrementUsageEventsCount] = useState<Callback>(() => { });
 
     const rnStoriesAvailableContext = useContext(StoriesAvailableContext);
 
@@ -63,17 +65,19 @@ export default function ReadUsageContextProvider({ children, story }: ReadUsageC
         });
     }
 
-    const incrementUsageEventsCount = () => {
-        usageEventsCount = usageEventsCount + 1;
-        if (usageEventsCount >= _MIN_READ_USAGE_EVENTS && !isStoryRead) {
-            markStoryAsRead();
-        }
-        posthogClient?.capture('read_usage_event', {
-            story_id: story.id,
-            story_title: story.title,
-            story_target_language: story.targetLanguage,
+    useEffect(() => {
+        setIncrementUsageEventsCount(() => () => {
+            usageEventsCount = usageEventsCount + 1;
+            if (usageEventsCount >= _MIN_READ_USAGE_EVENTS && !isStoryRead) {
+                markStoryAsRead();
+            }
+            posthogClient?.capture('read_usage_event', {
+                story_id: story.id,
+                story_title: story.title,
+                story_target_language: story.targetLanguage,
+            });
         });
-    };
+    }, [posthogClient, story, userStoriesRead]);
 
     return (
         <ReadUsageContext.Provider value={{

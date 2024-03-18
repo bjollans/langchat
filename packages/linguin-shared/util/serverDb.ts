@@ -33,6 +33,7 @@ import supabase from "./supabase";
       .from("stories")
       .select('title, id, difficulty, visible, wordCount, content, previewImageUrl, storiesToCollections ( collectionName ), wordsInStory, createdAt')
       .order(property, { ascending })
+      .eq("visible", true)
       .then(handle);
   }
   

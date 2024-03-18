@@ -11,7 +11,7 @@ import { getFirstInstallTime } from 'react-native-device-info';
 export function FeedbackModal() {
     const [installedForEnoughDays, setInstalledForEnoughDays] = useState(false);
     const [hasReviewed, setHasReviewed] = useState(false);
-    const [lastAskedForReview, setLastAskedForReview] = useState(0);
+    const [lastAskedForReview, setLastAskedForReview] = useState(Date.now());
     const [showThanksModal, setShowThanksModal] = useState(false);
     const [forceInvisible, setForceInvisible] = useState(false);
     const posthog = usePostHog();
@@ -36,25 +36,19 @@ export function FeedbackModal() {
     }, []);
 
     useEffect(() => {
-        if (hasReviewed) {
-            AsyncStorage.setItem('hasReviewed', 'true');
-        }
-    }, [hasReviewed]);
+        AsyncStorage.setItem('hasReviewed', 'true');
+    }, [lastAskedForReview]);
 
     useEffect(() => {
         AsyncStorage.getItem('lastAskedForReview').then((value) => {
             if (value) {
                 setLastAskedForReview(parseInt(value));
+            } else {
+                setLastAskedForReview(0);
             }
         }
         );
     }, []);
-
-    useEffect(() => {
-        if (hasReviewed) {
-            AsyncStorage.setItem('lastAskedForReview', Date.now().toString());
-        }
-    }, [hasReviewed]);
 
     const handleReview = async (rating) => {
         if (rating > 3) {

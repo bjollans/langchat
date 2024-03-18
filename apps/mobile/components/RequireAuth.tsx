@@ -19,18 +19,6 @@ export default function RequireAuth({ children, navigation }) {
         })
     }, []);
 
-    useEffect(() => {
-        if (session?.user) {
-            const apiKey = Platform.OS == "ios" ? "ios" : "goog_vgtgqumQvpccFSJWpKAzOgZsiHN";
-            try {
-                Purchases.configure({ apiKey: apiKey, appUserID: session.user.email });
-            }
-            catch (e) {
-                console.log('Error configuring purchases: ' + e);
-            }
-        }
-    }, [session?.user]);
-
     return (
         <>
             {children}

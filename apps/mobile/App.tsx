@@ -17,6 +17,7 @@ import Story from './screens/StoryScreen';
 import { Session } from '@supabase/supabase-js';
 import supabase from 'linguin-shared/util/supabase';
 import Purchases from 'react-native-purchases';
+import { initNotifications, scheduleReminderNotification } from './util/notifications';
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +63,11 @@ export default function App() {
       .then(() => {
         // Request config successfully set!
       });
+  }, []);
+
+  useEffect(() => {
+    initNotifications();
+    scheduleReminderNotification();
   }, []);
 
   return (

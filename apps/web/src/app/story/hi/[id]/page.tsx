@@ -4,6 +4,7 @@ import { getStory, getStoryCollections, getVisibleStoryIds } from "util/serverDb
 import StoryAudioContextProvider from "linguin-shared/context/storyAudioContext";
 import ReadUsageContextProvider from "linguin-shared/context/trackReadContext";
 import { requireAuth } from "@linguin-shared/util/requireAuth";
+import WebStory from "components/WebStory";
 
 export async function generateStaticParams() {
     const storyIdObjects = await getVisibleStoryIds();
@@ -32,7 +33,7 @@ async function StoryPage({ params }) {
                     <div className={`p-4 my-4 mb-36 rounded-lg border-1 border-black w-full`}>
                         <ReadUsageContextProvider story={story}>
                             <StoryAudioContextProvider>
-                                <Story story={story} />
+                                <WebStory story={story} />
                             </StoryAudioContextProvider>
                         </ReadUsageContextProvider>
                     </div>
@@ -42,4 +43,4 @@ async function StoryPage({ params }) {
     </>
 }
 
-export default requireAuth(StoryPage);
+export default StoryPage;

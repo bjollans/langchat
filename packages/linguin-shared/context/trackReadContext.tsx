@@ -1,9 +1,9 @@
 "use client";
 
-import { StoryText } from "linguin-shared/model/translations";
+import { StoryTranslation } from "linguin-shared/model/translations";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "linguin-shared/util/auth";
-import { markUserStoryReadAutomatic, useStories, useUserStoriesReadAutomatic } from "linguin-shared/util/clientDb";
+import { markUserStoryReadAutomatic, useUserStoriesReadAutomatic } from "linguin-shared/util/clientDb";
 import { trackStat } from "linguin-shared/util/storyStatistics";
 import { StoriesAvailableContext } from "./rnStoriesAvailableContext";
 import usePostHog from 'linguin-shared/util/usePostHog';
@@ -20,10 +20,10 @@ export const ReadUsageContext = createContext<ReadUsageContextType | null>(null)
 
 export interface ReadUsageContextProviderProps {
     children: React.ReactNode;
-    story: StoryText;
+    storyTranslation: StoryTranslation;
 }
 
-export default function ReadUsageContextProvider({ children, story }: ReadUsageContextProviderProps): JSX.Element {
+export default function ReadUsageContextProvider({ children, storyTranslation }: ReadUsageContextProviderProps): JSX.Element {
     const _MIN_READ_USAGE_EVENTS = 4;
 
     const posthogClient = usePostHog();
@@ -47,21 +47,20 @@ export default function ReadUsageContextProvider({ children, story }: ReadUsageC
         if (isStoryRead) return;
         isStoryRead = true;
 
-        const currentStoryAlreadyRead = userStoriesRead?.map(x => x.storyId).includes(story.id);
+        const currentStoryAlreadyRead = userStoriesRead?.map(x => x.storyId).includes(storyTranslation.id);
         if (currentStoryAlreadyRead) return;
 
-        markUserStoryReadAutomatic(story.id, auth?.user?.uid ?? null);
+        markUserStoryReadAutomatic(storyTranslation.id, auth?.user?.uid ?? null);
 
         if (rnStoriesAvailableContext) {
             rnStoriesAvailableContext.setStoriesAvailable(rnStoriesAvailableContext.storiesAvailable - 1);
         }
 
-        trackStat(story.id, "reads");
+        trackStat(storyTranslation.id, "reads");
 
         posthogClient?.capture('story_read', {
-            story_id: story.id,
-            story_title: story?.title,
-            story_target_language: story?.targetLanguage,
+            story_id: storyTranslation.id,
+            story_target_language: storyTranslation?.targetLanguage,
         });
     }
 
@@ -72,12 +71,11 @@ export default function ReadUsageContextProvider({ children, story }: ReadUsageC
                 markStoryAsRead();
             }
             posthogClient?.capture('read_usage_event', {
-                story_id: story.id,
-                story_title: story.title,
-                story_target_language: story.targetLanguage,
+                story_id: storyTranslation.id,
+                story_target_language: storyTranslation.targetLanguage,
             });
         });
-    }, [posthogClient, story, userStoriesRead]);
+    }, [posthogClient, storyTranslation, userStoriesRead]);
 
     return (
         <ReadUsageContext.Provider value={{

@@ -2,12 +2,14 @@ import Purchases, { PurchasesPackage } from 'react-native-purchases';
 import { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { useSubscribedContext } from 'linguin-shared/context/subscribedContext';
+import { usePostHog } from 'posthog-react-native';
 
 export default function SubscribeButton() {
     const [priceString, setPriceString] = useState<string>("");
     const [frequencyString, setFrequencyString] = useState<string | null>("");
     const [purchasablePackage, setPurchasablePackage] = useState<PurchasesPackage | null>(null);
     const { setSubscribed } = useSubscribedContext();
+    const posthog = usePostHog();
 
     const subscriptionPeriodsToReadable = (subscriptionPeriod: string | null): string | null => {
         if (subscriptionPeriod === 'P1M') {
@@ -37,6 +39,7 @@ export default function SubscribeButton() {
     }, []);
 
     const checkout = async () => {
+        posthog.capture('subscibe_button_clicked');
         Purchases.purchasePackage(
             purchasablePackage!
         ).then(({ customerInfo, productIdentifier }) => {
@@ -45,10 +48,11 @@ export default function SubscribeButton() {
                 "unlimited_reading"
                 ] !== "undefined"
             ) {
+                posthog.capture('subscibe_button_success');
                 setSubscribed(true);
             }
         }).catch((e) => {
-            console.log(e);
+            posthog.capture('subscibe_button_error', { error: e });
         });
     }
 

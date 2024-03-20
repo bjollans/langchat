@@ -17,6 +17,7 @@ import Story from './screens/StoryScreen';
 import { Session } from '@supabase/supabase-js';
 import supabase from 'linguin-shared/util/supabase';
 import Purchases from 'react-native-purchases';
+import { initNotifications, scheduleReminderNotification } from './util/notifications';
 
 const Stack = createNativeStackNavigator();
 
@@ -64,12 +65,17 @@ export default function App() {
       });
   }, []);
 
+  useEffect(() => {
+    initNotifications();
+    scheduleReminderNotification();
+  }, []);
+
   return (
     <QueryClientProvider>
       <AuthProvider>
         <SubscribedContextProvider>
           <StoriesAvailableContextProvider>
-            <NavigationContainer className="relative z-80">
+            <NavigationContainer>
               <PostHogProvider apiKey={process.env.EXPO_PUBLIC_POSTHOG_KEY} options={{
                 host: `${process.env.EXPO_PUBLIC_POSTHOG_HOST}`,
               }}>

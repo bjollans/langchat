@@ -1,4 +1,4 @@
-import { StoryIdContext } from "linguin-shared/context/storyIdContext";
+import { StoryTranslationIdContext } from "linguin-shared/context/storyTranslationIdContext";
 import { useContext, useMemo, useRef } from "react";
 import { Platform } from "react-native";
 import { Btn, Div } from "linguin-shared/components/RnTwComponents";
@@ -11,7 +11,7 @@ export interface WordPlayerButtonProps {
 
 export default function WordPlayerButton({ word }: WordPlayerButtonProps) {
     const audioRef = useRef<HTMLAudioElement>(null);
-    const storyId = useContext(StoryIdContext);
+    const storyTranslationId = useContext(StoryTranslationIdContext);
     const audioSrc = useMemo(() => {
         let fileName = "";
         for (let i = 0; i < word.length; i++) {
@@ -27,7 +27,7 @@ export default function WordPlayerButton({ word }: WordPlayerButtonProps) {
                 audioRef.current.play();
                 posthogClient?.capture("play_word_sound", {
                     vocab: word,
-                    storyId: storyId,
+                    storyTranslationId: storyTranslationId,
                 });
             }
         }

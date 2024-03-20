@@ -58,13 +58,13 @@ export default function StoryList({ navigation }) {
                     {auth?.user && <UserStatistics />}
                     <FlatList
                         data={filteredStories}
-                        renderItem={({ item: story, separators }) => {
-                            const hasAlreadyReadStory = userStoriesRead?.map(x => x.storyId).includes(story.id);
+                        renderItem={({ item: storyListEntity, separators }) => {
+                            const hasAlreadyReadStory = userStoriesRead?.map(x => x.storyId).includes(storyListEntity.id);
                             return <TouchableOpacity className="bg-white border-b border-gray-200"
                                 onPress={() => {
-                                    navigation.navigate(hasStories || hasAlreadyReadStory ? "Story" : "StoryPaywall", { storyId: story.id, storyTitle: story.title });
+                                    navigation.navigate(hasStories || hasAlreadyReadStory ? "Story" : "StoryPaywall", { storyTranslationId: storyListEntity.storyTranslationId, storyTitle: storyListEntity.title });
                                 }}>
-                                <StoryListElement story={story} />
+                                <StoryListElement storyListEntity={storyListEntity} />
                             </TouchableOpacity>
                         }}
                         keyExtractor={item => item.id}

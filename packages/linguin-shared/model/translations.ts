@@ -27,20 +27,37 @@ export interface Message extends TranslatedText {
     conversationId: string;
 }
 
-export interface StoryText extends TranslatedText {
+export interface StoryListEntity {
     id: string;
-    visible: boolean;
+    storyTranslationId: string;
+    title: string;
+    previewImageUrl: string;
+    createdAt: Date;
+    collections: Array<string>;
+    difficulty: string;
     wordCount: number;
+    content: string;
+}
+
+export interface StoryEntity extends TranslatedText {
+    id: string;
     title: string;
     imageUrl?: string;
     previewImageUrl?: string;
     createdAt: Date;
-    targetLanguage: Language;
-    translationLanguage: Language;
-    audioUrl?: string;
-    audioSentenceTimes?: Array<AudioSentenceTime>;
     collections?: Array<string>;
     difficulty: string;
+}
+
+export interface StoryTranslation extends TranslatedText {
+    id: string;
+    storyId: string;
+    visible: boolean;
+    wordCount: number;
+    createdAt: Date;
+    targetLanguage: Language;
+    audioUrl?: string;
+    audioSentenceTimes?: Array<AudioSentenceTime>;
     wordsInStory?: Array<string>;
 }
 

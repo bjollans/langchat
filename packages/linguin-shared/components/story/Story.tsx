@@ -5,9 +5,9 @@ import StoryAudioPlayer from "linguin-shared/components/audio/StoryAudioPlayer";
 //import SuggestedStories from "components/engagement/SuggestedStories";
 import SuggestedStories from "linguin-shared/components/engagement/SuggestedStories";
 import StoryTextRender from "linguin-shared/components/story/StoryTextRender";
-import { StoryIdContext } from "linguin-shared/context/storyIdContext";
+import { StoryTranslationIdContext } from "linguin-shared/context/storyTranslationIdContext";
 import { TargetLanguageContext } from "linguin-shared/context/targetLanguageContext";
-import { StoryText } from "linguin-shared/model/translations";
+import { StoryEntity, StoryTranslation } from "linguin-shared/model/translations";
 import { trackStat } from "linguin-shared/util/storyStatistics";
 import { useEffect, useState } from "react";
 import { Platform } from 'react-native';
@@ -17,11 +17,12 @@ import usePostHog from 'linguin-shared/util/usePostHog';
 
 
 interface StoryProps {
-    story: StoryText;
+    story: StoryEntity;
+    storyTranslation: StoryTranslation;
     navigation?: any;
 }
 
-function Story({ story, navigation }: StoryProps): JSX.Element {
+function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element {
     const [isPayWallOpen, setIsPayWallOpen] = useState(true);
     const posthogClient = usePostHog();
 
@@ -30,14 +31,14 @@ function Story({ story, navigation }: StoryProps): JSX.Element {
         posthogClient?.capture('story_view', {
             story_id: story.id,
             story_title: story?.title,
-            story_target_language: story?.targetLanguage,
+            target_language: storyTranslation?.targetLanguage,
         });
     }, []);
 
     return (
-        <StoryIdContext.Provider value={story.id}>
-            <TargetLanguageContext.Provider value={story?.targetLanguage}>
-                {story?.targetLanguage == "hi" && Platform.OS === 'web' &&
+        <StoryTranslationIdContext.Provider value={storyTranslation.id}>
+            <TargetLanguageContext.Provider value={storyTranslation?.targetLanguage}>
+                {storyTranslation?.targetLanguage == "hi" && Platform.OS === 'web' &&
                     <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
                 }
                 <Img className="h-96 lg:w-2/5 w-[90%] md:w-1/2 sm:w-2/3 mx-auto object-cover rounded-lg shadow-sm shadow-black flex-none" src={story?.imageUrl} alt="" />
@@ -47,13 +48,13 @@ function Story({ story, navigation }: StoryProps): JSX.Element {
                     }
                 </Div>
                 {Platform.OS == "web" && <StoryPayWall story={story} isPayWallOpen={isPayWallOpen} setIsPayWallOpen={setIsPayWallOpen} />}
-                <StoryTextRender story={story} />
+                <StoryTextRender storyTranslation={storyTranslation} />
                 <StoryQuestionsSection storyId={story.id} />
-                {isPayWallOpen && Platform.OS == "web" && story?.audioUrl &&
-                    <StoryAudioPlayer src={story.audioUrl} />}
+                {isPayWallOpen && Platform.OS == "web" && storyTranslation?.audioUrl &&
+                    <StoryAudioPlayer src={storyTranslation.audioUrl} />}
             </TargetLanguageContext.Provider>
             {isPayWallOpen && <SuggestedStories navigation={navigation} />}
-        </StoryIdContext.Provider>
+        </StoryTranslationIdContext.Provider>
     );
 }
 

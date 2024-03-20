@@ -1,9 +1,7 @@
 import Meta from "components/Meta";
-import Story from "components/story/Story";
-import { getStory, getStoryCollections, getVisibleStoryIds } from "util/serverDb";
+import { getStory, getStoryCollections, getStoryTranslation, getVisibleStoryIds } from "util/serverDb";
 import StoryAudioContextProvider from "linguin-shared/context/storyAudioContext";
 import ReadUsageContextProvider from "linguin-shared/context/trackReadContext";
-import { requireAuth } from "@linguin-shared/util/requireAuth";
 import WebStory from "components/WebStory";
 
 export async function generateStaticParams() {
@@ -16,7 +14,8 @@ export async function generateStaticParams() {
 
 async function StoryPage({ params }) {
     const { id } = params;
-    const story = await getStory(id);
+    const storyTranslation = await getStoryTranslation(id);
+    const story = await getStory(storyTranslation.storyId);
     const storyCollections = await getStoryCollections(id);
     const storyCollectionNames = (storyCollections as any)?.map((c) => c.collectionName).join(", ");
     return <>
@@ -33,7 +32,7 @@ async function StoryPage({ params }) {
                     <div className={`p-4 my-4 mb-36 rounded-lg border-1 border-black w-full`}>
                         <ReadUsageContextProvider story={story}>
                             <StoryAudioContextProvider>
-                                <WebStory story={story} />
+                                <WebStory story={story} storyTranslation={storyTranslation} />
                             </StoryAudioContextProvider>
                         </ReadUsageContextProvider>
                     </div>

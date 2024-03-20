@@ -39,7 +39,7 @@ export default function ReadUsageContextProvider({ children, storyTranslation }:
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             markStoryAsRead();
-        }, 3 * 60_000); // every 1 second
+        }, 2 * 60_000);
         return () => clearTimeout(timeoutId); // cleanup
     }, []);
 

@@ -30,7 +30,7 @@ async function StoryPage({ params }) {
 
                 <div className="relative flex z-0">
                     <div className={`p-4 my-4 mb-36 rounded-lg border-1 border-black w-full`}>
-                        <ReadUsageContextProvider story={story}>
+                        <ReadUsageContextProvider storyTranslation={storyTranslation}>
                             <StoryAudioContextProvider>
                                 <WebStory story={story} storyTranslation={storyTranslation} />
                             </StoryAudioContextProvider>

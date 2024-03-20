@@ -20,7 +20,7 @@ export default function StoryScreen({ route, navigation }) {
       <RequireAuth navigation={navigation}>
         <RnSoundContext.Provider value={Sound}>
           {loaded &&
-            <ReadUsageContextProvider story={story}>
+            <ReadUsageContextProvider storyTranslation={storyTranslation}>
               <StoryAudioContextProvider>
                 <ScrollView contentContainerStyle={styles.container}>
                   <RnTouchableContextProvider>

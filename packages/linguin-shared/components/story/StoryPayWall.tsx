@@ -1,13 +1,12 @@
-import PricingSection from "linguin-shared/components/PricingSection";
 import { Div, H3, P } from "linguin-shared/components/RnTwComponents";
-import { StoryText } from "linguin-shared/model/translations";
-import posthog from "posthog-js";
-import { useEffect, useState } from "react";
+import { StoryEntity } from "linguin-shared/model/translations";
 import { useAuth } from "linguin-shared/util/auth";
 import { useUserStoriesReadAutomatic, useUserStoriesReadAutomaticLast7Days } from "linguin-shared/util/clientDb";
+import posthog from "posthog-js";
+import { useEffect, useState } from "react";
 
 export interface StoryPayWallProps {
-    story: StoryText;
+    story: StoryEntity;
     isPayWallOpen: boolean;
     setIsPayWallOpen: (isPayWallOpen: boolean) => void;
 }
@@ -36,7 +35,6 @@ export default function StoryPayWall({ story, isPayWallOpen, setIsPayWallOpen }:
             posthog?.capture('story_blocked', {
                 story_id: story.id,
                 story_title: story.title,
-                story_target_language: story.targetLanguage,
             });
         }
     }, [isPayWallOpen]);

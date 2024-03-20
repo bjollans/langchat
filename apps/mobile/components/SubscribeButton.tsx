@@ -47,6 +47,8 @@ export default function SubscribeButton() {
             ) {
                 setSubscribed(true);
             }
+        }).catch((e) => {
+            console.log(e);
         });
     }
 

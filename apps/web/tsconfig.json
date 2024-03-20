@@ -13,8 +13,7 @@
         "../../packages/linguin-shared/*"
       ],
       "components/*": [
-        "src/components/*",
-        "../../packages/linguin-shared/components/*"
+        "src/components/*"
       ],
       "pages/*": [
         "src/pages/*"

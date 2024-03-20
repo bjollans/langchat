@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+/// <reference types="nativewind/types" />
+
 module.exports = {
   content: ["./App.{js,jsx,ts,tsx}", 
   "./screens/**/*.{js,jsx,ts,tsx}",

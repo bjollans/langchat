@@ -19,8 +19,8 @@ function getCustomer(uid) {
 
 function getStoryIdsByLanguage(targetLanguage) {
   return supabase
-    .from("stories")
-    .select("id")
+    .from("storyTranslations")
+    .select("storyId")
     .eq("targetLanguage", targetLanguage)
     .eq("visible", true)
     .then(handle);

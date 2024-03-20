@@ -1,5 +1,5 @@
 import { Btn, Span } from "linguin-shared/components/RnTwComponents";
-import { StoryIdContext } from "linguin-shared/context/storyIdContext";
+import { StoryTranslationIdContext } from "linguin-shared/context/storyTranslationIdContext";
 import { useReadUsageContext } from "linguin-shared/context/trackReadContext";
 import { TermTranslation } from "linguin-shared/model/translations";
 import { useContext, useState, useEffect } from "react";
@@ -19,7 +19,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     const posthogClient = usePostHog();
     const [showTranslation, setShowTranslation] = useState(false);
     const [isPlayingStoryAudio, setIsPlayingStoryAudio] = useState(false);
-    const storyId = useContext(StoryIdContext);
+    const storyTranslationId = useContext(StoryTranslationIdContext);
     const { registerReadUsageEvent } = useReadUsageContext();
     const RnSound = useContext(RnSoundContext);
     const { addToResetterFunctions } = useRnTouchableContext();
@@ -55,7 +55,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
         registerReadUsageEvent();
         posthogClient?.capture("view_word_translation", {
             vocab: props.termTranslation.text,
-            storyId: storyId,
+            storyTranslationId: storyTranslationId,
         });
     }
 

@@ -75,7 +75,7 @@ export default function App() {
       <AuthProvider>
         <SubscribedContextProvider>
           <StoriesAvailableContextProvider>
-            <NavigationContainer className="relative z-80">
+            <NavigationContainer>
               <PostHogProvider apiKey={process.env.EXPO_PUBLIC_POSTHOG_KEY} options={{
                 host: `${process.env.EXPO_PUBLIC_POSTHOG_HOST}`,
               }}>

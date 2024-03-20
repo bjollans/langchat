@@ -3,17 +3,17 @@
 import StoryFilters from "components/StoryFilters";
 import { useFilteredStories, useStoryFilterContext } from "context/storyListFilterContext";
 import StoryListElementWeb from "linguin-shared/components/story/StoryListElementWeb";
-import { StoryText } from "model/translations";
+import { StoryListEntity } from "model/translations";
 import { useEffect } from "react";
 
 export interface StoryListProps {
-    stories: StoryText[];
+    storyListEntities: StoryListEntity[];
     allDifficulties: string[];
     allCollectionNames: string[];
 }
 
 export default function StoryList(props: StoryListProps) {
-    const stories = useFilteredStories(props.stories);
+    const storyListEntities = useFilteredStories(props.storyListEntities);
     const { setAllCollectionNames, setAllDifficulties } = useStoryFilterContext();
 
     useEffect(() => {
@@ -26,7 +26,7 @@ export default function StoryList(props: StoryListProps) {
             <StoryFilters />
             <div className="flex flex-col">
                 <ul role="list" className="divide-y divide-gray-100">
-                    {stories.map((story: any) => <StoryListElementWeb key={story.id} story={story} />)}
+                    {storyListEntities.map((storyListEntity: any) => <StoryListElementWeb key={storyListEntity.id} storyListEntity={storyListEntity} />)}
                 </ul>
             </div>
         </>

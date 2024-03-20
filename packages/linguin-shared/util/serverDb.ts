@@ -28,12 +28,10 @@ import supabase from "./supabase";
       .then(handle);
   }
   
-  export function getStoriesOrderedByCustom(property: string, ascending: boolean) {
+  export function getStoryList(language: string) {
     return supabase
-      .from("stories")
-      .select('title, id, difficulty, visible, wordCount, content, previewImageUrl, storiesToCollections ( collectionName ), wordsInStory, createdAt')
-      .order(property, { ascending })
-      .eq("visible", true)
+      .from(`stories_list_${language}`)
+      .select()
       .then(handle);
   }
   
@@ -42,6 +40,15 @@ import supabase from "./supabase";
       .from("stories")
       .select()
       .eq("id", storyId)
+      .single()
+      .then(handle);
+  }
+  
+  export function getStoryTranslation(storyTranslationId: string) {
+    return supabase
+      .from("storyTranslations")
+      .select()
+      .eq("id", storyTranslationId)
       .single()
       .then(handle);
   }

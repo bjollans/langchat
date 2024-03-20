@@ -1,6 +1,6 @@
 "use client";
 
-import { StoryText } from 'model/translations';
+import { StoryListEntity } from 'model/translations';
 import { createContext, useState, useContext } from 'react';
 import { useAuth } from 'linguin-shared/util/auth';
 import { useUserStoriesRead } from "linguin-shared/util/clientDb";
@@ -66,14 +66,14 @@ export function useStoryFilterContext() {
 }
 
 
-export function useFilteredStories(stories: any) {
+export function useFilteredStories(stories: StoryListEntity[]) {
     const { difficulties, collectionNames, showRead } = useStoryFilterContext();
     const auth = useAuth();
     const { data: userStoriesRead } = useUserStoriesRead(auth?.user?.uid);
 
     const storyIdsRead = userStoriesRead?.map((userStoryRead) => userStoryRead.storyId);
 
-    return stories.filter((story: StoryText) => difficulties.length == 0 || difficulties.includes(story.difficulty))
-        .filter((story: StoryText) => collectionNames.length == 0 || story.collections && story.collections.filter((collection: string) => collectionNames.includes(collection)).length > 0)
-        .filter((story: StoryText) => showRead || !storyIdsRead?.includes(story.id))
+    return stories.filter((story: StoryListEntity) => difficulties.length == 0 || difficulties.includes(story.difficulty))
+        .filter((story: StoryListEntity) => collectionNames.length == 0 || story.collections && story.collections.filter((collection: string) => collectionNames.includes(collection)).length > 0)
+        .filter((story: StoryListEntity) => showRead || !storyIdsRead?.includes(story.id))
 }

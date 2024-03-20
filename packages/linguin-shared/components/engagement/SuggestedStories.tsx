@@ -1,5 +1,5 @@
 import StoryListElement from "linguin-shared/components/story/StoryListElement";
-import { StoryText } from "linguin-shared/model/translations";
+import { StoryListEntity } from "linguin-shared/model/translations";
 import { useEffect, useState } from "react";
 import { useAuth } from "linguin-shared/util/auth";
 import { useVisibleStoryIds, useUserStoriesRead } from "linguin-shared/util/clientDb";
@@ -12,9 +12,9 @@ export default function SuggestedStories({navigation}) {
 
     const posthog = usePostHog()
     const auth = useAuth();
-    const { data: storyIds, isSuccess: storyIdsLoaded } = useVisibleStoryIds();
+    const { data: storyIds, isSuccess: storyIdsLoaded } = useVisibleStoryIds({});
     const { data: storiesRead, isSuccess: storiesReadLoaded } = useUserStoriesRead(auth?.user?.uid ?? null);
-    const [stories, setStories] = useState<StoryText[]>([]);
+    const [stories, setStories] = useState<StoryListEntity[]>([]);
 
     useEffect(() => {
         if (!storyIdsLoaded || !storiesReadLoaded || storyIds.length < 1) return;
@@ -36,8 +36,8 @@ export default function SuggestedStories({navigation}) {
     return (
         <Div className="flex flex-col gap-y-4 items-center my-12 mb-24" onClick={captureClick}>
             <H2 className="text-2xl font-bold">Read this next</H2>
-            {stories && stories.map((story) => (
-                <StoryListElement key={"suggested-story-" + story.title} story={story} />
+            {stories && stories.map((storyListEntity) => (
+                <StoryListElement key={"suggested-story-" + storyListEntity.title} storyListEntity={storyListEntity} />
             ))}
         </Div>
     );

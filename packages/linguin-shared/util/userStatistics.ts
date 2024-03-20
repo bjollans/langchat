@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useStories, useStory, useUserHasReadStory, useUserStoriesRead, userWordsSeen } from "./clientDb";
+import { useStoryTranslations, useStory, useUserHasReadStory, useUserStoriesRead, userWordsSeen } from "./clientDb";
 
 export interface UserReadStatistics {
     wordsSeen: string[];
@@ -22,8 +22,10 @@ export interface UserStoryStatistics {
 export function useUserStoryStatistics({ userId, storyId, isInSingleStoryContext = false }): UserStoryStatistics {
     const { data: wordsSeenJson, isSuccess: wordsSeenJsonLoaded } = userWordsSeen(userId);
     const { data: storyReadData, isSuccess: storyReadDataLoaded } = isInSingleStoryContext ? useUserHasReadStory(storyId, userId) : useUserStoriesRead(userId);
-    const { data: storyData, isSuccess: storyLoaded } = isInSingleStoryContext ? useStory(storyId) : useStories();
-    const story = isInSingleStoryContext ? storyData : storyData?.find((story) => story.id === storyId);
+    const { data: storyTranslationData, isSuccess: storyLoaded } = isInSingleStoryContext ? useStory(storyId) : useStoryTranslations({});
+    const storyTranslation = isInSingleStoryContext
+        ? storyTranslationData
+        : storyTranslationData?.find((storyTranslation) => storyTranslation.storyId === storyId);
 
     const [userStoryStatistics, setUserStoryStatistics] = useState<UserStoryStatistics>({
         hasRead: false,
@@ -40,7 +42,7 @@ export function useUserStoryStatistics({ userId, storyId, isInSingleStoryContext
 
         const hasUserAlreadyReadStory: boolean = storyReadData.filter((storyReadData) => storyReadData.storyId === storyId).length > 0;
         const wordsSeenSet = new Set<string>(wordsSeenJson && wordsSeenJson[0] ? wordsSeenJson[0].wordsSeen : []);
-        const wordsInStory = story!.wordsInStory!;
+        const wordsInStory = storyTranslation!.wordsInStory!;
 
 
         const ret: UserStoryStatistics = {
@@ -65,7 +67,7 @@ export function useUserStoryStatistics({ userId, storyId, isInSingleStoryContext
         ret.knownWordsPercentage = Math.floor(100 * ret.knownWords / wordsInStory.length);
 
         setUserStoryStatistics(ret);
-    }, [wordsSeenJson, wordsSeenJsonLoaded, story, storyLoaded, storyReadData, storyReadDataLoaded]);
+    }, [wordsSeenJson, wordsSeenJsonLoaded, storyTranslation, storyLoaded, storyReadData, storyReadDataLoaded]);
 
     return userStoryStatistics;
 }

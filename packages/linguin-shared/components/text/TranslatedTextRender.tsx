@@ -1,20 +1,18 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
-import EqualizerIconWeb from "linguin-shared/components/audio/EqualizerIconWeb";
-import { StoryIdContext } from 'linguin-shared/context/storyIdContext';
-import { useReadUsageContext } from 'linguin-shared/context/trackReadContext';
-import { AudioSentenceTime, StoryText, TermTranslation, TranslatedText } from "linguin-shared/model/translations";
-import { useContext, useState, useEffect, useMemo } from "react";
-import TranslatedTerm from "./TranslatedWord";
-import { Div, P, Span, Btn } from 'linguin-shared/components/RnTwComponents';
 import { PlayIcon, TranslateIcon } from 'linguin-shared/components/Icons';
-import { useRnTouchableContext } from 'linguin-shared/context/rnTouchableContext';
-import { Platform, Text } from 'react-native';
+import { Btn, Div, P, Span } from 'linguin-shared/components/RnTwComponents';
 import EqualizerIconRn from "linguin-shared/components/audio/EqualizerIconRn";
+import EqualizerIconWeb from "linguin-shared/components/audio/EqualizerIconWeb";
+import { useRnTouchableContext } from 'linguin-shared/context/rnTouchableContext';
 import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
+import { StoryTranslationIdContext } from 'linguin-shared/context/storyTranslationIdContext';
+import { useReadUsageContext } from 'linguin-shared/context/trackReadContext';
+import { TermTranslation, TranslatedText } from "linguin-shared/model/translations";
 import usePostHog from 'linguin-shared/util/usePostHog';
+import { useContext, useEffect, useMemo, useState } from "react";
+import { Platform } from 'react-native';
+import TranslatedTerm from "./TranslatedWord";
 
 interface TranslatedTextProps {
-    story: StoryText;
     translatedText: TranslatedText;
     hasAudio: boolean;
     audioStartTime: number;
@@ -24,7 +22,7 @@ interface TranslatedTextProps {
 export default function TranslatedTextRender(props: TranslatedTextProps): JSX.Element {
     const posthogClient = usePostHog();
     const [showWholeTranslation, setShowWholeTranslation] = useState(false);
-    const storyId = useContext(StoryIdContext);
+    const storyTranslationId = useContext(StoryTranslationIdContext);
     const { registerReadUsageEvent } = useReadUsageContext();
     const { addToResetterFunctions } = useRnTouchableContext();
     const [isHighlighted, setIsHighlighted] = useState(false);
@@ -91,7 +89,7 @@ export default function TranslatedTextRender(props: TranslatedTextProps): JSX.El
         setShowWholeTranslation(true);
         registerReadUsageEvent();
         posthogClient?.capture("view_sentence_translation", {
-            storyId: storyId,
+            storyTranslationId: storyTranslationId,
         });
     }
 

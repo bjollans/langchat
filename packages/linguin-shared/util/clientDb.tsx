@@ -11,7 +11,7 @@ import {
 import supabase from "./supabase";
 import { Conversation, ConversationStatus } from "model/conversation";
 import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
-import { Message, StoryQuestionData, StoryText } from "model/translations";
+import { Message, StoryQuestionData, StoryEntity } from "model/translations";
 import { Vocab } from "model/vocab";
 import { UserReadStatistics } from "util/userStatistics";
 import { LinguinUser } from "linguin-shared/model/user";
@@ -101,43 +101,33 @@ export async function createVocab(data: Vocab) {
 /**** STORIES ****/
 /*****************/
 
-export function useStories() {
+export function useStoryTranslations({ language = "hi" }) {
   return useQuery(
     ["allStories"],
     () => supabase
-      .from("stories")
+      .from("storyTranslations")
       .select()
-      .order("wordCount", { ascending: true })
+      .eq("translationLanguage", language)
       .then(handle),
   );
 }
 
-export function useVisibleStoryIds() {
+export function useVisibleStoryIds({ language = "hi" }) {
   return useQuery(
     ["storyIds"],
     () => supabase
-      .from("stories")
-      .select("id")
-      .eq("visible", true)
-      .then(handle),
-  );
-}
-
-export function useVisibleStories() {
-  return useQuery(
-    ["visibleStories"],
-    () => supabase
-      .from("stories")
-      .select()
+      .from("storyTranslations")
+      .select("storyId")
+      .eq("targetLanguage", language)
       .eq("visible", true)
       .then(handle),
   );
 }
 
 const PAGE_LENGTH = 5;
-async function fetchVisibleStoriesPage({ pageParam = 0 }) {
+async function fetchVisibleStoriesPage({ pageParam = 0, language = "hi" }) {
   const { data, error } = await supabase
-    .from('ordered_simplified_stories_for_list')
+    .from(`stories_list_${language}`)
     .select()
     .range(pageParam, pageParam + PAGE_LENGTH - 1);
 
@@ -165,7 +155,7 @@ export function useStoriesOrderedByCustom(property: string, ascending: boolean) 
   );
 }
 
-export function useStory(storyId: string): UseQueryResult<StoryText> {
+export function useStory(storyId: string): UseQueryResult<StoryEntity> {
   return useQuery(
     ["story", { storyId }],
     () => supabase
@@ -175,6 +165,19 @@ export function useStory(storyId: string): UseQueryResult<StoryText> {
       .single()
       .then(handle),
     { enabled: !!storyId }
+  );
+}
+
+export function useStoryTranslation(storyTranslationId: string) {
+  return useQuery(
+    ["storyTranslation", { storyTranslationId }],
+    () => supabase
+      .from("storyTranslations")
+      .select()
+      .eq("id", storyTranslationId)
+      .single()
+      .then(handle),
+    { enabled: !!storyTranslationId }
   );
 }
 

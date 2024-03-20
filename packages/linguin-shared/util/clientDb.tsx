@@ -107,7 +107,7 @@ export function useStoryTranslations({ language = "hi" }) {
     () => supabase
       .from("storyTranslations")
       .select()
-      .eq("translationLanguage", language)
+      .eq("targetLanguage", language)
       .then(handle),
   );
 }

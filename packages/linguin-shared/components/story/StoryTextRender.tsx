@@ -32,11 +32,14 @@ export default function StoryTextRender(props: StoryTextRenderProps): JSX.Elemen
         const audioStartTime = lineAudioSentenceTime ? lineAudioSentenceTime.start : 0;
         const audioEndTime = lineAudioSentenceTime ? lineAudioSentenceTime.end : 0;
         return (<TranslatedTextRender translatedText={{ content: line, translationJson: lineTranslationJson }}
-            audioStartTime={audioStartTime} audioEndTime={audioEndTime} 
+            audioStartTime={audioStartTime} audioEndTime={audioEndTime}
             hasAudio={props.storyTranslation.audioUrl !== null && props.storyTranslation.audioUrl !== undefined} />);
     };
 
-    const renderedLines = useMemo(() => props.storyTranslation.content.split("\n").map(lineToTranslatedTextRender), [props.storyTranslation.content]);
+    const renderedLines = useMemo(() => {
+        nonSentenceLinesSeen = 0;
+        return props.storyTranslation.content.split("\n").map(lineToTranslatedTextRender);
+    }, [props.storyTranslation.content]);
 
     return (<Div className="max-w-4xl mx-auto">{renderedLines}</Div>);
 }

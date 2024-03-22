@@ -5,7 +5,7 @@ import posthog from "posthog-js";
 import { useEffect, useState } from "react";
 import { useAuth } from "linguin-shared/util/auth";
 import { useUserStoriesReadAutomatic, useUserStoriesReadAutomaticLast7Days } from "linguin-shared/util/clientDb";
-import usePostHog from "util/usePostHog";
+import usePostHog from "linguin-shared/util/usePostHog";
 
 export interface StoryPayWallProps {
     story: StoryEntity;

@@ -1,6 +1,6 @@
 import supabase from 'linguin-shared/util/supabase';
 import React, { useEffect, useState } from 'react';
-import { Alert, Modal, Platform, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { Alert, Modal, Platform, StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
 import { authorize } from 'react-native-app-auth';
@@ -17,6 +17,7 @@ export default function AuthForm({ visible, navigation }) {
     const posthog = usePostHog();
 
     async function authGoogle() {
+        setLoading(true);
         const config = {
             issuer: 'https://accounts.google.com',
             clientId: Platform.OS == "ios"
@@ -35,10 +36,11 @@ export default function AuthForm({ visible, navigation }) {
                 provider: 'google',
                 token: authState.idToken,
             });
-            posthog?.capture("auth_completed", );
+            posthog?.capture("auth_completed",);
         } catch (error) {
             Alert.alert('Something went wrong, please try again later');
         }
+        setLoading(false);
     }
 
     async function signInWithEmail() {
@@ -50,7 +52,7 @@ export default function AuthForm({ visible, navigation }) {
 
         if (error) Alert.alert(error.message)
         setLoading(false)
-        posthog?.capture("auth_completed", );
+        posthog?.capture("auth_completed",);
     }
 
     async function signUpWithEmail() {
@@ -66,7 +68,7 @@ export default function AuthForm({ visible, navigation }) {
         if (error) Alert.alert(error.message);
         if (!session && !error) Alert.alert('Please check your inbox for email verification!');
         setLoading(false);
-        posthog?.capture("auth_completed", );
+        posthog?.capture("auth_completed",);
     }
 
     useEffect(() => {
@@ -105,18 +107,22 @@ export default function AuthForm({ visible, navigation }) {
                             autoCapitalize={'none'}
                         />
                     </View>
-                    <View style={[styles.verticallySpaced, styles.mt20]}>
-                        <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} buttonStyle={{ backgroundColor: "#38bdf8" }} />
-                    </View>
-                    <View style={styles.verticallySpaced}>
-                        <Button title="Sign up" disabled={loading} onPress={() => signUpWithEmail()} buttonStyle={{ backgroundColor: "#38bdf8" }} />
-                    </View>
-                    <View style={styles.verticallySpaced}>
-                        <Button title={<>
-                            <FontAwesomeIcon icon={faGoogle} size={20} color="#000000" />
-                            <Text className="text-black text-lg ml-2"> Sign in With Google</Text>
-                        </>} disabled={loading} onPress={() => authGoogle()} buttonStyle={{ backgroundColor: "#ffffff", borderWidth: 1, borderColor: "black" }} />
-                    </View>
+                    {loading
+                        && <ActivityIndicator />
+                        || <>
+                            <View style={[styles.verticallySpaced, styles.mt20]}>
+                                <Button title="Sign in" disabled={loading} onPress={() => signInWithEmail()} buttonStyle={{ backgroundColor: "#38bdf8" }} />
+                            </View>
+                            <View style={styles.verticallySpaced}>
+                                <Button title="Sign up" disabled={loading} onPress={() => signUpWithEmail()} buttonStyle={{ backgroundColor: "#38bdf8" }} />
+                            </View>
+                            <View style={styles.verticallySpaced}>
+                                <Button title={<>
+                                    <FontAwesomeIcon icon={faGoogle} size={20} color="#000000" />
+                                    <Text className="text-black text-lg ml-2"> Sign in With Google</Text>
+                                </>} disabled={loading} onPress={() => authGoogle()} buttonStyle={{ backgroundColor: "#ffffff", borderWidth: 1, borderColor: "black" }} />
+                            </View>
+                        </>}
                 </View>
             </View>
         </Modal>);

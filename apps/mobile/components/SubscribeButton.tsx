@@ -1,6 +1,6 @@
 import Purchases, { PurchasesPackage } from 'react-native-purchases';
 import { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
 import { useSubscribedContext } from 'linguin-shared/context/subscribedContext';
 import { usePostHog } from 'posthog-react-native';
 
@@ -10,6 +10,7 @@ export default function SubscribeButton() {
     const [purchasablePackage, setPurchasablePackage] = useState<PurchasesPackage | null>(null);
     const { setSubscribed } = useSubscribedContext();
     const posthog = usePostHog();
+    const [loading, setLoading] = useState<boolean>(false);
 
     const subscriptionPeriodsToReadable = (subscriptionPeriod: string | null): string | null => {
         if (subscriptionPeriod === 'P1M') {
@@ -39,28 +40,32 @@ export default function SubscribeButton() {
     }, []);
 
     const checkout = async () => {
-        posthog.capture('subscibe_button_clicked');
-        Purchases.purchasePackage(
-            purchasablePackage!
-        ).then(({ customerInfo, productIdentifier }) => {
+        posthog?.capture('subscibe_button_clicked');
+        setLoading(true);
+        try {
+            const { customerInfo, productIdentifier } = await Purchases.purchasePackage(purchasablePackage!)
             if (
                 typeof customerInfo.entitlements.active[
                 "unlimited_reading"
                 ] !== "undefined"
             ) {
-                posthog.capture('subscibe_button_success');
+                posthog?.capture('subscibe_button_success');
                 setSubscribed(true);
             }
-        }).catch((e) => {
-            posthog.capture('subscibe_button_error', { error: e });
-        });
+        } catch (e) {
+            posthog?.capture('subscibe_button_error', { error: e });
+        };
+        setLoading(false);
     }
 
     return <View>
-        <TouchableOpacity onPress={checkout} className="rounded-full border bg-green-500 p-4 text-center text-lg">
-            <Text className="text-white text-2xl font-semibold tracking-tight text-center"
-            >Unlock For {priceString}{frequencyString}</Text>
-        </TouchableOpacity>
+        {loading
+            && <ActivityIndicator />
+            || <TouchableOpacity onPress={checkout} className="rounded-full border bg-green-500 p-4 text-center text-lg">
+                <Text className="text-white text-2xl font-semibold tracking-tight text-center"
+                >Unlock For {priceString}{frequencyString}</Text>
+            </TouchableOpacity>
+        }
         <Text className="text-s italic text-center mt-2">Unlocks unlimited reading and removes ads.</Text>
         <Text className="text-s italic text-center">Renewed monthly. You can cancel anytime in the account overview.</Text>
     </View>

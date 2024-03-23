@@ -1,22 +1,24 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Session } from '@supabase/supabase-js';
 import StoriesAvailableContextProvider from 'linguin-shared/context/rnStoriesAvailableContext';
 import SubscribedContextProvider from 'linguin-shared/context/subscribedContext';
+import TargetLanguageContextProvider from 'linguin-shared/context/targetLanguageContext';
 import { AuthProvider } from 'linguin-shared/util/auth';
 import { QueryClientProvider } from 'linguin-shared/util/clientDb';
+import supabase from 'linguin-shared/util/supabase';
 import { PostHogProvider } from 'posthog-react-native';
 import { useEffect, useState } from 'react';
 import { Platform, TouchableOpacity } from 'react-native';
 import mobileAds, { MaxAdContentRating } from 'react-native-google-mobile-ads';
+import Purchases from 'react-native-purchases';
 import Svg, { Path } from 'react-native-svg';
 import 'react-native-url-polyfill/auto';
+import StoryListTitle from './components/StoryListTitle';
 import AccountScreen from './screens/AccountScreen';
 import StoryListScreen from './screens/StoryListScreen';
 import StoryPaywallScreen from './screens/StoryPaywallScreen';
 import Story from './screens/StoryScreen';
-import { Session } from '@supabase/supabase-js';
-import supabase from 'linguin-shared/util/supabase';
-import Purchases from 'react-native-purchases';
 import { initNotifications, scheduleReminderNotification } from './util/notifications';
 
 const Stack = createNativeStackNavigator();
@@ -79,6 +81,7 @@ export default function App() {
               <PostHogProvider apiKey={process.env.EXPO_PUBLIC_POSTHOG_KEY} options={{
                 host: `${process.env.EXPO_PUBLIC_POSTHOG_HOST}`,
               }}>
+                <TargetLanguageContextProvider>
                 <Stack.Navigator screenOptions={{
                   headerTitleStyle: {
                     fontWeight: '700',
@@ -87,7 +90,7 @@ export default function App() {
                 }}>
                   <Stack.Screen name="StoryList" component={StoryListScreen}
                     options={({ route, navigation }) => ({
-                      title: "🇮🇳 Hindi Stories",
+                      headerTitle: () => <StoryListTitle />,
                       headerTitleAlign: 'center',
                       headerRight: (route.params as any)?.filterButton,
                       headerLeft: () => <TouchableOpacity onPress={() => navigation.navigate('Account')}><_AccountIcon /></TouchableOpacity>
@@ -107,6 +110,7 @@ export default function App() {
                       title: "Account"
                     })} />
                 </Stack.Navigator>
+                </TargetLanguageContextProvider>
               </PostHogProvider>
             </NavigationContainer>
           </StoriesAvailableContextProvider>

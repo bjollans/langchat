@@ -1,20 +1,20 @@
 "use client";
 
+import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
+import { LinguinUser } from "linguin-shared/model/user";
+import { Conversation, ConversationStatus } from "model/conversation";
+import { Message, StoryEntity, StoryQuestionData } from "model/translations";
+import { Vocab } from "model/vocab";
 import {
-  useQuery,
-  useInfiniteQuery,
   QueryClient,
   QueryClientProvider as QueryClientProviderBase,
-  QueryClientProviderProps,
   UseQueryResult,
+  useInfiniteQuery,
+  useQuery
 } from "react-query";
-import supabase from "./supabase";
-import { Conversation, ConversationStatus } from "model/conversation";
-import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
-import { Message, StoryQuestionData, StoryEntity } from "model/translations";
-import { Vocab } from "model/vocab";
+import { Language } from "types/language";
 import { UserReadStatistics } from "util/userStatistics";
-import { LinguinUser } from "linguin-shared/model/user";
+import supabase from "./supabase";
 
 // React Query client
 const client = new QueryClient();
@@ -125,18 +125,20 @@ export function useVisibleStoryIds({ language = "hi" }) {
 }
 
 const PAGE_LENGTH = 5;
-async function fetchVisibleStoriesPage({ pageParam = 0, language = "hi" }) {
-  const { data, error } = await supabase
-    .from(`stories_list_${language}`)
-    .select()
-    .range(pageParam, pageParam + PAGE_LENGTH - 1);
+function getFetchVisibleStoriesPageFunction(language: Language) {
+  return async function fetchVisibleStoriesPage({ pageParam = 0 }) {
+    const { data, error } = await supabase
+      .from(`stories_list_${language}`)
+      .select()
+      .range(pageParam, pageParam + PAGE_LENGTH - 1);
 
-  if (error) console.log('error', error);
-  return data;
-};
+    if (error) console.log('error', error);
+    return data;
+  };
+}
 
-export function useVisibleStoriesInfinite() {
-  return useInfiniteQuery(['visibleStories'], fetchVisibleStoriesPage, {
+export function useVisibleStoriesInfinite(language: Language) {
+  return useInfiniteQuery(['visibleStories'+language], getFetchVisibleStoriesPageFunction(language), {
     getNextPageParam: (lastPage, pages) => {
       if (!lastPage || lastPage.length === 0) return undefined; // No more pages
       return pages.length * PAGE_LENGTH; // Adjust according to your pagination logic

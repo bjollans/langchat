@@ -27,6 +27,8 @@ export async function scheduleReminderNotification() {
     const date = new Date(Date.now());
     date.setHours(hourOfTheDay);
     date.setDate(date.getDate() + delayDays);
+
+    await Notifications.cancelAllScheduledNotificationsAsync();
     
     await Notifications.scheduleNotificationAsync({
         content: {

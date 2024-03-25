@@ -20,6 +20,7 @@
     "@react-native-picker/picker": "2.6.1",
     "@react-navigation/native": "^6.1.10",
     "@react-navigation/native-stack": "^6.9.18",
+    "@sentry/react-native": "5.19.1",
     "expo": "^50.0.8",
     "expo-application": "~5.8.3",
     "expo-dev-client": "~3.3.8",

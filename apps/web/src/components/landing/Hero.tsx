@@ -1,9 +1,11 @@
 "use client";
 
 import usePostHog from "@linguin-shared/util/usePostHog";
+import { getCookie } from "cookies-next";
 
 export default function Hero() {
     const posthog = usePostHog();
+    const viaCookie = getCookie('via');
     return (
         <div className="h-fit relative lg:flex z-0 lg:h-screen">
             <div className="-z-10 lg:h-1/4 h-40 bg-gradient-to-r from-amber-400 to-amber-600 lg:absolute lg:top-0 w-full" />
@@ -18,11 +20,11 @@ export default function Hero() {
                     </p>
                     <div className="mt-10 flex gap-x-6 items-center max-lg:justify-center">
                         <div className="w-60">
-                            <a onClick={() => posthog.capture("android_hero_link_click")}
+                            <a onClick={() => posthog.capture("android_hero_link_click", {via: viaCookie})}
                             href='https://play.google.com/store/apps/details?id=com.bjolly.linguin&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' /></a>
                         </div>
                         <a
-                            onClick={() => posthog.capture("web_hero_link_click")}  
+                            onClick={() => posthog.capture("web_hero_link_click", {via: viaCookie})}  
                             href="/story/hi"
                             className="rounded-md h-fit bg-blue-900 px-3.5 py-3.5 sm:text-2xl text-md font-semibold shadow-sm hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 text-white focus-visible:outline-offset-2 focus-visible:outline-amber-400 mr-4"
                         >

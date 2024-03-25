@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useAuth } from "util/auth";
 import { updateUser } from "util/clientDb";
 import { setCookie, getCookie } from 'cookies-next';
+import posthog from "posthog-js";
 
 export default function OriginTracker() {
     const DAY_DURATION = 24 * 60 * 60 * 1000;
@@ -21,6 +22,7 @@ export default function OriginTracker() {
         //Set affiliate everytime the query changes, to have the latest affiliate
         if (affiliateId && affiliateId.length > 0) {
             setCookie('via', affiliateId, { expires: new Date(Date.now() + 60 * DAY_DURATION) });
+            posthog.capture('via_set', { via: affiliateId });
         }
 
         // Only set referrer once, to get the initial referrer

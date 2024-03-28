@@ -9,6 +9,7 @@ import { TouchableOpacity, View } from "react-native";
 import { useSubscribedContext } from "linguin-shared/context/subscribedContext";
 import { useStoriesAvailable } from "linguin-shared/context/rnStoriesAvailableContext";
 import usePostHog from 'linguin-shared/util/usePostHog';
+import { useTargetLanguageContext } from "linguin-shared/context/targetLanguageContext";
 
 export default function SuggestedStories({ navigation }) {
     const STORY_AMOUNT = 3;
@@ -16,7 +17,8 @@ export default function SuggestedStories({ navigation }) {
     const posthog = usePostHog()
 
     const auth = useAuth();
-    const { data: storyIds, isSuccess: storyIdsLoaded } = useVisibleStoryIds({});
+    const {targetLanguage } = useTargetLanguageContext();
+    const { data: storyIds, isSuccess: storyIdsLoaded } = useVisibleStoryIds({language: targetLanguage});
     const { data: storiesRead, isSuccess: storiesReadLoaded } = useUserStoriesRead(auth?.user?.uid ?? null);
     const [stories, setStories] = useState<StoryListEntity[]>([]);
     const { subscribed } = useSubscribedContext();
@@ -28,8 +30,8 @@ export default function SuggestedStories({ navigation }) {
         if (!storyIdsLoaded || !storiesReadLoaded || storyIds.length < 1) return;
         const storyReadIds = storiesRead.map(x => x.storyId);
         const randomIds = storyIds
-            .filter(x => !storyReadIds.includes(x.id))
-            .sort(() => Math.random() - Math.random()).slice(0, STORY_AMOUNT).map(x => x.id);
+            .filter(x => !storyReadIds.includes(x.storyId))
+            .sort(() => Math.random() - Math.random()).slice(0, STORY_AMOUNT).map(x => x.storyId);
         getStoriesByIds(randomIds).then((stories) => {
             setStories(stories);
         });

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useStoryTranslations, useStory, useUserHasReadStory, useUserStoriesRead, userWordsSeen } from "./clientDb";
+import { useStoryTranslations, useStory, useUserHasReadStory, useUserStoriesRead, userWordsSeen, useStoryTranslationFromStoryIdAndLanguage } from "./clientDb";
+import { useTargetLanguageContext } from "linguin-shared/context/targetLanguageContext";
 
 export interface UserReadStatistics {
     wordsSeen: string[];
@@ -20,9 +21,10 @@ export interface UserStoryStatistics {
 //                           I want to just make one bulk request for all stories
 //                           This makes the code slightly less readable, but a lot more performant.
 export function useUserStoryStatistics({ userId, storyId, isInSingleStoryContext = false }): UserStoryStatistics {
+    const { targetLanguage } = useTargetLanguageContext();
     const { data: wordsSeenJson, isSuccess: wordsSeenJsonLoaded } = userWordsSeen(userId);
     const { data: storyReadData, isSuccess: storyReadDataLoaded } = isInSingleStoryContext ? useUserHasReadStory(storyId, userId) : useUserStoriesRead(userId);
-    const { data: storyTranslationData, isSuccess: storyLoaded } = isInSingleStoryContext ? useStory(storyId) : useStoryTranslations({});
+    const { data: storyTranslationData, isSuccess: storyLoaded } = isInSingleStoryContext ? useStoryTranslationFromStoryIdAndLanguage(storyId, targetLanguage) : useStoryTranslations({language: targetLanguage});
     const storyTranslation = isInSingleStoryContext
         ? storyTranslationData
         : storyTranslationData?.find((storyTranslation) => storyTranslation.storyId === storyId);
@@ -42,7 +44,7 @@ export function useUserStoryStatistics({ userId, storyId, isInSingleStoryContext
 
         const hasUserAlreadyReadStory: boolean = storyReadData.filter((storyReadData) => storyReadData.storyId === storyId).length > 0;
         const wordsSeenSet = new Set<string>(wordsSeenJson && wordsSeenJson[0] ? wordsSeenJson[0].wordsSeen : []);
-        const wordsInStory = storyTranslation!.wordsInStory!;
+        const wordsInStory = storyTranslation?.wordsInStory || [];
 
 
         const ret: UserStoryStatistics = {

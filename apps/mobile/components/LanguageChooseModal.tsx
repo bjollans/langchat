@@ -24,7 +24,7 @@ export default function LanguageChooseModal({ visible, close }) {
                 <TouchableOpacity className='h-full w-full' onPress={() => close()}>
                     <View className='mx-auto my-auto bg-slate-50 p-4 w-5/6 rounded-lg shadow'>
                         <Text className='text-xl text-center font-bold'>Choose a Language</Text>
-                        <ScrollView className='h-2/5 px-6 py-2 border border-slate-700 rounded-lg m-4'>
+                        <ScrollView className='h-3/5 px-6 py-2 border border-slate-700 rounded-lg m-4'>
                             <FlatList
                                 data={items}
                                 renderItem={({ item }) => (
@@ -32,7 +32,7 @@ export default function LanguageChooseModal({ visible, close }) {
                                         setTargetLanguage(item.value);
                                         close();
                                     }} className='border-b my-1 p-2 border-slate-400'>
-                                        <Text className='text-lg'>{item.label}</Text>
+                                        <Text className='text-2xl font-bold tracking-tight'>{item.label}</Text>
                                     </TouchableOpacity>
                                 )}
                             />

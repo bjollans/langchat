@@ -21,7 +21,7 @@ export interface TargetLanguageContextProviderProps {
 
 export default function TargetLanguageContextProvider({ children }: TargetLanguageContextProviderProps): JSX.Element {
     const posthog = usePostHog();
-    const [targetLanguage, setTargetLanguage] = useState<Language>("hi");
+    const [targetLanguage, setTargetLanguage] = useState<Language>("");
     const languageToLanguageString = {
         'hi': '🇮🇳 Hindi',
         'ja': '🇯🇵 Japanese',

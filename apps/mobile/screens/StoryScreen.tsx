@@ -28,7 +28,7 @@ export default function StoryScreen({ route, navigation }) {
                   </RnTouchableContextProvider>
                 </ScrollView>
                 {loaded &&
-                  <StoryAudioPlayer src={story.audioUrl} />}
+                  <StoryAudioPlayer src={storyTranslation.audioUrl} />}
               </StoryAudioContextProvider>
             </ReadUsageContextProvider>
             ||

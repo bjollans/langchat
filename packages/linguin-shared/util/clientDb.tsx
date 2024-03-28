@@ -112,6 +112,18 @@ export function useStoryTranslations({ language = "hi" }) {
   );
 }
 
+export function useStoryTranslationFromStoryIdAndLanguage(storyId, targetLanguage) {
+  return useQuery(
+    ["allStories", storyId, targetLanguage],
+    () => supabase
+      .from("storyTranslations")
+      .select()
+      .eq("targetLanguage", targetLanguage)
+      .eq("storyId", storyId)
+      .then(handle),
+  );
+}
+
 export function useVisibleStoryIds({ language = "hi" }) {
   return useQuery(
     ["storyIds"],
@@ -146,17 +158,6 @@ export function useVisibleStoriesInfinite(language: Language) {
   });
 }
 
-export function useStoriesOrderedByCustom(property: string, ascending: boolean) {
-  return useQuery(
-    ["stories"],
-    () => supabase
-      .from("stories")
-      .select('title, id, difficulty, visible, wordCount, content, previewImageUrl, storiesToCollections ( collectionName ), wordsInStory, createdAt')
-      .order(property, { ascending })
-      .then(handle),
-  );
-}
-
 export function useStory(storyId: string): UseQueryResult<StoryEntity> {
   return useQuery(
     ["story", { storyId }],
@@ -175,7 +176,7 @@ export function useStoryTranslation(storyTranslationId: string) {
     ["storyTranslation", { storyTranslationId }],
     () => supabase
       .from("storyTranslations")
-      .select()
+      .select("*")
       .eq("id", storyTranslationId)
       .single()
       .then(handle),

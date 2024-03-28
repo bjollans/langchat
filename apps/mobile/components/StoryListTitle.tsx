@@ -5,8 +5,8 @@ import LanguageChooseModal from "./LanguageChooseModal";
 import Svg, { Path } from "react-native-svg";
 
 export default function StoryListTitle() {
-    const [languageModalVisible, setLanguageModalVisible] = useState(false);
     const { targetLanguage, languageToLanguageString } = useTargetLanguageContext();
+    const [languageModalVisible, setLanguageModalVisible] = useState(targetLanguage === "");
 
     return (<>
         <LanguageChooseModal visible={languageModalVisible} close={() => setLanguageModalVisible(false)} />

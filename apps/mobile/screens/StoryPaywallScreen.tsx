@@ -11,32 +11,31 @@ import SubscribeButton from '../components/SubscribeButton';
 const adUnitId = __DEV__ ? TestIds.REWARDED : Platform.OS == "ios" ? "ca-app-pub-8807034955415313/5953829320" : "ca-app-pub-8807034955415313/2018900855";
 
 const rewarded = RewardedAd.createForAdRequest(adUnitId, {
-    keywords: ['languages', 'education'],
+  keywords: ['languages', 'education'],
 });
 
 export default function PaywallScreen({ navigation, route }) {
   const { storyId, storyTitle } = route.params;
   const { subscribed, subscribedLoaded } = useSubscribedContext();
-  const showAdBtnFirst = useFeatureFlag('flip_native_paywall_buttons');
   const { storiesAvailable, setStoriesAvailable, minStoriesUnlockedAtOnce, storiesAvailableLoaded } = useStoriesAvailable();
   const [adLoaded, setAdLoaded] = useState(rewarded.loaded);
   useEffect(() => {
-      const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
-        setAdLoaded(true);
-      });
-      const unsubscribeEarned = rewarded.addAdEventListener(
-          RewardedAdEventType.EARNED_REWARD,
-          reward => {
-              setStoriesAvailable(Math.max(storiesAvailable + minStoriesUnlockedAtOnce, minStoriesUnlockedAtOnce));
-          },
-      );
+    const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
+      setAdLoaded(true);
+    });
+    const unsubscribeEarned = rewarded.addAdEventListener(
+      RewardedAdEventType.EARNED_REWARD,
+      reward => {
+        setStoriesAvailable(Math.max(storiesAvailable + minStoriesUnlockedAtOnce, minStoriesUnlockedAtOnce));
+      },
+    );
 
-      rewarded.load();
+    rewarded.load();
 
-      return () => {
-          unsubscribeLoaded();
-          unsubscribeEarned();
-      };
+    return () => {
+      unsubscribeLoaded();
+      unsubscribeEarned();
+    };
   }, []);
 
   useEffect(() => {
@@ -57,27 +56,17 @@ export default function PaywallScreen({ navigation, route }) {
       <View className="p-4">
         <Image source={require('../assets/logoWithTransparency.png')} className="h-24 mx-auto" style={{ resizeMode: 'contain' }} />
       </View>
-      {!showAdBtnFirst && <><Text className="tracking-tight text-4xl font-bold text-center mt-2 mb-2">
-        Unlimited Reading
-      </Text>
-      <SubscribeButton />
-      <Text className="tracking-tight text-2xl text-slate-600 font-bold text-center mt-4 mb-2">
-        OR
-      </Text>
-      </>}
       <Text className="tracking-tight text-slate-600 text-2xl font-bold text-center mt-2 mb-2">
         Watch an Ad to Continue Reading
       </Text>
       <AdRewarderButton rewarded={rewarded} />
-      {showAdBtnFirst && <><Text className="tracking-tight text-2xl text-slate-600 font-bold text-center mt-4 mb-2">
+      <Text className="tracking-tight text-2xl text-slate-600 font-bold text-center mt-4 mb-2">
         OR
       </Text>
       <Text className="tracking-tight text-4xl font-bold text-center mt-2 mb-2">
         Unlimited Reading
       </Text>
       <SubscribeButton />
-      </>}
-      
     </View>
   );
 }

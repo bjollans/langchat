@@ -2,18 +2,16 @@
 
 import { Div, H3, Img } from "linguin-shared/components/RnTwComponents";
 import StoryAudioPlayer from "linguin-shared/components/audio/StoryAudioPlayer";
-//import SuggestedStories from "components/engagement/SuggestedStories";
 import SuggestedStories from "linguin-shared/components/engagement/SuggestedStories";
+import StoryPayWall from 'linguin-shared/components/story/StoryPayWall';
 import StoryTextRender from "linguin-shared/components/story/StoryTextRender";
 import { StoryTranslationIdContext } from "linguin-shared/context/storyTranslationIdContext";
-import { TargetLanguageContext } from "linguin-shared/context/targetLanguageContext";
 import { StoryEntity, StoryTranslation } from "linguin-shared/model/translations";
 import { trackStat } from "linguin-shared/util/storyStatistics";
+import usePostHog from 'linguin-shared/util/usePostHog';
 import { useEffect, useState } from "react";
 import { Platform } from 'react-native';
-import StoryPayWall from 'linguin-shared/components/story/StoryPayWall';
 import StoryQuestionsSection from "./StoryQuestionsSection";
-import usePostHog from 'linguin-shared/util/usePostHog';
 
 
 interface StoryProps {
@@ -37,7 +35,6 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
 
     return (
         <StoryTranslationIdContext.Provider value={storyTranslation.id}>
-            <TargetLanguageContext.Provider value={storyTranslation?.targetLanguage}>
                 {storyTranslation?.targetLanguage == "hi" && Platform.OS === 'web' &&
                     <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
                 }
@@ -52,7 +49,6 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
                 <StoryQuestionsSection storyId={story.id} />
                 {isPayWallOpen && Platform.OS == "web" && storyTranslation?.audioUrl &&
                     <StoryAudioPlayer src={storyTranslation.audioUrl} />}
-            </TargetLanguageContext.Provider>
             {isPayWallOpen && <SuggestedStories navigation={navigation} />}
         </StoryTranslationIdContext.Provider>
     );

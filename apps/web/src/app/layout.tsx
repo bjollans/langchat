@@ -7,6 +7,7 @@ import { QueryClientProvider } from "util/clientDb";
 import ApplicationShell from "components/ApplicationShell";
 import Script from 'next/script';
 import OriginTracker from "components/tracking/OriginTracker";
+import TargetLanguageContextProvider from "@linguin-shared/context/targetLanguageContext";
 
 
 
@@ -23,18 +24,20 @@ export default function RootLayout({
                 <PHProvider>
                     <QueryClientProvider>
                         <AuthProvider>
-                            <OriginTracker />
-                            <Script strategy="afterInteractive" src={"https://www.googletagmanager.com/gtag/js?id=" + process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
-                            <Script id="google-analytics" strategy="afterInteractive">
-                                {`window.dataLayer = window.dataLayer || [];
+                            <TargetLanguageContextProvider>
+                                <OriginTracker />
+                                <Script strategy="afterInteractive" src={"https://www.googletagmanager.com/gtag/js?id=" + process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
+                                <Script id="google-analytics" strategy="afterInteractive">
+                                    {`window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             
             gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}');`}
-                            </Script>
-                            <ApplicationShell>
-                                {children}
-                            </ApplicationShell>
+                                </Script>
+                                <ApplicationShell>
+                                    {children}
+                                </ApplicationShell>
+                            </TargetLanguageContextProvider>
                         </AuthProvider>
                     </QueryClientProvider>
                 </PHProvider>

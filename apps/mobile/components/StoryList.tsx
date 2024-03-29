@@ -8,6 +8,7 @@ import { useUserStoriesReadAutomatic, useVisibleStoriesInfinite } from 'linguin-
 import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import StoryListFilterMenu from './StoryListFilterMenu';
 import { FeedbackModal } from './FeedbackModal';
+import { useTargetLanguageContext } from 'linguin-shared/context/targetLanguageContext';
 
 export interface Filter {
     id: string;
@@ -32,13 +33,14 @@ export interface FilterOption {
 
 export default function StoryList({ navigation }) {
     const auth = useAuth();
+    const { targetLanguage } = useTargetLanguageContext();
     const {
         data: stories,
         isLoading,
         isError,
         fetchNextPage,
         hasNextPage,
-    } = useVisibleStoriesInfinite();
+    } = useVisibleStoriesInfinite(targetLanguage);
     const filteredStories = useFilteredStories(stories?.pages?.flat() ?? []);
     const { subscribed, subscribedLoaded } = useSubscribedContext();
     const { storiesAvailable, storiesAvailableLoaded } = useStoriesAvailable();
@@ -59,6 +61,7 @@ export default function StoryList({ navigation }) {
                     <FlatList
                         data={filteredStories}
                         renderItem={({ item: storyListEntity, separators }) => {
+                            if (!storyListEntity) return null;
                             const hasAlreadyReadStory = userStoriesRead?.map(x => x.storyId).includes(storyListEntity.id);
                             return <TouchableOpacity className="bg-white border-b border-gray-200"
                                 onPress={() => {
@@ -67,7 +70,7 @@ export default function StoryList({ navigation }) {
                                 <StoryListElement storyListEntity={storyListEntity} />
                             </TouchableOpacity>
                         }}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => item?.id}
                         onEndReached={() => {
                             if (hasNextPage) fetchNextPage();
                         }}

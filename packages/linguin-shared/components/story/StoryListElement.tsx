@@ -81,7 +81,7 @@ export default function StoryListElement(props: StoryListElementProps) {
                 </Div>
                 <Div className="flex flex-row mt-4 text-sm leading-5 text-gray-500 rounded-full overflow-hidden">
                     <Btn key={`${props.storyListEntity.id}-difficulty`}
-                        className={`rounded-full mr-2 inline-flex flex-row items-center  px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset ${difficultyColor[props.storyListEntity.difficulty.toLowerCase()]}`}
+                        className={`rounded-full mr-2 inline-flex flex-row items-center  px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset ${difficultyColor[props.storyListEntity?.difficulty?.toLowerCase()]}`}
                         onClick={(e) => {
                             if (!storyFilterChangeCalls) return;
                             e.preventDefault();

@@ -1,1 +1,1 @@
-export type Language = "ja" | "en" | "hi" | undefined;
+export type Language = "ja" | "en" | "hi" | "el" | "zh" | "de" | "";

@@ -33,7 +33,7 @@ export interface FilterOption {
 
 export default function StoryList({ navigation }) {
     const auth = useAuth();
-    const {targetLanguage} = useTargetLanguageContext();
+    const { targetLanguage } = useTargetLanguageContext();
     const {
         data: stories,
         isLoading,

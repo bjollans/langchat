@@ -3,6 +3,8 @@ import { getStory, getStoryCollections, getStoryTranslation, getVisibleStoryIds 
 import StoryAudioContextProvider from "linguin-shared/context/storyAudioContext";
 import ReadUsageContextProvider from "linguin-shared/context/trackReadContext";
 import WebStory from "components/WebStory";
+import { useEffect } from "react";
+import { useTargetLanguageContext } from "@linguin-shared/context/targetLanguageContext";
 
 export async function generateStaticParams() {
     const storyIdObjects = await getVisibleStoryIds();
@@ -13,6 +15,10 @@ export async function generateStaticParams() {
 }
 
 async function StoryPage({ params }) {
+    const { setTargetLanguage } = useTargetLanguageContext();
+    useEffect(() => {
+        setTargetLanguage("hi");
+    }, []);
     const { id } = params;
     const storyTranslation = await getStoryTranslation(id);
     const story = await getStory(storyTranslation.storyId);

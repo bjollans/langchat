@@ -7,6 +7,8 @@ import { StoryListEntity, StoryToCollection } from "model/translations";
 import { getAvailableStoryDifficultyLevels, getCollectionNames, getStoriesCollections, getStoryList } from "util/serverDb";
 import StoryListFilterContextProvider from "@linguin-shared/context/storyListFilterContext";
 import { Metadata } from "next/types";
+import { useTargetLanguageContext } from "@linguin-shared/context/targetLanguageContext";
+import { useEffect } from "react";
 
 async function getPropsForStoryIndexPage() {
     const storyListEntities = await getStoryList("hi");
@@ -29,6 +31,10 @@ async function getPropsForStoryIndexPage() {
 
 async function StoryIndexPage() {
     const propsForStoryIndexPage = await getPropsForStoryIndexPage();
+    const { setTargetLanguage } = useTargetLanguageContext();
+    useEffect(() => {
+        setTargetLanguage("hi");
+    }, []);
     return (
         <>
             <PurchasedTracker />

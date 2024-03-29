@@ -38,6 +38,7 @@ export default function StoryPayWall({ story, isPayWallOpen, setIsPayWallOpen }:
     }, [isPayWallOpen]);
 
     if (isPayWallOpen) return (<></>);
+    if (auth?.user?.planIsActive) return (<></>);
 
     return (
         <Div className="flex justify-center absolute w-full z-10 h-full backdrop-blur-sm bg-white bg-opacity-60">

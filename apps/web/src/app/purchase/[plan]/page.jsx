@@ -10,11 +10,12 @@ import { requireAuth } from "util/requireAuth";
 import { redirectToCheckout } from "util/stripe";
 import { getCookie } from 'cookies-next';
 
-function PurchasePage(props) {
+function PurchasePage({params}) {
   const router = useRouter();
   const auth = useAuth();
   const [formAlert, setFormAlert] = useState();
   const viaCookie = getCookie('via');
+  const { plan } = params;
 
   useEffect(() => {
     if (auth.user.planIsActive) {
@@ -23,7 +24,7 @@ function PurchasePage(props) {
       router.push("/settings/billing");
     } else {
       // Otherwise go to checkout
-      redirectToCheckout(router.query.plan, viaCookie).catch((error) => {
+      redirectToCheckout(plan, viaCookie).catch((error) => {
         setFormAlert({
           type: "error",
           message: error.message,

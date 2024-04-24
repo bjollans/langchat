@@ -1,6 +1,24 @@
 import { useRef, useEffect } from "react";
 import supabase from "linguin-shared/util/supabase";
 
+export async function apiRequestFromApp(path, method = "GET", data) {
+  return fetch(`https://linguin.co/api/${path}`, {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: data ? JSON.stringify(data) : undefined,
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      if (response.status === "error") {
+        throw new CustomError(response.code, response.message);
+      } else {
+        return response.data;
+      }
+    });
+};
+
 // Make an API request to `/api/{path}`
 export async function apiRequest(path, method = "GET", data) {
   const {

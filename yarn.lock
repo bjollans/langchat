@@ -2698,10 +2698,15 @@
   dependencies:
     nanoid "^3.1.23"
 
-"@revenuecat/purchases-typescript-internal@8.10.1":
-  version "8.10.1"
-  resolved "https://registry.yarnpkg.com/@revenuecat/purchases-typescript-internal/-/purchases-typescript-internal-8.10.1.tgz#9e5079102061e559ef2fadba969090bdf112d47a"
-  integrity sha512-T3GJHtYAHXLrM3XkAuxZCeYpn1yEShRb1qY31AIuyp/9eTTHgYhNa/jteNj1rlxYYFD4pCSi+dJeoy4vrpcf5w==
+"@revenuecat/purchases-typescript-internal@10.1.0":
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/@revenuecat/purchases-typescript-internal/-/purchases-typescript-internal-10.1.0.tgz#f97958aa415b65750fe1a87518797e86a9e2a7e7"
+  integrity sha512-ItD/eToap9codS6IkhGGZTtrDPFvDPTDjo7CdW+ghanSO+tY3VthpBTuO6eUcS4eIelTLS0nFKZUtUfJzYvxRw==
+
+"@revenuecat/purchases-typescript-internal@10.2.0":
+  version "10.2.0"
+  resolved "https://registry.yarnpkg.com/@revenuecat/purchases-typescript-internal/-/purchases-typescript-internal-10.2.0.tgz#9d8817a3c34e4e413ff05dc635cd4cad953161ca"
+  integrity sha512-5oKZ//a6A67TCfTwOwip08J/nfUmq3SMQTKZ8OIL4uqPMcDXH25KWmGTo21BcpbftHWhdBDGcpq7E70vdfze8g==
 
 "@revenuecat/purchases-typescript-internal@9.8.0":
   version "9.8.0"
@@ -8693,13 +8698,13 @@ react-native-picker-select@^9.0.1:
   dependencies:
     lodash.isequal "^4.5.0"
 
-react-native-purchases-ui@^7.22.0:
-  version "7.22.0"
-  resolved "https://registry.yarnpkg.com/react-native-purchases-ui/-/react-native-purchases-ui-7.22.0.tgz#ffe89527365b7728d507cf266b869b0474f64fad"
-  integrity sha512-lnFfT/VNRmBBIhNABC+xZu5zvmO5i3qvvA/Ws0Br3O5vEwlo6UuS97/WEfC8PMV3+Pia4AIlwkPS4cxDGd/HRA==
+react-native-purchases-ui@^7.24.1:
+  version "7.24.1"
+  resolved "https://registry.yarnpkg.com/react-native-purchases-ui/-/react-native-purchases-ui-7.24.1.tgz#7bfb227b53d1f5db86da2fe42381ab9062af12b4"
+  integrity sha512-IJsh7TMucKKEOKwuevQmW13OoEo88x4chmtWGZVbm8it8IExAT1eZQjqOzlymDJ51GOr4OsPH6E4Vr2QOyjcTg==
   dependencies:
-    "@revenuecat/purchases-typescript-internal" "8.10.1"
-    react-native-purchases "7.22.0"
+    "@revenuecat/purchases-typescript-internal" "10.1.0"
+    react-native-purchases "7.24.1"
 
 react-native-purchases@7.22.0:
   version "7.22.0"
@@ -8707,6 +8712,13 @@ react-native-purchases@7.22.0:
   integrity sha512-TqiAK/JUR774kUfLMhVqUZsf11E7qtUdyR+mop+velJ2vFkynuv/iW1Lot4tj2jnl5icWoiOM7keOezkYIdcNQ==
   dependencies:
     "@revenuecat/purchases-typescript-internal" "9.8.0"
+
+react-native-purchases@7.24.1:
+  version "7.24.1"
+  resolved "https://registry.yarnpkg.com/react-native-purchases/-/react-native-purchases-7.24.1.tgz#6b44f89cf8c58361fcceb400ed33b960dd8b00a7"
+  integrity sha512-lDOioHHJJqX9oxaDFJZInuJBVySqCuB1U4u8XAENDs4N8HFKk1T/CcKq/zNTNjOctPDfTc0nwKovMPHTdMndbQ==
+  dependencies:
+    "@revenuecat/purchases-typescript-internal" "10.2.0"
 
 react-native-ratings@8.0.4:
   version "8.0.4"

@@ -14,6 +14,7 @@ export default function AuthForm({ visible, navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [wasVisible, setWasVisible] = useState(false);
     const posthog = usePostHog();
 
     async function authGoogle() {
@@ -72,8 +73,17 @@ export default function AuthForm({ visible, navigation }) {
     }
 
     useEffect(() => {
-        if (visible) posthog?.capture("auth_modal_opened");
+        if (visible) {
+            setWasVisible(true);
+            posthog?.capture("auth_modal_opened");
+        }
     }, [posthog]);
+
+    useEffect(() => {
+        if (wasVisible && !visible) {
+            posthog?.capture("auth_modal_closed");
+        }
+    }, [visible]);
 
     return (
         <Modal

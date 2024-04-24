@@ -1,7 +1,6 @@
 import { useTargetLanguageContext } from "linguin-shared/context/targetLanguageContext";
 import { useState } from "react";
 import { TouchableOpacity, Text } from "react-native";
-import LanguageChooseModal from "./LanguageChooseModal";
 import Svg, { Path } from "react-native-svg";
 
 export default function StoryListTitle() {
@@ -9,7 +8,6 @@ export default function StoryListTitle() {
     const [languageModalVisible, setLanguageModalVisible] = useState(targetLanguage === "");
 
     return (<>
-        <LanguageChooseModal visible={languageModalVisible} close={() => setLanguageModalVisible(false)} />
         <TouchableOpacity className='flex flex-row items-center' onPress={() => setLanguageModalVisible(true)}>
             <_ExpandIcon />
             <Text className='text-lg font-bold'>{languageToLanguageString[targetLanguage]} Stories</Text>

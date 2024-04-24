@@ -96,8 +96,8 @@ function App() {
                 }}>
                   <Stack.Screen name="StoryList" component={StoryListScreen}
                     options={({ route, navigation }) => ({
-                      //title: "🇮🇳 Hindi Stories",
-                      headerTitle: () => <StoryListTitle />,
+                      title: "🇮🇳 Hindi Stories",
+                      //headerTitle: () => <StoryListTitle />,
                       headerTitleAlign: 'center',
                       headerRight: (route.params as any)?.filterButton,
                       headerLeft: () => <TouchableOpacity onPress={() => navigation.navigate('Account')}><_AccountIcon /></TouchableOpacity>

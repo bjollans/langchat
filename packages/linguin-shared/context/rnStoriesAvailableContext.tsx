@@ -1,5 +1,4 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useReadUsageContextNullable } from "linguin-shared/context/trackReadContext";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export interface StoriesAvailableState {

@@ -1,10 +1,9 @@
 import { PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
 import { Div, SingleLayerBtn } from 'linguin-shared/components/RnTwComponents';
 import { useStoryAudioContext } from 'linguin-shared/context/storyAudioContext';
-import { useReadUsageContext } from 'linguin-shared/context/trackReadContext';
 import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
 import { useEffect, useRef, useState, useContext } from 'react';
-import { Platform, Text } from 'react-native';
+import { Platform } from 'react-native';
 import { PlayCircleIcon, PauseCircleIcon } from 'linguin-shared/components/Icons';
 import ProgressBar from './ProgressBar';
 import usePostHog from 'linguin-shared/util/usePostHog';
@@ -19,7 +18,6 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     const [currentAudioTime, setCurrentAudioTime] = useState(0);
     const [isPlayingAudio, setIsPlayingAudio] = useState(false);
     const audioRef = useRef<HTMLAudioElement>(null);
-    const { registerReadUsageEvent } = useReadUsageContext();
     const RnSound = useContext(RnSoundContext);
     const posthogClient = usePostHog();
 
@@ -68,12 +66,10 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
             if (audioRef.current) {
                 audioRef.current.play();
                 updateIsPlayingAudio(true);
-                registerReadUsageEvent();
             }
         } else {
             playRnAudio();
             updateIsPlayingAudio(true);
-            registerReadUsageEvent();
         }
     };
 

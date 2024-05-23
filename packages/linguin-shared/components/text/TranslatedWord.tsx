@@ -1,6 +1,5 @@
 import { Btn, Span } from "linguin-shared/components/RnTwComponents";
 import { StoryTranslationIdContext } from "linguin-shared/context/storyTranslationIdContext";
-import { useReadUsageContext } from "linguin-shared/context/trackReadContext";
 import { TermTranslation } from "linguin-shared/model/translations";
 import { useContext, useState, useEffect } from "react";
 import TranslatedWordHoverBox from "./TranslatedWordHoverBox";
@@ -8,7 +7,6 @@ import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
 import { useRnTouchableContext } from "linguin-shared/context/rnTouchableContext";
 import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
 import usePostHog from 'linguin-shared/util/usePostHog';
-import { Platform } from "react-native";
 
 export interface TranslatedTermProps {
     termTranslation: TermTranslation;
@@ -20,7 +18,6 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     const [showTranslation, setShowTranslation] = useState(false);
     const [isPlayingStoryAudio, setIsPlayingStoryAudio] = useState(false);
     const storyTranslationId = useContext(StoryTranslationIdContext);
-    const { registerReadUsageEvent } = useReadUsageContext();
     const RnSound = useContext(RnSoundContext);
     const { addToResetterFunctions } = useRnTouchableContext();
 
@@ -52,7 +49,6 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
         addToResetterFunctions(() => setShowTranslation(false));
         setShowTranslation(true);
         playRnAudio();
-        registerReadUsageEvent();
         posthogClient?.capture("view_word_translation", {
             vocab: props.termTranslation.text,
             storyTranslationId: storyTranslationId,

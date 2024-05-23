@@ -3,7 +3,6 @@ import Story from 'linguin-shared/components/story/Story';
 import { RnSoundContext } from 'linguin-shared/context/rnSoundContext';
 import RnTouchableContextProvider from 'linguin-shared/context/rnTouchableContext';
 import StoryAudioContextProvider from 'linguin-shared/context/storyAudioContext';
-import ReadUsageContextProvider from 'linguin-shared/context/trackReadContext';
 import { useStory, useStoryTranslation } from 'linguin-shared/util/clientDb';
 import { ActivityIndicator, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import Sound from 'react-native-sound';
@@ -20,7 +19,6 @@ export default function StoryScreen({ route, navigation }) {
       <RequireAuth navigation={navigation}>
         <RnSoundContext.Provider value={Sound}>
           {loaded &&
-            <ReadUsageContextProvider storyTranslation={storyTranslation}>
               <StoryAudioContextProvider>
                 <ScrollView contentContainerStyle={styles.container}>
                   <RnTouchableContextProvider>
@@ -30,7 +28,6 @@ export default function StoryScreen({ route, navigation }) {
                 {loaded &&
                   <StoryAudioPlayer src={storyTranslation.audioUrl} />}
               </StoryAudioContextProvider>
-            </ReadUsageContextProvider>
             ||
             <ActivityIndicator size="large" color="#0000ff" />
           }

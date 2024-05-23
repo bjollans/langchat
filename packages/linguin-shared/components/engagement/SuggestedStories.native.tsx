@@ -2,12 +2,10 @@ import StoryListElement from "linguin-shared/components/story/StoryListElement";
 import { StoryListEntity } from "linguin-shared/model/translations";
 import { useEffect, useState } from "react";
 import { useAuth } from "linguin-shared/util/auth";
-import { useVisibleStoryIds, useUserStoriesRead, useUserStoriesReadAutomatic } from "linguin-shared/util/clientDb";
+import { useVisibleStoryIds, useUserStoriesRead } from "linguin-shared/util/clientDb";
 import { getStoriesByIds } from "linguin-shared/util/serverDb";
 import { Div, H2 } from "linguin-shared/components/RnTwComponents";
 import { TouchableOpacity, View } from "react-native";
-import { useSubscribedContext } from "linguin-shared/context/subscribedContext";
-import { useStoriesAvailable } from "linguin-shared/context/rnStoriesAvailableContext";
 import usePostHog from 'linguin-shared/util/usePostHog';
 import { useTargetLanguageContext } from "linguin-shared/context/targetLanguageContext";
 
@@ -21,10 +19,6 @@ export default function SuggestedStories({ navigation }) {
     const { data: storyIds, isSuccess: storyIdsLoaded } = useVisibleStoryIds({language: targetLanguage});
     const { data: storiesRead, isSuccess: storiesReadLoaded } = useUserStoriesRead(auth?.user?.uid ?? null);
     const [stories, setStories] = useState<StoryListEntity[]>([]);
-    const { subscribed } = useSubscribedContext();
-    const { storiesAvailable } = useStoriesAvailable();
-    const { data: userStoriesRead } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
-    const hasStories = storiesAvailable > 0 || subscribed;
 
     useEffect(() => {
         if (!storyIdsLoaded || !storiesReadLoaded || storyIds.length < 1) return;
@@ -49,8 +43,7 @@ export default function SuggestedStories({ navigation }) {
             {stories && stories.map((storyListEntity) => (
                 <TouchableOpacity className="bg-white border-b border-gray-200 w-full"
                     onPress={() => {
-                        const hasAlreadyReadStory = userStoriesRead?.map(x => x.storyId).includes(storyListEntity.id);
-                        navigation.navigate(hasStories || hasAlreadyReadStory ? "Story" : "StoryPaywall", { storyId: storyListEntity.id, storyTitle: storyListEntity.title });
+                        navigation.navigate("Story", { storyId: storyListEntity.id, storyTitle: storyListEntity.title });
                     }}>
                     <StoryListElement key={"suggested-story-" + storyListEntity.title} storyListEntity={storyListEntity} />
                 </TouchableOpacity>

@@ -44,7 +44,7 @@ export default function AccountScreen({ navigation }) {
                         className="mx-12 text-slate-800 text-2xl font-semibold tracking-tight text-center">Sign out</Text>
                 </TouchableOpacity>
             }
-            {customerInfo && customerInfo.managementURL
+            {/*customerInfo && customerInfo.managementURL
                 && <TouchableOpacity onPress={() => Linking.openURL(customerInfo.managementURL)}
                     className="mx-12 rounded-full border bg-cyan-50 p-4 text-center text-lg mb-12">
                     <Text className="mx-12 text-slate-800 text-lg font-semibold tracking-tight text-center">
@@ -54,7 +54,7 @@ export default function AccountScreen({ navigation }) {
                     <Text className="text-center text-lg font-bold mb-4">Subscribe For Unlimited Reading</Text>
                     <SubscribeButton />
                 </View>
-            }
+        */}
             <AuthModal visible={!auth?.user} navigation={navigation} />
         </SafeAreaView>
     );

@@ -1,8 +1,6 @@
 import StoryListElement from 'linguin-shared/components/story/StoryListElement';
 import UserStatistics from 'linguin-shared/components/user/UserStatistics';
-import { useStoriesAvailable } from 'linguin-shared/context/rnStoriesAvailableContext';
 import { useFilteredStories } from 'linguin-shared/context/storyListFilterContext';
-import { useSubscribedContext } from 'linguin-shared/context/subscribedContext';
 import { useAuth } from 'linguin-shared/util/auth';
 import { useUserStoriesReadAutomatic, useVisibleStoriesInfinite } from 'linguin-shared/util/clientDb';
 import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
@@ -42,13 +40,10 @@ export default function StoryList({ navigation }) {
         hasNextPage,
     } = useVisibleStoriesInfinite(targetLanguage);
     const filteredStories = useFilteredStories(stories?.pages?.flat() ?? []);
-    const { subscribed, subscribedLoaded } = useSubscribedContext();
-    const { storiesAvailable, storiesAvailableLoaded } = useStoriesAvailable();
     const { data: userStoriesRead, isSuccess: userStoriesReadLoaded } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
-    const hasStories = storiesAvailable > 0 || subscribed;
 
     if (isLoading) {
-        if (auth?.user && (!subscribedLoaded || !storiesAvailableLoaded || !userStoriesReadLoaded)) {
+        if (auth?.user && !userStoriesReadLoaded) {
             return <ActivityIndicator size="large" color="#0000ff" />;
         }
     }
@@ -62,10 +57,9 @@ export default function StoryList({ navigation }) {
                         data={filteredStories}
                         renderItem={({ item: storyListEntity, separators }) => {
                             if (!storyListEntity) return null;
-                            const hasAlreadyReadStory = userStoriesRead?.map(x => x.storyId).includes(storyListEntity.id);
                             return <TouchableOpacity className="bg-white border-b border-gray-200"
                                 onPress={() => {
-                                    navigation.navigate(hasStories || hasAlreadyReadStory ? "Story" : "StoryPaywall", { storyTranslationId: storyListEntity.storyTranslationId, storyTitle: storyListEntity.title });
+                                    navigation.navigate("Story", { storyTranslationId: storyListEntity.storyTranslationId, storyTitle: storyListEntity.title });
                                 }}>
                                 <StoryListElement storyListEntity={storyListEntity} />
                             </TouchableOpacity>

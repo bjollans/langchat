@@ -3,7 +3,6 @@
 import { Div, H3, Img } from "linguin-shared/components/RnTwComponents";
 import StoryAudioPlayer from "linguin-shared/components/audio/StoryAudioPlayer";
 import SuggestedStories from "linguin-shared/components/engagement/SuggestedStories";
-import StoryPayWall from 'linguin-shared/components/story/StoryPayWall';
 import StoryTextRender from "linguin-shared/components/story/StoryTextRender";
 import { StoryTranslationIdContext } from "linguin-shared/context/storyTranslationIdContext";
 import { StoryEntity, StoryTranslation } from "linguin-shared/model/translations";
@@ -44,7 +43,6 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
                         <H3 className="mx-6 text-base text-4xl py-3 mx-auto font-semibold leading-6 text-gray-900">{story?.title}</H3>
                     }
                 </Div>
-                {Platform.OS == "web" && <StoryPayWall story={story} isPayWallOpen={isPayWallOpen} setIsPayWallOpen={setIsPayWallOpen} />}
                 <StoryTextRender storyTranslation={storyTranslation} />
                 <StoryQuestionsSection storyId={story.id} />
                 {isPayWallOpen && Platform.OS == "web" && storyTranslation?.audioUrl &&

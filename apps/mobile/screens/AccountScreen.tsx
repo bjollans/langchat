@@ -35,7 +35,7 @@ export default function AccountScreen({ navigation }) {
             <Text className="mx-12 text-md font-bold text-center mb-4">Contact support@linguin.co for help.</Text>
             {loading
                 && <ActivityIndicator />
-                || <TouchableOpacity onPress={() => {
+                || <><TouchableOpacity onPress={() => {
                     setLoading(true);
                     auth?.signout();
                 }}
@@ -43,6 +43,15 @@ export default function AccountScreen({ navigation }) {
                     <Text
                         className="mx-12 text-slate-800 text-2xl font-semibold tracking-tight text-center">Sign out</Text>
                 </TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        Linking.openURL("https://www.linguin.co/auth/delete-my-account");
+                        return false;
+                    }}
+                        className="mx-12 rounded-full border bg-red-600 p-4 text-center text-lg mb-12">
+                        <Text
+                            className="mx-12 text-slate-100 text-sm font-bold tracking-tight text-center">!! DELETE ACCOUNT !!</Text>
+                    </TouchableOpacity></>
+
             }
             {/*customerInfo && customerInfo.managementURL
                 && <TouchableOpacity onPress={() => Linking.openURL(customerInfo.managementURL)}

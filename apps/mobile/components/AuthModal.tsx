@@ -10,6 +10,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Svg, { Path } from 'react-native-svg';
 import usePostHog from 'linguin-shared/util/usePostHog';
 
+import { AppleButton } from '@invertase/react-native-apple-authentication';
+import * as AppleAuthentication from 'expo-apple-authentication'
+
 export default function AuthForm({ visible, navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -37,12 +40,52 @@ export default function AuthForm({ visible, navigation }) {
                 provider: 'google',
                 token: authState.idToken,
             });
-            posthog?.capture("auth_completed",);
+            if (!error) {
+                posthog?.capture("auth_completed",);
+                posthog?.capture("auth_completed_google",);
+            }
+            else {
+                posthog?.capture("auth_error_supabase_google",);
+            }
         } catch (error) {
             Alert.alert('Something went wrong, please try again later');
+            posthog?.capture("auth_error_google",);
         }
         setLoading(false);
     }
+
+    async function authAppleOniOS() {
+        try {
+            const credential = await AppleAuthentication.signInAsync({
+                requestedScopes: [
+                    AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                    AppleAuthentication.AppleAuthenticationScope.EMAIL,
+                ],
+            })
+            // Sign in via Supabase Auth.
+            if (credential.identityToken) {
+                const {
+                    error,
+                    data: { user },
+                } = await supabase.auth.signInWithIdToken({
+                    provider: 'apple',
+                    token: credential.identityToken,
+                })
+
+                if (!error) {
+                    posthog?.capture("auth_completed",);
+                    posthog?.capture("auth_completed_apple_ios",);
+                }
+                else {
+                    posthog?.capture("auth_error_supabase_apple_ios",);
+                }
+            }
+        } catch (error) {
+            Alert.alert('Something went wrong, please try again later');
+            posthog?.capture("auth_error_apple_ios",);
+        }
+    }
+
 
     async function signInWithEmail() {
         setLoading(true)
@@ -127,10 +170,22 @@ export default function AuthForm({ visible, navigation }) {
                                 <Button title="Sign up" disabled={loading} onPress={() => signUpWithEmail()} buttonStyle={{ backgroundColor: "#38bdf8" }} />
                             </View>
                             <View style={styles.verticallySpaced}>
-                                <Button title={<>
-                                    <FontAwesomeIcon icon={faGoogle} size={20} color="#000000" />
-                                    <Text className="text-black text-lg ml-2"> Sign in With Google</Text>
-                                </>} disabled={loading} onPress={() => authGoogle()} buttonStyle={{ backgroundColor: "#ffffff", borderWidth: 1, borderColor: "black" }} />
+                                <Button className='my-2 mt-3' title={<>
+                                    <FontAwesomeIcon icon={faGoogle} size={15} color="#000000" />
+                                    <Text className="text-black ml-1.5 py-1" style={{ fontSize: 18, fontWeight: 500 }}>Sign in with Google</Text>
+                                </>} disabled={loading} onPress={() => authGoogle()}
+                                    buttonStyle={{ backgroundColor: "#ffffff", borderWidth: 1, borderColor: "#838383", borderRadius: 6 }} />
+                            </View>
+                            <View>
+                                <AppleButton
+                                    buttonStyle={AppleButton.Style.WHITE_OUTLINE}
+                                    buttonType={AppleButton.Type.SIGN_IN}
+                                    style={{
+                                        width: '100%', // You must specify a width
+                                        height: 45, // You must specify a hei
+                                    }}
+                                    onPress={authAppleOniOS}
+                                />
                             </View>
                         </>}
                 </View>

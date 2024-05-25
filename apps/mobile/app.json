@@ -6,6 +6,7 @@
       }
     },
     "plugins": [
+      "expo-apple-authentication",
       [
         "@sentry/react-native/expo",
         {
@@ -55,6 +56,7 @@
       "com.googleusercontent.apps.501061996944-vr81abn7hvfgi6jsfeo44q39qbhntkn3"
     ],
     "ios": {
+      "usesAppleSignIn": true,
       "icon": "./assets/icon.png",
       "supportsTablet": false,
       "bundleIdentifier": "com.bjolly.linguin",

@@ -176,7 +176,7 @@ export default function AuthForm({ visible, navigation }) {
                                 </>} disabled={loading} onPress={() => authGoogle()}
                                     buttonStyle={{ backgroundColor: "#ffffff", borderWidth: 1, borderColor: "#838383", borderRadius: 6 }} />
                             </View>
-                            <View>
+                            {Platform.OS == "ios" && <View>
                                 <AppleButton
                                     buttonStyle={AppleButton.Style.WHITE_OUTLINE}
                                     buttonType={AppleButton.Type.SIGN_IN}
@@ -186,7 +186,7 @@ export default function AuthForm({ visible, navigation }) {
                                     }}
                                     onPress={authAppleOniOS}
                                 />
-                            </View>
+                            </View>}
                         </>}
                 </View>
             </View>

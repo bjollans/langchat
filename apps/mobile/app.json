@@ -40,7 +40,7 @@
       ],
       "expo-localization"
     ],
-    "version": "1.2.11",
+    "version": "1.2.12",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -60,6 +60,7 @@
       "icon": "./assets/icon.png",
       "supportsTablet": false,
       "bundleIdentifier": "com.bjolly.linguin",
+      "buildNumber": "2",
       "config": {
         "usesNonExemptEncryption": false
       },

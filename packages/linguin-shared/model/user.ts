@@ -1,3 +1,5 @@
+import { Language } from "types/language";
+
 export interface LinguinUser {
     id?: string;
     name?: string;
@@ -5,3 +7,8 @@ export interface LinguinUser {
     affiliate?: string;
     referrer?: string;
 }
+
+export interface LinguinUserProfile {
+    targetLanguage: Language;
+}
+

@@ -15,8 +15,8 @@ export default function SuggestedStories({ navigation }) {
     const posthog = usePostHog()
 
     const auth = useAuth();
-    const {targetLanguage } = useTargetLanguageContext();
-    const { data: storyIds, isSuccess: storyIdsLoaded } = useVisibleStoryIds({language: targetLanguage});
+    const {userProfile } = useTargetLanguageContext();
+    const { data: storyIds, isSuccess: storyIdsLoaded } = useVisibleStoryIds({language: userProfile.targetLanguage});
     const { data: storiesRead, isSuccess: storiesReadLoaded } = useUserStoriesRead(auth?.user?.uid ?? null);
     const [stories, setStories] = useState<StoryListEntity[]>([]);
 

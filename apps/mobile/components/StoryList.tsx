@@ -31,14 +31,14 @@ export interface FilterOption {
 
 export default function StoryList({ navigation }) {
     const auth = useAuth();
-    const { targetLanguage } = useTargetLanguageContext();
+    const { userProfile } = useTargetLanguageContext();
     const {
         data: stories,
         isLoading,
         isError,
         fetchNextPage,
         hasNextPage,
-    } = useVisibleStoriesInfinite(targetLanguage);
+    } = useVisibleStoriesInfinite(userProfile.targetLanguage);
     const filteredStories = useFilteredStories(stories?.pages?.flat() ?? []);
     const { data: userStoriesRead, isSuccess: userStoriesReadLoaded } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
 

@@ -5,7 +5,6 @@ import { useFilteredStories, useStoryFilterContext } from "context/storyListFilt
 import StoryListElementWeb from "linguin-shared/components/story/StoryListElementWeb";
 import { StoryListEntity } from "model/translations";
 import { useEffect } from "react";
-import { useTargetLanguageContext } from "@linguin-shared/context/targetLanguageContext";
 
 export interface StoryListProps {
     storyListEntities: StoryListEntity[];
@@ -14,10 +13,6 @@ export interface StoryListProps {
 }
 
 export default function StoryList(props: StoryListProps) {
-    const { setTargetLanguage } = useTargetLanguageContext();
-    useEffect(() => {
-        setTargetLanguage("hi");
-    }, []);
     const storyListEntities = useFilteredStories(props.storyListEntities);
     const { setAllCollectionNames, setAllDifficulties } = useStoryFilterContext();
 

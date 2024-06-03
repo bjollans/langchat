@@ -21,10 +21,10 @@ export interface UserStoryStatistics {
 //                           I want to just make one bulk request for all stories
 //                           This makes the code slightly less readable, but a lot more performant.
 export function useUserStoryStatistics({ userId, storyId, isInSingleStoryContext = false }): UserStoryStatistics {
-    const { targetLanguage } = useTargetLanguageContext();
+    const { userProfile } = useTargetLanguageContext();
     const { data: wordsSeenJson, isSuccess: wordsSeenJsonLoaded } = userWordsSeen(userId);
     const { data: storyReadData, isSuccess: storyReadDataLoaded } = isInSingleStoryContext ? useUserHasReadStory(storyId, userId) : useUserStoriesRead(userId);
-    const { data: storyTranslationData, isSuccess: storyLoaded } = isInSingleStoryContext ? useStoryTranslationFromStoryIdAndLanguage(storyId, targetLanguage) : useStoryTranslations({language: targetLanguage});
+    const { data: storyTranslationData, isSuccess: storyLoaded } = isInSingleStoryContext ? useStoryTranslationFromStoryIdAndLanguage(storyId, userProfile.targetLanguage) : useStoryTranslations({language: userProfile.targetLanguage});
     const storyTranslation = isInSingleStoryContext
         ? storyTranslationData
         : storyTranslationData?.find((storyTranslation) => storyTranslation.storyId === storyId);

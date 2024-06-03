@@ -1,15 +1,18 @@
 "use client";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import LanguageChooseModal from "linguin-shared/components/LanguageChooseModal";
 import usePostHog from 'linguin-shared/util/usePostHog';
+import { LinguinUserProfile } from "model/user";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Language } from "types/language";
+import { useAuth } from "linguin-shared/util/auth";
+import { getUserProfile, updateUserProfileDb } from "linguin-shared/util/clientDb";
 
 
 export interface TargetLanguageContextType {
-    languageToLanguageString: any;
-    targetLanguage: Language;
-    setTargetLanguage: (language: Language) => void;
+    availableLanguagesMap: any;
+    userProfile: LinguinUserProfile;
+    updateUserProfile: (userProfile: any) => void;
+    setLanguageChooseModalVisible: (visible: boolean) => void;
 }
 
 export const TargetLanguageContext = createContext<TargetLanguageContextType | null>(null);
@@ -21,7 +24,18 @@ export interface TargetLanguageContextProviderProps {
 
 export default function TargetLanguageContextProvider({ children }: TargetLanguageContextProviderProps): JSX.Element {
     const posthog = usePostHog();
-    const [targetLanguage, setTargetLanguage] = useState<Language>("hi");
+    const auth = useAuth();
+    const [userProfile, setUserProfile] = useState<LinguinUserProfile>({
+        targetLanguage: "",
+    });
+    function updateUserProfile(data) {
+        const newUserProfile = { ...userProfile, ...data };
+        setUserProfile(newUserProfile);
+        if (auth && auth.user) {
+            updateUserProfileDb(auth.user.id, newUserProfile);
+        }
+    }
+    const [languageChooseModalVisible, setLanguageChooseModalVisible] = useState<boolean>(false);
     const languageToLanguageString = {
         'hi': '🇮🇳 Hindi',
         'ja': '🇯🇵 Japanese',
@@ -30,31 +44,29 @@ export default function TargetLanguageContextProvider({ children }: TargetLangua
         'el': '🇬🇷 Greek',
     };
 
-    useEffect(() => {
-        if (targetLanguage) {
-            AsyncStorage.getItem('targetLanguage').then((savedTargetLanguage) => {
-                if (savedTargetLanguage !== targetLanguage) {
-                    AsyncStorage.setItem('targetLanguage', targetLanguage);
-                    posthog?.capture('target_language_selected', { target_language: targetLanguage });
-                }
-            });
-        }
-    }, [targetLanguage]);
+    async function pullUserProfileFromDB() {
+        setUserProfile(await getUserProfile(auth.user.id));
+    }
 
     useEffect(() => {
-        AsyncStorage.getItem('targetLanguage').then((language) => {
-            if (language) {
-                setTargetLanguage(language as Language);
-            }
-        });
-    }, []);
+        if (auth && auth.user) {
+            pullUserProfileFromDB();
+        }
+    }, [auth, auth.user]);
 
     return (
         <TargetLanguageContext.Provider value={{
-            languageToLanguageString: languageToLanguageString,
-            targetLanguage: targetLanguage,
-            setTargetLanguage: setTargetLanguage,
+            availableLanguagesMap: languageToLanguageString,
+            userProfile: userProfile,
+            setLanguageChooseModalVisible: setLanguageChooseModalVisible,
+            updateUserProfile: updateUserProfile,
         }}>
+            <LanguageChooseModal
+                visible={languageChooseModalVisible}
+                close={() => {
+                    setLanguageChooseModalVisible(false);
+                }}
+            />
             {children}
         </TargetLanguageContext.Provider>
     );

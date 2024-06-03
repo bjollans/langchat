@@ -18,6 +18,7 @@ import StoryListScreen from './screens/StoryListScreen';
 import Story from './screens/StoryScreen';
 import { initNotifications, scheduleReminderNotification } from './util/notifications';
 import * as Sentry from '@sentry/react-native';
+import StoryListTitle from './components/StoryListTitle';
 
 Sentry.init({
   dsn: 'https://4a146848a62a8271f335ecdcc6ea9c5a@o4505409086095360.ingest.us.sentry.io/4506970903805952',
@@ -93,7 +94,7 @@ function App() {
                   <Stack.Screen name="StoryList" component={StoryListScreen}
                     options={({ route, navigation }) => ({
                       title: "🇮🇳 Hindi Stories",
-                      //headerTitle: () => <StoryListTitle />,
+                      headerTitle: () => <StoryListTitle />,
                       headerTitleAlign: 'center',
                       headerRight: (route.params as any)?.filterButton,
                       headerLeft: () => <TouchableOpacity onPress={() => navigation.navigate('Account')}><_AccountIcon /></TouchableOpacity>

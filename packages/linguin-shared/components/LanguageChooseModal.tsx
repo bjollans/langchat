@@ -4,14 +4,14 @@ import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
 
 
 export default function LanguageChooseModal({ visible, close }) {
-    const { languageToLanguageString, setTargetLanguage } = useTargetLanguageContext();
+    const { availableLanguagesMap, updateUserProfile } = useTargetLanguageContext();
     const items = useMemo(() => {
-        let items = [];
-        for (const [key, value] of Object.entries(languageToLanguageString)) {
+        let items : any[] = [];
+        for (const [key, value] of Object.entries(availableLanguagesMap)) {
             items.push({ label: value, value: key });
         }
         return items;
-    }, [languageToLanguageString]);
+    }, [availableLanguagesMap]);
 
     return (
         <Modal
@@ -29,7 +29,7 @@ export default function LanguageChooseModal({ visible, close }) {
                                 data={items}
                                 renderItem={({ item }) => (
                                     <TouchableOpacity onPress={() => {
-                                        setTargetLanguage(item.value);
+                                        updateUserProfile({targetLanguage: item.value});
                                         close();
                                     }} className='border-b my-1 p-2 border-slate-400'>
                                         <Text className='text-2xl font-bold tracking-tight'>{item.label}</Text>

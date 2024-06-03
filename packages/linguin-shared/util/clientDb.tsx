@@ -1,7 +1,7 @@
 "use client";
 
 import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
-import { LinguinUser } from "linguin-shared/model/user";
+import { LinguinUser, LinguinUserProfile } from "linguin-shared/model/user";
 import { Conversation, ConversationStatus } from "model/conversation";
 import { Message, StoryEntity, StoryQuestionData } from "model/translations";
 import { Vocab } from "model/vocab";
@@ -48,6 +48,33 @@ export async function updateUser(uid: string, data: LinguinUser) {
     .then(handle);
   // Invalidate and refetch queries that could have old data
   await client.invalidateQueries(["user", { uid }]);
+  return response;
+}
+
+export async function useUserProfile(uid: string) {
+  return useQuery(
+    ["userProfile", { uid }],
+    () =>
+      getUserProfile(uid),
+    { enabled: !!uid }
+  );
+}
+
+export async function getUserProfile(uid: string) {
+  return supabase
+    .from("userProfile")
+    .select()
+    .eq("id", uid)
+    .single()
+    .then(handle);
+}
+
+export async function updateUserProfileDb(uid: string, data: LinguinUserProfile) {
+  const response = await supabase
+    .from("userProfile")
+    .upsert([{ id: uid, ...data }])
+    .then(handle);
+  await client.invalidateQueries(["userProfile", { uid }]);
   return response;
 }
 
@@ -150,7 +177,7 @@ function getFetchVisibleStoriesPageFunction(language: Language) {
 }
 
 export function useVisibleStoriesInfinite(language: Language) {
-  return useInfiniteQuery(['visibleStories'+language], getFetchVisibleStoriesPageFunction(language), {
+  return useInfiniteQuery(['visibleStories' + language], getFetchVisibleStoriesPageFunction(language), {
     getNextPageParam: (lastPage, pages) => {
       if (!lastPage || lastPage.length === 0) return undefined; // No more pages
       return pages.length * PAGE_LENGTH; // Adjust according to your pagination logic

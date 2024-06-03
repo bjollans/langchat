@@ -12,9 +12,9 @@ export interface WebStoryProps {
 }
 
 function WebStory({ story, storyTranslation }: WebStoryProps) {
-  const { setTargetLanguage } = useTargetLanguageContext();
+  const { updateUserProfile } = useTargetLanguageContext();
   useEffect(() => {
-    setTargetLanguage("hi");
+    updateUserProfile({ targetLanguage: "hi" });
   }, []);
   return (
     <Story story={story} storyTranslation={storyTranslation} />

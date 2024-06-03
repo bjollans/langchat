@@ -8,10 +8,6 @@ import mixpanelPlugin from "@analytics/mixpanel";
 const analytics = Analytics({
   debug: process.env.NODE_ENV !== "production",
   plugins: [
-    // Instructions: https://divjoy.com/docs/mixpanel
-    mixpanelPlugin({
-      token: process.env.NEXT_PUBLIC_MIXPANEL_TOKEN,
-    })
   ],
 });
 

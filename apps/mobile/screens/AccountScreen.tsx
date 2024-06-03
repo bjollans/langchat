@@ -2,7 +2,6 @@ import { useAuth } from "linguin-shared/util/auth";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Linking, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import Purchases from "react-native-purchases";
-import SubscribeButton from "../components/SubscribeButton";
 import UserStatistics from "linguin-shared/components/user/UserStatistics";
 import AuthModal from "../components/AuthModal";
 

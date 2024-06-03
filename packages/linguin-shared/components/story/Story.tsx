@@ -20,7 +20,6 @@ interface StoryProps {
 }
 
 function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element {
-    const [isPayWallOpen, setIsPayWallOpen] = useState(true);
     const posthogClient = usePostHog();
 
     useEffect(() => {
@@ -45,9 +44,9 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
                 </Div>
                 <StoryTextRender storyTranslation={storyTranslation} />
                 <StoryQuestionsSection storyId={story.id} />
-                {isPayWallOpen && Platform.OS == "web" && storyTranslation?.audioUrl &&
+                {Platform.OS == "web" && storyTranslation?.audioUrl &&
                     <StoryAudioPlayer src={storyTranslation.audioUrl} />}
-            {isPayWallOpen && <SuggestedStories navigation={navigation} />}
+            <SuggestedStories navigation={navigation} />
         </StoryTranslationIdContext.Provider>
     );
 }

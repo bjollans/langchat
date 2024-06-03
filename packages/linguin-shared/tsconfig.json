@@ -20,7 +20,6 @@
       "context/**/*.ts*",
       "types/**/*.ts*",
       "util/**/*.ts*",
-      "model/**/*.ts*"
-, "../../apps/mobile/components/NativePayWall.tsx", "../../apps/mobile/components/AdRewarderButton.tsx", "../../apps/mobile/components/SubscribeButton.tsx"    ],
+      "model/**/*.ts*"],
     "extends": "@tsconfig/next/tsconfig.json"
   }

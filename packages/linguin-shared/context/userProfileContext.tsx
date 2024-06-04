@@ -8,21 +8,21 @@ import { useAuth } from "linguin-shared/util/auth";
 import { getUserProfile, updateUserProfileDb } from "linguin-shared/util/clientDb";
 
 
-export interface TargetLanguageContextType {
+export interface UserProfileContextType {
     availableLanguagesMap: any;
     userProfile: LinguinUserProfile;
     updateUserProfile: (userProfile: any) => void;
     setLanguageChooseModalVisible: (visible: boolean) => void;
 }
 
-export const TargetLanguageContext = createContext<TargetLanguageContextType | null>(null);
+export const UserProfileContext = createContext<UserProfileContextType | null>(null);
 
 
-export interface TargetLanguageContextProviderProps {
+export interface UserProfileContextProviderProps {
     children: React.ReactNode;
 }
 
-export default function TargetLanguageContextProvider({ children }: TargetLanguageContextProviderProps): JSX.Element {
+export default function UserProfileContextProvider({ children }: UserProfileContextProviderProps): JSX.Element {
     const posthog = usePostHog();
     const auth = useAuth();
     const [userProfile, setUserProfile] = useState<LinguinUserProfile>({
@@ -55,7 +55,7 @@ export default function TargetLanguageContextProvider({ children }: TargetLangua
     }, [auth, auth.user]);
 
     return (
-        <TargetLanguageContext.Provider value={{
+        <UserProfileContext.Provider value={{
             availableLanguagesMap: languageToLanguageString,
             userProfile: userProfile,
             setLanguageChooseModalVisible: setLanguageChooseModalVisible,
@@ -68,14 +68,14 @@ export default function TargetLanguageContextProvider({ children }: TargetLangua
                 }}
             />
             {children}
-        </TargetLanguageContext.Provider>
+        </UserProfileContext.Provider>
     );
 }
 
-export function useTargetLanguageContext(): TargetLanguageContextType {
-    const context = useContext(TargetLanguageContext);
+export function useUserProfileContext(): UserProfileContextType {
+    const context = useContext(UserProfileContext);
     if (context === null) {
-        throw new Error('useTargetLanguageContext must be used within a TargetLanguageContextProvider');
+        throw new Error('useUserProfileContext must be used within a UserProfileContextProvider');
     }
     return context;
 }

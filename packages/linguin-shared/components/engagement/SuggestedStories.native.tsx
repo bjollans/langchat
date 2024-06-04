@@ -7,7 +7,7 @@ import { getStoriesByIds } from "linguin-shared/util/serverDb";
 import { Div, H2 } from "linguin-shared/components/RnTwComponents";
 import { TouchableOpacity, View } from "react-native";
 import usePostHog from 'linguin-shared/util/usePostHog';
-import { useTargetLanguageContext } from "linguin-shared/context/targetLanguageContext";
+import { useUserProfileContext } from "linguin-shared/context/userProfileContext";
 
 export default function SuggestedStories({ navigation }) {
     const STORY_AMOUNT = 3;
@@ -15,7 +15,7 @@ export default function SuggestedStories({ navigation }) {
     const posthog = usePostHog()
 
     const auth = useAuth();
-    const {userProfile } = useTargetLanguageContext();
+    const {userProfile } = useUserProfileContext();
     const { data: storyIds, isSuccess: storyIdsLoaded } = useVisibleStoryIds({language: userProfile.targetLanguage});
     const { data: storiesRead, isSuccess: storiesReadLoaded } = useUserStoriesRead(auth?.user?.uid ?? null);
     const [stories, setStories] = useState<StoryListEntity[]>([]);

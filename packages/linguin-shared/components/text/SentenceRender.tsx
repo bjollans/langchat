@@ -11,14 +11,14 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { Platform } from 'react-native';
 import TranslatedTerm from "./TranslatedWord";
 
-interface TranslatedTextProps {
+interface SentenceRenderProps {
     translatedText: TranslatedText;
     hasAudio: boolean;
     audioStartTime: number;
     audioEndTime: number;
 }
 
-export default function TranslatedTextRender(props: TranslatedTextProps): JSX.Element {
+export default function SentenceRender(props: SentenceRenderProps): JSX.Element {
     const posthogClient = usePostHog();
     const [showWholeTranslation, setShowWholeTranslation] = useState(false);
     const storyTranslationId = useContext(StoryTranslationIdContext);

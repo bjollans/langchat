@@ -1,5 +1,5 @@
 import { Br, Div } from "linguin-shared/components/RnTwComponents";
-import TranslatedTextRender from "linguin-shared/components/text/TranslatedTextRender";
+import SentenceRender from "linguin-shared/components/text/SentenceRender";
 import { AudioSentenceTime, StoryTranslation, TermTranslation, TranslationJson } from "linguin-shared/model/translations";
 import { useMemo } from "react";
 
@@ -31,7 +31,7 @@ export default function StoryTextRender(props: StoryTextRenderProps): JSX.Elemen
         const lineAudioSentenceTime: AudioSentenceTime | undefined = props.storyTranslation.audioSentenceTimes ? props.storyTranslation.audioSentenceTimes[lineIndex - nonSentenceLinesSeen] : undefined;
         const audioStartTime = lineAudioSentenceTime ? lineAudioSentenceTime.start : 0;
         const audioEndTime = lineAudioSentenceTime ? lineAudioSentenceTime.end : 0;
-        return (<TranslatedTextRender translatedText={{ content: line, translationJson: lineTranslationJson }}
+        return (<SentenceRender translatedText={{ content: line, translationJson: lineTranslationJson }}
             audioStartTime={audioStartTime} audioEndTime={audioEndTime}
             hasAudio={props.storyTranslation.audioUrl !== null && props.storyTranslation.audioUrl !== undefined} />);
     };

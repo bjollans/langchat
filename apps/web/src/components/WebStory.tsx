@@ -4,7 +4,7 @@ import { StoryEntity, StoryTranslation } from "@linguin-shared/model/translation
 import { requireAuth } from "@linguin-shared/util/requireAuth";
 import Story from "linguin-shared/components/story/Story";
 import { useEffect } from "react";
-import { useTargetLanguageContext } from "@linguin-shared/context/targetLanguageContext";
+import { useUserProfileContext } from "@linguin-shared/context/userProfileContext";
 
 export interface WebStoryProps {
   story: StoryEntity;
@@ -12,7 +12,7 @@ export interface WebStoryProps {
 }
 
 function WebStory({ story, storyTranslation }: WebStoryProps) {
-  const { updateUserProfile } = useTargetLanguageContext();
+  const { updateUserProfile } = useUserProfileContext();
   useEffect(() => {
     updateUserProfile({ targetLanguage: "hi" });
   }, []);

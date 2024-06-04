@@ -1,10 +1,10 @@
-import { useTargetLanguageContext } from 'linguin-shared/context/targetLanguageContext';
+import { useUserProfileContext } from 'linguin-shared/context/userProfileContext';
 import React, { useMemo } from 'react';
 import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
 
 
 export default function LanguageChooseModal({ visible, close }) {
-    const { availableLanguagesMap, updateUserProfile } = useTargetLanguageContext();
+    const { availableLanguagesMap, updateUserProfile } = useUserProfileContext();
     const items = useMemo(() => {
         let items : any[] = [];
         for (const [key, value] of Object.entries(availableLanguagesMap)) {

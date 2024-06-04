@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Session } from '@supabase/supabase-js';
 import SubscribedContextProvider from 'linguin-shared/context/subscribedContext';
-import TargetLanguageContextProvider from 'linguin-shared/context/targetLanguageContext';
+import UserProfileContextProvider from 'linguin-shared/context/userProfileContext';
 import { AuthProvider } from 'linguin-shared/util/auth';
 import { QueryClientProvider } from 'linguin-shared/util/clientDb';
 import supabase from 'linguin-shared/util/supabase';
@@ -84,7 +84,7 @@ function App() {
               <PostHogProvider apiKey={process.env.EXPO_PUBLIC_POSTHOG_KEY} options={{
                 host: `${process.env.EXPO_PUBLIC_POSTHOG_HOST}`,
               }}>
-                <TargetLanguageContextProvider>
+                <UserProfileContextProvider>
                 <Stack.Navigator screenOptions={{
                   headerTitleStyle: {
                     fontWeight: '700',
@@ -109,7 +109,7 @@ function App() {
                       title: "Account"
                     })} />
                 </Stack.Navigator>
-                </TargetLanguageContextProvider>
+                </UserProfileContextProvider>
               </PostHogProvider>
             </NavigationContainer>
         </SubscribedContextProvider>

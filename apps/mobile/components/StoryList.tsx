@@ -6,7 +6,7 @@ import { useUserStoriesReadAutomatic, useVisibleStoriesInfinite } from 'linguin-
 import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import StoryListFilterMenu from './StoryListFilterMenu';
 import { FeedbackModal } from './FeedbackModal';
-import { useTargetLanguageContext } from 'linguin-shared/context/targetLanguageContext';
+import { useUserProfileContext } from 'linguin-shared/context/userProfileContext';
 
 export interface Filter {
     id: string;
@@ -31,7 +31,7 @@ export interface FilterOption {
 
 export default function StoryList({ navigation }) {
     const auth = useAuth();
-    const { userProfile } = useTargetLanguageContext();
+    const { userProfile } = useUserProfileContext();
     const {
         data: stories,
         isLoading,

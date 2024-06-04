@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useStoryTranslations, useStory, useUserHasReadStory, useUserStoriesRead, userWordsSeen, useStoryTranslationFromStoryIdAndLanguage } from "./clientDb";
-import { useTargetLanguageContext } from "linguin-shared/context/targetLanguageContext";
+import { useUserProfileContext } from "linguin-shared/context/userProfileContext";
 
 export interface UserReadStatistics {
     wordsSeen: string[];
@@ -21,7 +21,7 @@ export interface UserStoryStatistics {
 //                           I want to just make one bulk request for all stories
 //                           This makes the code slightly less readable, but a lot more performant.
 export function useUserStoryStatistics({ userId, storyId, isInSingleStoryContext = false }): UserStoryStatistics {
-    const { userProfile } = useTargetLanguageContext();
+    const { userProfile } = useUserProfileContext();
     const { data: wordsSeenJson, isSuccess: wordsSeenJsonLoaded } = userWordsSeen(userId, userProfile.targetLanguage);
     const { data: storyReadData, isSuccess: storyReadDataLoaded } = isInSingleStoryContext ? useUserHasReadStory(storyId, userId) : useUserStoriesRead(userId);
     const { data: storyTranslationData, isSuccess: storyLoaded } = isInSingleStoryContext ? useStoryTranslationFromStoryIdAndLanguage(storyId, userProfile.targetLanguage) : useStoryTranslations({language: userProfile.targetLanguage});

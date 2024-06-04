@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons/faArrowsRotate'
 import { trackStat } from "linguin-shared/util/storyStatistics";
 import usePostHog from 'linguin-shared/util/usePostHog';
-import { useTargetLanguageContext } from "linguin-shared/context/targetLanguageContext";
+import { useUserProfileContext } from "linguin-shared/context/userProfileContext";
 
 
 export interface StoryQuestionsSectionProps {
@@ -28,7 +28,7 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
     const { data: storyQuestions, isSuccess } = useStoryQuestions(props.storyId);
     const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics({ userId: auth?.user?.id ?? null, storyId: props.storyId, isInSingleStoryContext: true });
     const updatedUserReadStatistics: UserReadStatistics = useUpdatedUserReadStatistics(auth?.user?.id ?? null, props.storyId);
-    const { userProfile } = useTargetLanguageContext();
+    const { userProfile } = useUserProfileContext();
 
     const [triedQuestionIndices, setTriedQuestionIndices] = useState<Array<number>>([]);
     const [currentQuestionIndices, setCurrentQuestionIndices] = useState<Array<number>>(_.range(QUESTION_AMOUNT));

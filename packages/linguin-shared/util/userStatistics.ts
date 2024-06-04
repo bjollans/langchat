@@ -22,7 +22,7 @@ export interface UserStoryStatistics {
 //                           This makes the code slightly less readable, but a lot more performant.
 export function useUserStoryStatistics({ userId, storyId, isInSingleStoryContext = false }): UserStoryStatistics {
     const { userProfile } = useTargetLanguageContext();
-    const { data: wordsSeenJson, isSuccess: wordsSeenJsonLoaded } = userWordsSeen(userId);
+    const { data: wordsSeenJson, isSuccess: wordsSeenJsonLoaded } = userWordsSeen(userId, userProfile.targetLanguage);
     const { data: storyReadData, isSuccess: storyReadDataLoaded } = isInSingleStoryContext ? useUserHasReadStory(storyId, userId) : useUserStoriesRead(userId);
     const { data: storyTranslationData, isSuccess: storyLoaded } = isInSingleStoryContext ? useStoryTranslationFromStoryIdAndLanguage(storyId, userProfile.targetLanguage) : useStoryTranslations({language: userProfile.targetLanguage});
     const storyTranslation = isInSingleStoryContext

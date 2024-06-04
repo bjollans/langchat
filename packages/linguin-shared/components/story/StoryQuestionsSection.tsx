@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons/faArrowsRotate'
 import { trackStat } from "linguin-shared/util/storyStatistics";
 import usePostHog from 'linguin-shared/util/usePostHog';
+import { useTargetLanguageContext } from "linguin-shared/context/targetLanguageContext";
 
 
 export interface StoryQuestionsSectionProps {
@@ -27,6 +28,7 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
     const { data: storyQuestions, isSuccess } = useStoryQuestions(props.storyId);
     const userStoryStatistics: UserStoryStatistics = useUserStoryStatistics({ userId: auth?.user?.id ?? null, storyId: props.storyId, isInSingleStoryContext: true });
     const updatedUserReadStatistics: UserReadStatistics = useUpdatedUserReadStatistics(auth?.user?.id ?? null, props.storyId);
+    const { userProfile } = useTargetLanguageContext();
 
     const [triedQuestionIndices, setTriedQuestionIndices] = useState<Array<number>>([]);
     const [currentQuestionIndices, setCurrentQuestionIndices] = useState<Array<number>>(_.range(QUESTION_AMOUNT));
@@ -65,7 +67,7 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
             const newAnsweredCorrectly = [...answeredCorrectlyByIndex];
             newAnsweredCorrectly[questionIndex] = true;
             setAnsweredCorrectlyByIndex(newAnsweredCorrectly);
-            await upsertUserReadStatistics(auth!.user!.id, updatedUserReadStatistics);
+            await upsertUserReadStatistics(auth!.user!.id, userProfile.targetLanguage, updatedUserReadStatistics);
             await markUserStoryReadAutomatic(props.storyId, auth?.user?.uid ?? null);
             await trackStat(props.storyId, "completes")
             posthogClient?.capture('story_read', {
@@ -132,5 +134,5 @@ export default function StoryQuestionsSection(props: StoryQuestionsSectionProps)
 export function _RefreshIcon() {
     return Platform.OS == "web"
         ? <ArrowPathIcon className="h-5 w-5 mr-2 text-indigo-400" />
-        : <FontAwesomeIcon icon={ faArrowsRotate } size={12} color="#818cf8" />;
+        : <FontAwesomeIcon icon={faArrowsRotate} size={12} color="#818cf8" />;
 }

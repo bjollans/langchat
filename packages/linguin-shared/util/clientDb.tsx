@@ -296,7 +296,7 @@ export function unmarkUserStoryRead(storyId: string, userId: string) {
   return response;
 }
 
-export function userWordsSeen(userId: string) {
+export function userWordsSeen(userId: string, targetLanguage: Language) {
   return useQuery(
     ["userWordsSeen", { userId }],
     () =>
@@ -304,15 +304,16 @@ export function userWordsSeen(userId: string) {
         .from("userReadStatistics")
         .select("wordsSeen")
         .eq("userId", userId)
+        .eq("targetLanguage", targetLanguage)
         .then(handle),
     { enabled: !!userId }
   );
 }
 
-export async function upsertUserReadStatistics(userId: string, data: UserReadStatistics) {
+export async function upsertUserReadStatistics(userId: string, targetLanguage: Language, data: UserReadStatistics) {
   const response = supabase
     .from("userReadStatistics")
-    .upsert({ userId, ...data })
+    .upsert({ userId, targetLanguage, ...data })
     .eq("userId", userId)
     .then(handle);
   await client.invalidateQueries(["userWordsSeen", userId]);

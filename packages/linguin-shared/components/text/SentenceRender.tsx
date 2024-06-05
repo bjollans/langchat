@@ -10,6 +10,8 @@ import usePostHog from 'linguin-shared/util/usePostHog';
 import { useContext, useEffect, useMemo, useState } from "react";
 import { Platform } from 'react-native';
 import TranslatedTerm from "./TranslatedWord";
+import { useInView } from 'react-intersection-observer';
+import { IOScrollView, InView } from 'react-native-intersection-observer'
 
 interface SentenceRenderProps {
     translatedText: TranslatedText;
@@ -31,6 +33,26 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
         updateAudioTimes,
         addAudioTimeUpdateFunction
     } = useStoryAudioContext();
+
+    const considerReadAfterSeconds = 10;
+
+
+    const [visibilityRef, hasBeenSeen] = useInView({
+        threshold: 0.5,
+        triggerOnce: true,
+        delay: considerReadAfterSeconds * 1000,
+    });
+
+    function reactToVisibleRN(visible: boolean) {
+        console.log("Seen: " + props.translatedText.content);
+    }
+
+    useEffect(() => {
+        if (hasBeenSeen) {
+            console.log("Seen: " + props.translatedText.content);
+        }
+    }, [hasBeenSeen]);
+
 
 
     useEffect(() => {
@@ -92,7 +114,7 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
 
     return (<>
         <Div className="relative cursor-pointer w-full"
-            onMouseLeave={() => setShowWholeTranslation(false)}>
+            onMouseLeave={() => setShowWholeTranslation(false)} ref={visibilityRef}>
             <Div className={showWholeTranslation ? "cursor-text absolute bottom-0 left-0 z-50" : "hidden"} style={{ maxWidth: "80%" }}>
                 <Div className="bg-black text-white rounded-lg p-2 mb-6 w-96 max-w-full mx-auto">
                     <P className="flex text-white items-start">
@@ -124,6 +146,7 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
                     </Btn>
                 </Div>
             </Div>
+            {Platform.OS !== 'web' && <InView onChange={(inView: boolean) => { if (inView) reactToVisibleRN(inView); }} ><Span style={{ fontSize: 1 }}> </Span></InView>}
         </Div>
     </>
     );

@@ -7,6 +7,7 @@ import { useStory, useStoryTranslation } from 'linguin-shared/util/clientDb';
 import { ActivityIndicator, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import Sound from 'react-native-sound';
 import RequireAuth from '../components/RequireAuth';
+import { IOScrollView, InView } from 'react-native-intersection-observer'
 
 export default function StoryScreen({ route, navigation }) {
   const { storyTranslationId } = route.params;
@@ -15,16 +16,16 @@ export default function StoryScreen({ route, navigation }) {
   const loaded = storyTranslationLoaded && storyLoaded;
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }} >
       <RequireAuth navigation={navigation}>
         <RnSoundContext.Provider value={Sound}>
           {loaded &&
               <StoryAudioContextProvider>
-                <ScrollView contentContainerStyle={styles.container}>
+                <IOScrollView contentContainerStyle={styles.container}>
                   <RnTouchableContextProvider>
                     {loaded && <Story story={story} storyTranslation={storyTranslation} navigation={navigation} />}
                   </RnTouchableContextProvider>
-                </ScrollView>
+                </IOScrollView>
                 {loaded &&
                   <StoryAudioPlayer src={storyTranslation.audioUrl} />}
               </StoryAudioContextProvider>

@@ -11,6 +11,7 @@ import usePostHog from 'linguin-shared/util/usePostHog';
 import { useEffect, useState } from "react";
 import { Platform } from 'react-native';
 import StoryQuestionsSection from "./StoryQuestionsSection";
+import { ScrollView } from "react-native";
 
 
 interface StoryProps {
@@ -46,7 +47,7 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
                 <StoryQuestionsSection storyId={story.id} />
                 {Platform.OS == "web" && storyTranslation?.audioUrl &&
                     <StoryAudioPlayer src={storyTranslation.audioUrl} />}
-            <SuggestedStories navigation={navigation} />
+                <SuggestedStories navigation={navigation} />
         </StoryTranslationIdContext.Provider>
     );
 }

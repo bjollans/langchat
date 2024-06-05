@@ -7,14 +7,16 @@ import StoryCompletedCheckMark from "./StoryCompletedCheckMark";
 import { useInView } from 'react-intersection-observer';
 import { trackStat } from "linguin-shared/util/storyStatistics";
 import StoryListElement from "./StoryListElement";
+import { Language } from "linguin-shared/types/language";
 
 export interface StoryListElementWebProps {
     storyListEntity: StoryListEntity;
+    language: Language;
 }
 
 export default function StoryListElementWeb(props: StoryListElementWebProps) {
     return (
-        <a href={`/story/hi/${props.storyListEntity.storyTranslationId}`} className="w-full h-full">
+        <a href={`/story/${props.language}/${props.storyListEntity.storyTranslationId}`} className="w-full h-full">
             <StoryListElement storyListEntity={props.storyListEntity} />
         </a>
     );

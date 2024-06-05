@@ -2,9 +2,19 @@ import Meta from "components/Meta";
 import { getStory, getStoryCollections, getStoryTranslation, getVisibleStoryIds } from "util/serverDb";
 import StoryAudioContextProvider from "linguin-shared/context/storyAudioContext";
 import WebStory from "components/WebStory";
+import { Language } from "@linguin-shared/types/language";
 
-export async function generateStaticParams() {
-    const storyIdObjects = await getVisibleStoryIds();
+export async function generateStaticParams(
+    {
+        params: { language },
+      }: {
+        params: { language: Language }
+      }
+) {
+    console.log("??????????????????");
+    console.log(language);
+    console.log("??????????????????");
+    const storyIdObjects = await getVisibleStoryIds(language);
     const params = storyIdObjects.map((storyIdObj) => (
         { id: storyIdObj.id }
     ));

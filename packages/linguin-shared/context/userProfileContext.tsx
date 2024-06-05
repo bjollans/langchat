@@ -6,6 +6,7 @@ import { LinguinUserProfile } from "model/user";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "linguin-shared/util/auth";
 import { getUserProfile, updateUserProfileDb } from "linguin-shared/util/clientDb";
+import { Platform } from 'react-native';
 
 
 export interface UserProfileContextType {
@@ -61,12 +62,12 @@ export default function UserProfileContextProvider({ children }: UserProfileCont
             setLanguageChooseModalVisible: setLanguageChooseModalVisible,
             updateUserProfile: updateUserProfile,
         }}>
-            <LanguageChooseModal
+            {Platform.OS !== 'web' &&  <LanguageChooseModal
                 visible={languageChooseModalVisible}
                 close={() => {
                     setLanguageChooseModalVisible(false);
                 }}
-            />
+            />}
             {children}
         </UserProfileContext.Provider>
     );

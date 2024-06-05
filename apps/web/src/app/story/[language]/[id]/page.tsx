@@ -13,7 +13,7 @@ export async function generateStaticParams(
 ) {
     const storyIdObjects = await getVisibleStoryIds(language);
     const params = storyIdObjects.map((storyIdObj) => (
-        { id: storyIdObj.id }
+        { id: storyIdObj.storyTranslationId }
     ));
     return params;
 }

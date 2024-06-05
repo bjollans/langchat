@@ -11,9 +11,6 @@ export async function generateStaticParams(
         params: { language: Language }
       }
 ) {
-    console.log("??????????????????");
-    console.log(language);
-    console.log("??????????????????");
     const storyIdObjects = await getVisibleStoryIds(language);
     const params = storyIdObjects.map((storyIdObj) => (
         { id: storyIdObj.id }

@@ -22,9 +22,6 @@ export async function generateStaticParams() {
 
 
 async function getPropsForStoryIndexPage(language: Language) {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    console.log(language);
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     const storyListEntities = await getStoryList(language);
     const allDifficulties = await getAvailableStoryDifficultyLevels();
     const storyIds = storyListEntities.map((story: any) => story.id);

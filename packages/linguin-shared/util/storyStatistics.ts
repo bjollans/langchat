@@ -1,8 +1,8 @@
-import { apiRequestFromApp } from "./util";
+import { apiRequestMultiPlatform } from "./util";
 
 export const trackStat = async (storyId: string, statName: string) => {
     if (process.env.NODE_ENV === "production" || !__DEV__) {
-        await apiRequestFromApp("increment-story-statistic", "POST", {
+        await apiRequestMultiPlatform("increment-story-statistic", "POST", {
             id: storyId,
             statName,
         });

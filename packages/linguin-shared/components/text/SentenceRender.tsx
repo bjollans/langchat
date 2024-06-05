@@ -8,7 +8,7 @@ import { StoryTranslationIdContext } from 'linguin-shared/context/storyTranslati
 import { useUserProfileContext } from 'linguin-shared/context/userProfileContext';
 import { TermTranslation, TranslatedText } from "linguin-shared/model/translations";
 import usePostHog from 'linguin-shared/util/usePostHog';
-import { apiRequest, apiRequestFromApp } from 'linguin-shared/util/util';
+import { apiRequestMultiPlatform } from 'linguin-shared/util/util';
 import { useContext, useEffect, useMemo, useState } from "react";
 import { InView as InViewWeb } from 'react-intersection-observer';
 import { Platform } from 'react-native';
@@ -44,32 +44,22 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
 
     function reactToVisible(visible: boolean) {
         if (visible && !wordStatUpdated && !wordStatInterval) {
-            console.log("initiating request: " + props.translatedText.content + " " + storyTranslationId);
             wordStatInterval = setInterval(() => {
-                const apiName = "update-user-word-stats";
-                const apiProps = {
-                    wordsSeen: [props.translatedText.content],
+                apiRequestMultiPlatform("update-user-word-stats", "POST", {
+                    wordsSeen: props.translatedText.translationJson!.terms.map((termTranslation: TermTranslation) => termTranslation.text),
                     storiesViewed: [storyTranslationId],
                     language: userProfile.targetLanguage,
-                };
-                if (Platform.OS === 'web') {
-                    apiRequest(apiName, "POST", apiProps);
-                }
-                else {
-                    apiRequestFromApp(apiName, "POST", apiProps);
-                }
+                });
                 wordStatUpdated = true;
             }, considerReadAfterSeconds * 1000);
         }
         else {
-            console.log("cancelling request: " + props.translatedText.content + " " + storyTranslationId);
             if (wordStatInterval) {
                 clearInterval(wordStatInterval);
-                wordStatInterval = null;
+                wordStatInterval = undefined;
             }
         }
     }
-
 
 
     useEffect(() => {

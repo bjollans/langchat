@@ -1,5 +1,16 @@
 import { useRef, useEffect } from "react";
 import supabase from "linguin-shared/util/supabase";
+import { Platform } from 'react-native';
+
+export async function apiRequestMultiPlatform(apiName, method = "GET", data) {
+  if (Platform.OS === 'web') {
+    return apiRequest(apiName, method, data);
+  }
+  else {
+    console.log("making app request");
+    return apiRequestFromApp(apiName, method, data);
+  }
+}
 
 export async function apiRequestFromApp(path, method = "GET", data) {
   return fetch(`https://linguin.co/api/${path}`, {

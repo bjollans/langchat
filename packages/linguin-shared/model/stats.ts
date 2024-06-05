@@ -6,6 +6,8 @@ export interface DailyUserReadStat {
     language: Language;
     wordsSeen: string[];
     wordsSeenCount: number;
+    wordsLookedUp: string[];
+    wordsLookedUpCount: number;
     storiesViewed: string[];
     storiesViewedCount: number;
     lastUpdatedAt: Date;

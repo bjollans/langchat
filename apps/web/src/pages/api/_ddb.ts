@@ -30,6 +30,8 @@ export async function getUserStats(userId: string, date: string, language: Langu
             language: language,
             wordsSeen: [],
             wordsSeenCount: 0,
+            wordsLookedUp: [],
+            wordsLookedUpCount: 0,
             storiesViewed: [],
             storiesViewedCount: 0,
             lastUpdatedAt: new Date(),
@@ -43,6 +45,8 @@ async function _putOrUpdateStat(stat: DailyUserReadStat) {
         const statToUpdate = _mapRecordToStat(item);
         statToUpdate.wordsSeen = Array.from(new Set([...statToUpdate.wordsSeen, ...stat.wordsSeen]));
         statToUpdate.wordsSeenCount = statToUpdate.wordsSeen.length;
+        statToUpdate.wordsLookedUp = Array.from(new Set([...statToUpdate.wordsLookedUp, ...stat.wordsLookedUp]));
+        statToUpdate.wordsLookedUpCount = statToUpdate.wordsLookedUp.length;
         statToUpdate.storiesViewed = Array.from(new Set([...statToUpdate.storiesViewed, ...stat.storiesViewed]));
         statToUpdate.storiesViewedCount = statToUpdate.storiesViewed.length;
         statToUpdate.lastUpdatedAt = new Date();
@@ -55,13 +59,22 @@ async function _putOrUpdateStat(stat: DailyUserReadStat) {
 }
 
 function _mapStatToRecord(stat: DailyUserReadStat): Record<string, AttributeValue> {
-    return {
-        wordsSeen: { SS: Array.from(stat.wordsSeen) },
-        wordsSeenCount: { N: stat.wordsSeenCount.toString() },
-        storiesViewed: { SS: Array.from(stat.storiesViewed) },
-        storiesViewedCount: { N: stat.storiesViewedCount.toString() },
+    const record: Record<string, AttributeValue> = {
         lastUpdatedAt: { S: stat.lastUpdatedAt.toISOString() },
+    };
+    if (stat.wordsSeen.length > 0) {
+        record.wordsSeen = { SS: Array.from(stat.wordsSeen) };
+        record.wordsSeenCount = { N: stat.wordsSeenCount.toString() };
     }
+    if (stat.wordsLookedUp.length > 0) {
+        record.wordsLookedUp = { SS: Array.from(stat.wordsLookedUp) };
+        record.wordsLookedUpCount = { N: stat.wordsLookedUpCount.toString() };
+    }
+    if (stat.storiesViewed.length > 0) {
+        record.storiesViewed = { SS: Array.from(stat.storiesViewed) };
+        record.storiesViewedCount = { N: stat.storiesViewedCount.toString() };
+    }
+    return record;
 }
 
 
@@ -70,10 +83,12 @@ function _mapRecordToStat(record: Record<string, AttributeValue>): DailyUserRead
         userId: record.userId.S!,
         date: record.date_and_language.S!.split("_")[0],
         language: record.date_and_language.S!.split("_")[1] as Language,
-        wordsSeen: Array.from(new Set(record.wordsSeen.SS)),
-        wordsSeenCount: parseInt(record.wordsSeenCount.N ?? "0"),
-        storiesViewed: Array.from(new Set(record.storiesViewed.SS)),
-        storiesViewedCount: parseInt(record.storiesViewedCount.N ?? "0"),
+        wordsSeen: Array.from(new Set(record.wordsSeen?.SS ?? [])),
+        wordsSeenCount: parseInt(record.wordsSeenCount?.N ?? "0"),
+        wordsLookedUp: Array.from(new Set(record.wordsLookedUp?.SS ?? [])),
+        wordsLookedUpCount: parseInt(record.wordsLookedUpCount?.N ?? "0"),
+        storiesViewed: Array.from(new Set(record.storiesViewed?.SS ?? [])),
+        storiesViewedCount: parseInt(record.storiesViewedCount?.N ?? "0"),
         lastUpdatedAt: new Date(record.lastUpdatedAt.S!),
     }
 };

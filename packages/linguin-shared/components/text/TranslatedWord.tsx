@@ -7,6 +7,8 @@ import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
 import { useRnTouchableContext } from "linguin-shared/context/rnTouchableContext";
 import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
 import usePostHog from 'linguin-shared/util/usePostHog';
+import { apiRequestMultiPlatform } from "linguin-shared/util/util";
+import { useUserProfileContext } from "linguin-shared/context/userProfileContext";
 
 export interface TranslatedTermProps {
     termTranslation: TermTranslation;
@@ -20,6 +22,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     const storyTranslationId = useContext(StoryTranslationIdContext);
     const RnSound = useContext(RnSoundContext);
     const { addToResetterFunctions } = useRnTouchableContext();
+    const { userProfile } = useUserProfileContext();
 
     const {
         addIsPlayingAudioUpdateFunction,
@@ -53,6 +56,12 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
             vocab: props.termTranslation.text,
             storyTranslationId: storyTranslationId,
         });
+        apiRequestMultiPlatform("update-user-word-stats", "POST", {
+            wordsLookedUp: [props.termTranslation.text],
+            storiesViewed: [storyTranslationId],
+            language: userProfile.targetLanguage,
+        });
+
     }
 
     return (

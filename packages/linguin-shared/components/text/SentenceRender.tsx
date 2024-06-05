@@ -5,13 +5,15 @@ import EqualizerIconWeb from "linguin-shared/components/audio/EqualizerIconWeb";
 import { useRnTouchableContext } from 'linguin-shared/context/rnTouchableContext';
 import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
 import { StoryTranslationIdContext } from 'linguin-shared/context/storyTranslationIdContext';
+import { useUserProfileContext } from 'linguin-shared/context/userProfileContext';
 import { TermTranslation, TranslatedText } from "linguin-shared/model/translations";
 import usePostHog from 'linguin-shared/util/usePostHog';
+import { apiRequest, apiRequestFromApp } from 'linguin-shared/util/util';
 import { useContext, useEffect, useMemo, useState } from "react";
+import { InView as InViewWeb } from 'react-intersection-observer';
 import { Platform } from 'react-native';
+import { InView as InViewRn } from 'react-native-intersection-observer';
 import TranslatedTerm from "./TranslatedWord";
-import { useInView } from 'react-intersection-observer';
-import { IOScrollView, InView } from 'react-native-intersection-observer'
 
 interface SentenceRenderProps {
     translatedText: TranslatedText;
@@ -33,25 +35,40 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
         updateAudioTimes,
         addAudioTimeUpdateFunction
     } = useStoryAudioContext();
+    const { userProfile } = useUserProfileContext();
 
-    const considerReadAfterSeconds = 10;
+    const considerReadAfterSeconds = 15;
 
+    let wordStatUpdated = false;
+    let wordStatInterval: any = null;
 
-    const [visibilityRef, hasBeenSeen] = useInView({
-        threshold: 0.5,
-        triggerOnce: true,
-        delay: considerReadAfterSeconds * 1000,
-    });
-
-    function reactToVisibleRN(visible: boolean) {
-        console.log("Seen: " + props.translatedText.content);
-    }
-
-    useEffect(() => {
-        if (hasBeenSeen) {
-            console.log("Seen: " + props.translatedText.content);
+    function reactToVisible(visible: boolean) {
+        if (visible && !wordStatUpdated && !wordStatInterval) {
+            console.log("initiating request: " + props.translatedText.content + " " + storyTranslationId);
+            wordStatInterval = setInterval(() => {
+                const apiName = "update-user-word-stats";
+                const apiProps = {
+                    wordsSeen: [props.translatedText.content],
+                    storiesViewed: [storyTranslationId],
+                    language: userProfile.targetLanguage,
+                };
+                if (Platform.OS === 'web') {
+                    apiRequest(apiName, "POST", apiProps);
+                }
+                else {
+                    apiRequestFromApp(apiName, "POST", apiProps);
+                }
+                wordStatUpdated = true;
+            }, considerReadAfterSeconds * 1000);
         }
-    }, [hasBeenSeen]);
+        else {
+            console.log("cancelling request: " + props.translatedText.content + " " + storyTranslationId);
+            if (wordStatInterval) {
+                clearInterval(wordStatInterval);
+                wordStatInterval = null;
+            }
+        }
+    }
 
 
 
@@ -113,8 +130,9 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
     }
 
     return (<>
+
         <Div className="relative cursor-pointer w-full"
-            onMouseLeave={() => setShowWholeTranslation(false)} ref={visibilityRef}>
+            onMouseLeave={() => setShowWholeTranslation(false)}>
             <Div className={showWholeTranslation ? "cursor-text absolute bottom-0 left-0 z-50" : "hidden"} style={{ maxWidth: "80%" }}>
                 <Div className="bg-black text-white rounded-lg p-2 mb-6 w-96 max-w-full mx-auto">
                     <P className="flex text-white items-start">
@@ -146,8 +164,18 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
                     </Btn>
                 </Div>
             </Div>
-            {Platform.OS !== 'web' && <InView onChange={(inView: boolean) => { if (inView) reactToVisibleRN(inView); }} ><Span style={{ fontSize: 1 }}> </Span></InView>}
-        </Div>
+            <InView onChange={(inView: boolean) => reactToVisible(inView)} ><Span style={{ fontSize: 1 }}> </Span></InView>
+        </Div >
     </>
     );
+}
+
+
+function InView({ onChange, children }: { onChange: (inView: boolean) => void, children: JSX.Element }) {
+    if (Platform.OS === 'web') {
+        return <InViewWeb onChange={onChange}>{children}</InViewWeb>;
+    }
+    else {
+        return <InViewRn onChange={onChange}>{children}</InViewRn>;
+    }
 }

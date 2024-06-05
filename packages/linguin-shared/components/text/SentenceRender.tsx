@@ -14,6 +14,7 @@ import { InView as InViewWeb } from 'react-intersection-observer';
 import { Platform } from 'react-native';
 import { InView as InViewRn } from 'react-native-intersection-observer';
 import TranslatedTerm from "./TranslatedWord";
+import { useDailyReadStatContext } from 'linguin-shared/context/dailyReadStatContext';
 
 interface SentenceRenderProps {
     translatedText: TranslatedText;
@@ -36,6 +37,7 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
         addAudioTimeUpdateFunction
     } = useStoryAudioContext();
     const { userProfile } = useUserProfileContext();
+    const { recordStatUpdate } = useDailyReadStatContext();
 
     const considerReadAfterSeconds = 15;
 
@@ -45,9 +47,9 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
     function reactToVisible(visible: boolean) {
         if (visible && !wordStatUpdated && !wordStatInterval) {
             wordStatInterval = setInterval(() => {
-                apiRequestMultiPlatform("update-user-word-stats", "POST", {
+                recordStatUpdate({
                     wordsSeen: props.translatedText.translationJson!.terms.map((termTranslation: TermTranslation) => termTranslation.text),
-                    storiesViewed: [storyTranslationId],
+                    storiesViewed: [storyTranslationId!],
                     language: userProfile.targetLanguage,
                 });
                 wordStatUpdated = true;

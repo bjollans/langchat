@@ -9,7 +9,7 @@ import { getUserProfile, updateUserProfileDb } from "linguin-shared/util/clientD
 
 
 export interface UserProfileContextType {
-    availableLanguagesMap: any;
+    availableLanguagesMap: Record<string,any>;
     userProfile: LinguinUserProfile;
     updateUserProfile: (userProfile: any) => void;
     setLanguageChooseModalVisible: (visible: boolean) => void;

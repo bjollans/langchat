@@ -16,7 +16,11 @@ import { Fragment, useState } from 'react'
 import { useAuth } from 'util/auth'
 
 var navigation = [
-    { name: 'Stories', href: '/story/hi', icon: BookOpenIcon },
+    { name: 'Hindi Stories', href: '/story/hi', icon: BookOpenIcon },
+    { name: 'Japanese Stories', href: '/story/ja', icon: BookOpenIcon },
+    { name: 'Chinese Stories', href: '/story/zh', icon: BookOpenIcon },
+    { name: 'German Stories', href: '/story/de', icon: BookOpenIcon },
+    { name: 'Greek Stories', href: '/story/el', icon: BookOpenIcon },
     { name: 'How to Read Hindi', href: '/articles/how-to-read-hindi', icon: AcademicCapIcon },
     { name: 'My Account', href: '/settings/general', icon: UserCircleIcon },
 ]
@@ -40,6 +44,10 @@ const pageTitles = (location: string) => {
 }
 
 const backLocation = (currentLocation: string) => {
+    // Turn story/../xxx-xxx-xxx into story/..
+    if (currentLocation.search(/story\/..\//) != -1) {
+        return currentLocation.replace("/",":").replace("/",":").replace(/\/.*/,"").replaceAll(":","/");
+    }
     switch (currentLocation) {
         case '/': return null;
         case '/articles/hindi-alphabet': return '/articles/how-to-read-hindi';

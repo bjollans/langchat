@@ -2,12 +2,12 @@
 
 import { createContext, useContext, useState } from "react";
 import { apiRequestMultiPlatform } from "util/util";
+import { useLanguageContext } from "./languageContext";
 
 export interface DailyReadStatUpdateProps {
     wordsSeen?: string[];
     storiesViewed?: string[];
     wordsLookedUp?: string[];
-    language: string;
 }
 
 export interface DailyReadStatContextType {
@@ -22,14 +22,14 @@ export interface DailyReadStatContextProviderProps {
 }
 
 export default function DailyReadStatContextProvider({ children }: DailyReadStatContextProviderProps): JSX.Element {
+    const { language } = useLanguageContext();
+
     let [currentDailyReadStatUpdateProps] = useState<DailyReadStatUpdateProps>({
-        language: "",
         wordsSeen: [],
         wordsLookedUp: [],
         storiesViewed: [],
     });
     let [lastRecordedDailyReadStatUpdateProps] = useState<DailyReadStatUpdateProps>({
-        language: "",
         wordsSeen: [],
         wordsLookedUp: [],
         storiesViewed: [],
@@ -37,7 +37,6 @@ export default function DailyReadStatContextProvider({ children }: DailyReadStat
 
     function mergeDailyReadStats(dailyReadStat1: DailyReadStatUpdateProps, dailyReadStat2: DailyReadStatUpdateProps) {
         return {
-            language: dailyReadStat1.language,
             wordsSeen: Array.from(new Set([...dailyReadStat1.wordsSeen ?? [], ...dailyReadStat2.wordsSeen ?? []])),
             wordsLookedUp: Array.from(new Set([...dailyReadStat1.wordsLookedUp ?? [], ...dailyReadStat2.wordsLookedUp ?? []])),
             storiesViewed: Array.from(new Set([...dailyReadStat1.storiesViewed ?? [], ...dailyReadStat2.storiesViewed ?? []])),
@@ -59,7 +58,7 @@ export default function DailyReadStatContextProvider({ children }: DailyReadStat
                 || !_eqList(currentDailyReadStatUpdateProps.wordsLookedUp ?? [], lastRecordedDailyReadStatUpdateProps.wordsLookedUp ?? [])
                 || !_eqList(currentDailyReadStatUpdateProps.storiesViewed ?? [], lastRecordedDailyReadStatUpdateProps.storiesViewed ?? [])) {
                 lastRecordedDailyReadStatUpdateProps = structuredClone(currentDailyReadStatUpdateProps);
-                apiRequestMultiPlatform("update-user-word-stats", "POST", currentDailyReadStatUpdateProps);
+                apiRequestMultiPlatform("update-user-word-stats", "POST", { language: language, ...currentDailyReadStatUpdateProps });
             }
         }, 5000);
     }

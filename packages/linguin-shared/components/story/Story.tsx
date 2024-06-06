@@ -4,14 +4,14 @@ import { Div, H3, Img } from "linguin-shared/components/RnTwComponents";
 import StoryAudioPlayer from "linguin-shared/components/audio/StoryAudioPlayer";
 import SuggestedStories from "linguin-shared/components/engagement/SuggestedStories";
 import StoryTextRender from "linguin-shared/components/story/StoryTextRender";
+import LanguageContextProvider from "linguin-shared/context/languageContext";
 import { StoryTranslationIdContext } from "linguin-shared/context/storyTranslationIdContext";
 import { StoryEntity, StoryTranslation } from "linguin-shared/model/translations";
 import { trackStat } from "linguin-shared/util/storyStatistics";
 import usePostHog from 'linguin-shared/util/usePostHog';
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Platform } from 'react-native';
 import StoryQuestionsSection from "./StoryQuestionsSection";
-import { ScrollView } from "react-native";
 
 
 interface StoryProps {
@@ -34,6 +34,7 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
 
     return (
         <StoryTranslationIdContext.Provider value={storyTranslation.id}>
+            <LanguageContextProvider language={storyTranslation.targetLanguage}>
                 {storyTranslation?.targetLanguage == "hi" && Platform.OS === 'web' &&
                     <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
                 }
@@ -48,6 +49,7 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
                 {Platform.OS == "web" && storyTranslation?.audioUrl &&
                     <StoryAudioPlayer src={storyTranslation.audioUrl} />}
                 <SuggestedStories navigation={navigation} />
+            </LanguageContextProvider>
         </StoryTranslationIdContext.Provider>
     );
 }

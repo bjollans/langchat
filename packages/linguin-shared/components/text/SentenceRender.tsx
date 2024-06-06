@@ -6,7 +6,6 @@ import { useDailyReadStatContext } from 'linguin-shared/context/dailyReadStatCon
 import { useRnTouchableContext } from 'linguin-shared/context/rnTouchableContext';
 import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
 import { StoryTranslationIdContext } from 'linguin-shared/context/storyTranslationIdContext';
-import { useUserProfileContext } from 'linguin-shared/context/userProfileContext';
 import { TermTranslation, TranslatedText } from "linguin-shared/model/translations";
 import usePostHog from 'linguin-shared/util/usePostHog';
 import { useContext, useEffect, useMemo, useState } from "react";
@@ -35,7 +34,6 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
         updateAudioTimes,
         addAudioTimeUpdateFunction
     } = useStoryAudioContext();
-    const { userProfile } = useUserProfileContext();
     const { recordStatUpdate } = useDailyReadStatContext();
 
     const considerReadAfterSeconds = 15;
@@ -49,7 +47,6 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
                 recordStatUpdate({
                     wordsSeen: props.translatedText.translationJson!.terms.map((termTranslation: TermTranslation) => termTranslation.text),
                     storiesViewed: [storyTranslationId!],
-                    language: userProfile.targetLanguage,
                 });
                 wordStatUpdated = true;
             }, considerReadAfterSeconds * 1000);

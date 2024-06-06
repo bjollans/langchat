@@ -1,15 +1,13 @@
 import { Btn, Span } from "linguin-shared/components/RnTwComponents";
-import { StoryTranslationIdContext } from "linguin-shared/context/storyTranslationIdContext";
-import { TermTranslation } from "linguin-shared/model/translations";
-import { useContext, useState, useEffect } from "react";
-import TranslatedWordHoverBox from "./TranslatedWordHoverBox";
+import { useDailyReadStatContext } from "linguin-shared/context/dailyReadStatContext";
 import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
 import { useRnTouchableContext } from "linguin-shared/context/rnTouchableContext";
 import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
+import { StoryTranslationIdContext } from "linguin-shared/context/storyTranslationIdContext";
+import { TermTranslation } from "linguin-shared/model/translations";
 import usePostHog from 'linguin-shared/util/usePostHog';
-import { apiRequestMultiPlatform } from "linguin-shared/util/util";
-import { useUserProfileContext } from "linguin-shared/context/userProfileContext";
-import { useDailyReadStatContext } from "linguin-shared/context/dailyReadStatContext";
+import { useContext, useEffect, useState } from "react";
+import TranslatedWordHoverBox from "./TranslatedWordHoverBox";
 
 export interface TranslatedTermProps {
     termTranslation: TermTranslation;
@@ -23,7 +21,6 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     const storyTranslationId = useContext(StoryTranslationIdContext);
     const RnSound = useContext(RnSoundContext);
     const { addToResetterFunctions } = useRnTouchableContext();
-    const { userProfile } = useUserProfileContext();
     const { recordStatUpdate } = useDailyReadStatContext();
 
     const {
@@ -61,7 +58,6 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
         recordStatUpdate({
             wordsLookedUp: [props.termTranslation.text],
             storiesViewed: [storyTranslationId!],
-            language: userProfile.targetLanguage,
         });
 
     }

@@ -2,19 +2,18 @@ import { PlayIcon, TranslateIcon } from 'linguin-shared/components/Icons';
 import { Btn, Div, P, Span } from 'linguin-shared/components/RnTwComponents';
 import EqualizerIconRn from "linguin-shared/components/audio/EqualizerIconRn";
 import EqualizerIconWeb from "linguin-shared/components/audio/EqualizerIconWeb";
+import { useDailyReadStatContext } from 'linguin-shared/context/dailyReadStatContext';
 import { useRnTouchableContext } from 'linguin-shared/context/rnTouchableContext';
 import { useStoryAudioContext } from "linguin-shared/context/storyAudioContext";
 import { StoryTranslationIdContext } from 'linguin-shared/context/storyTranslationIdContext';
 import { useUserProfileContext } from 'linguin-shared/context/userProfileContext';
 import { TermTranslation, TranslatedText } from "linguin-shared/model/translations";
 import usePostHog from 'linguin-shared/util/usePostHog';
-import { apiRequestMultiPlatform } from 'linguin-shared/util/util';
 import { useContext, useEffect, useMemo, useState } from "react";
 import { InView as InViewWeb } from 'react-intersection-observer';
 import { Platform } from 'react-native';
 import { InView as InViewRn } from 'react-native-intersection-observer';
 import TranslatedTerm from "./TranslatedWord";
-import { useDailyReadStatContext } from 'linguin-shared/context/dailyReadStatContext';
 
 interface SentenceRenderProps {
     translatedText: TranslatedText;
@@ -46,7 +45,7 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
 
     function reactToVisible(visible: boolean) {
         if (visible && !wordStatUpdated && !wordStatInterval) {
-            wordStatInterval = setInterval(() => {
+            wordStatInterval = setTimeout(() => {
                 recordStatUpdate({
                     wordsSeen: props.translatedText.translationJson!.terms.map((termTranslation: TermTranslation) => termTranslation.text),
                     storiesViewed: [storyTranslationId!],
@@ -57,7 +56,7 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
         }
         else {
             if (wordStatInterval) {
-                clearInterval(wordStatInterval);
+                clearTimeout(wordStatInterval);
                 wordStatInterval = undefined;
             }
         }

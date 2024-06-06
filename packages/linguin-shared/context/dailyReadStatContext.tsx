@@ -1,13 +1,12 @@
 "use client";
 
-import { DailyUserReadStat } from "linguin-shared/model/stats";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState } from "react";
 import { apiRequestMultiPlatform } from "util/util";
 
 export interface DailyReadStatUpdateProps {
-    wordsSeen?: Array<string>;
-    storiesViewed?: Array<string>;
-    wordsLookedUp?: Array<string>;
+    wordsSeen?: string[];
+    storiesViewed?: string[];
+    wordsLookedUp?: string[];
     language: string;
 }
 
@@ -23,13 +22,46 @@ export interface DailyReadStatContextProviderProps {
 }
 
 export default function DailyReadStatContextProvider({ children }: DailyReadStatContextProviderProps): JSX.Element {
+    let [currentDailyReadStatUpdateProps] = useState<DailyReadStatUpdateProps>({
+        language: "",
+        wordsSeen: [],
+        wordsLookedUp: [],
+        storiesViewed: [],
+    });
+    let [lastRecordedDailyReadStatUpdateProps] = useState<DailyReadStatUpdateProps>({
+        language: "",
+        wordsSeen: [],
+        wordsLookedUp: [],
+        storiesViewed: [],
+    });
+
+    function mergeDailyReadStats(dailyReadStat1: DailyReadStatUpdateProps, dailyReadStat2: DailyReadStatUpdateProps) {
+        return {
+            language: dailyReadStat1.language,
+            wordsSeen: Array.from(new Set([...dailyReadStat1.wordsSeen ?? [], ...dailyReadStat2.wordsSeen ?? []])),
+            wordsLookedUp: Array.from(new Set([...dailyReadStat1.wordsLookedUp ?? [], ...dailyReadStat2.wordsLookedUp ?? []])),
+            storiesViewed: Array.from(new Set([...dailyReadStat1.storiesViewed ?? [], ...dailyReadStat2.storiesViewed ?? []])),
+        }
+    }
+
     function recordStatUpdate(props: DailyReadStatUpdateProps) {
-        apiRequestMultiPlatform("update-user-word-stats", "POST", {
-            wordsSeen: props.wordsSeen,
-            storiesViewed: props.storiesViewed,
-            wordsLookedUp: props.wordsLookedUp,
-            language: props.language,
-        });
+        currentDailyReadStatUpdateProps = mergeDailyReadStats(currentDailyReadStatUpdateProps, props);
+        initiateUpdate();
+    }
+
+    let updateWaitTimeout: any = null;
+    function initiateUpdate() {
+        if (updateWaitTimeout) {
+            clearTimeout(updateWaitTimeout);
+        }
+        updateWaitTimeout = setTimeout(() => {
+            if (!_eqList(currentDailyReadStatUpdateProps.wordsSeen ?? [], lastRecordedDailyReadStatUpdateProps.wordsSeen ?? [])
+                || !_eqList(currentDailyReadStatUpdateProps.wordsLookedUp ?? [], lastRecordedDailyReadStatUpdateProps.wordsLookedUp ?? [])
+                || !_eqList(currentDailyReadStatUpdateProps.storiesViewed ?? [], lastRecordedDailyReadStatUpdateProps.storiesViewed ?? [])) {
+                lastRecordedDailyReadStatUpdateProps = structuredClone(currentDailyReadStatUpdateProps);
+                apiRequestMultiPlatform("update-user-word-stats", "POST", currentDailyReadStatUpdateProps);
+            }
+        }, 5000);
     }
 
     return (
@@ -47,4 +79,8 @@ export function useDailyReadStatContext(): DailyReadStatContextType {
         throw new Error('useDailyReadStatContext must be used within a DailyReadStatContextProvider');
     }
     return context;
+}
+
+function _eqList(list1: string[], list2: string[]) {
+    return list1.length == list2.length && list1.every((value: string) => list2.includes(value));
 }

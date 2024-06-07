@@ -1,8 +1,9 @@
 import { AttributeValue, DynamoDBClient, UpdateItemCommand, PutItemCommand, GetItemCommand, Get } from "@aws-sdk/client-dynamodb";
 import { Language } from "@linguin-shared/types/language";
 import { DailyUserReadStat } from "linguin-shared/model/stats";
+import { fromEnv } from "@aws-sdk/credential-providers";
 
-const client = new DynamoDBClient({ region: "eu-west-1" });
+const client = new DynamoDBClient({ region: "eu-west-1", credentials: fromEnv()});
 
 export async function upsertUserStat(stat: DailyUserReadStat) {
     for (let i = 0; i < 3; i++) {

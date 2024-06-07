@@ -7,37 +7,17 @@ export async function apiRequestMultiPlatform(apiName, method = "GET", data) {
     return apiRequest(apiName, method, data);
   }
   else {
-    console.log("making app request");
-    return apiRequestFromApp(apiName, method, data);
+    return apiRequest(apiName, method, data, "https://linguin.co");
   }
 }
 
-export async function apiRequestFromApp(path, method = "GET", data) {
-  return fetch(`https://linguin.co/api/${path}`, {
-    method: method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: data ? JSON.stringify(data) : undefined,
-  })
-    .then((response) => response.json())
-    .then((response) => {
-      if (response.status === "error") {
-        throw new CustomError(response.code, response.message);
-      } else {
-        return response.data;
-      }
-    });
-};
-
-// Make an API request to `/api/{path}`
-export async function apiRequest(path, method = "GET", data) {
+export async function apiRequest(path, method = "GET", data, baseUrl = "") {
   const {
     data: { session },
   } = await supabase.auth.getSession();
   const accessToken = session ? session.access_token : undefined;
 
-  return fetch(`/api/${path}`, {
+  return fetch(`${baseUrl}/api/${path}`, {
     method: method,
     headers: {
       "Content-Type": "application/json",

@@ -8,7 +8,7 @@ import { TermTranslation } from "linguin-shared/model/translations";
 import usePostHog from 'linguin-shared/util/usePostHog';
 import { useContext, useEffect, useState } from "react";
 import TranslatedWordHoverBox from "./TranslatedWordHoverBox";
-import { useLanguageContext } from "context/languageContext";
+import { useLanguageContext } from "linguin-shared/context/languageContext";
 
 export interface TranslatedTermProps {
     termTranslation: TermTranslation;

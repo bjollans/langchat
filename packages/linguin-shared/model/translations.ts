@@ -66,13 +66,6 @@ export interface StoryToCollection {
     collectionName: string;
 }
 
-export interface StoryQuestionData {
-    question: string;
-    correctAnswer: string;
-    otherOptions: Array<string>;
-}
-    
-
 export interface AudioSentenceTime {
     start: number;
     end: number;

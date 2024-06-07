@@ -11,7 +11,6 @@ import { trackStat } from "linguin-shared/util/storyStatistics";
 import usePostHog from 'linguin-shared/util/usePostHog';
 import { useEffect } from "react";
 import { Platform } from 'react-native';
-import StoryQuestionsSection from "./StoryQuestionsSection";
 
 
 interface StoryProps {
@@ -45,7 +44,6 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
                     }
                 </Div>
                 <StoryTextRender storyTranslation={storyTranslation} />
-                <StoryQuestionsSection storyId={story.id} />
                 {Platform.OS == "web" && storyTranslation?.audioUrl &&
                     <StoryAudioPlayer src={storyTranslation.audioUrl} />}
                 <SuggestedStories navigation={navigation} />

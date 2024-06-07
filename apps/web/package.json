@@ -35,7 +35,6 @@
     "query-string": "6.13.8",
     "raw-body": "2.4.1",
     "react": "^18.2.0",
-    "react-confetti-explosion": "^2.1.2",
     "react-cookie": "^7.0.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "7.48.2",

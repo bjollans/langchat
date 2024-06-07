@@ -362,20 +362,6 @@ export function markUserStoryReadAutomatic(storyId: string, userId: string) {
   return response;
 }
 
-export function useStoryQuestions(storyId: string): UseQueryResult<Array<StoryQuestionData>> {
-  return useQuery(
-    ["storyQuestions", { storyId }],
-    () =>
-      supabase
-        .from("storyQuestions")
-        .select()
-        .eq("storyId", storyId)
-        .then(handle),
-    { enabled: !!storyId }
-  );
-}
-
-
 
 /**********************************/
 /**** MESSAGES & CONVERSATIONS ****/

@@ -8,6 +8,7 @@ import { TermTranslation } from "linguin-shared/model/translations";
 import usePostHog from 'linguin-shared/util/usePostHog';
 import { useContext, useEffect, useState } from "react";
 import TranslatedWordHoverBox from "./TranslatedWordHoverBox";
+import { useLanguageContext } from "context/languageContext";
 
 export interface TranslatedTermProps {
     termTranslation: TermTranslation;
@@ -22,6 +23,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     const RnSound = useContext(RnSoundContext);
     const { addToResetterFunctions } = useRnTouchableContext();
     const { recordStatUpdate } = useDailyReadStatContext();
+    const { language } = useLanguageContext();
 
     const {
         addIsPlayingAudioUpdateFunction,
@@ -35,7 +37,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
 
     const playRnAudio = () => {
         if (!RnSound || isPlayingStoryAudio) return;
-        let fileName = "";
+        let fileName = language + "-";
         for (let i = 0; i < props.termTranslation.text.length; i++) {
             fileName += props.termTranslation.text.charCodeAt(i) + (i < props.termTranslation.text.length - 1 ? "-" : "");
         }

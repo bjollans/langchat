@@ -1,4 +1,4 @@
-import DailyReadStatContextProvider, { DailyReadStatContext } from "context/dailyReadStatContext";
+import DailyReadStatContextProvider from "linguin-shared/context/dailyReadStatContext";
 import { Div } from "linguin-shared/components/RnTwComponents";
 import { StoryTranslation } from "linguin-shared/model/translations";
 import TranslationRenderer from "linguin-shared/util/translationRendering";

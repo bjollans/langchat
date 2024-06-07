@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-import { apiRequestMultiPlatform } from "util/util";
+import { apiRequestMultiPlatform } from "linguin-shared/util/util";
 import { useLanguageContext } from "./languageContext";
 
 export interface DailyReadStatUpdateProps {
@@ -57,7 +57,9 @@ export default function DailyReadStatContextProvider({ children }: DailyReadStat
             if (!_eqList(currentDailyReadStatUpdateProps.wordsSeen ?? [], lastRecordedDailyReadStatUpdateProps.wordsSeen ?? [])
                 || !_eqList(currentDailyReadStatUpdateProps.wordsLookedUp ?? [], lastRecordedDailyReadStatUpdateProps.wordsLookedUp ?? [])
                 || !_eqList(currentDailyReadStatUpdateProps.storiesViewed ?? [], lastRecordedDailyReadStatUpdateProps.storiesViewed ?? [])) {
-                lastRecordedDailyReadStatUpdateProps = structuredClone(currentDailyReadStatUpdateProps);
+                lastRecordedDailyReadStatUpdateProps.wordsSeen = [... currentDailyReadStatUpdateProps.wordsSeen?? []];
+                lastRecordedDailyReadStatUpdateProps.wordsLookedUp = [... currentDailyReadStatUpdateProps.wordsLookedUp?? []];
+                lastRecordedDailyReadStatUpdateProps.storiesViewed = [... currentDailyReadStatUpdateProps.storiesViewed?? []];
                 apiRequestMultiPlatform("update-user-word-stats", "POST", { language: language, ...currentDailyReadStatUpdateProps });
             }
         }, 5000);

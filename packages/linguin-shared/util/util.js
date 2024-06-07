@@ -7,7 +7,7 @@ export async function apiRequestMultiPlatform(apiName, method = "GET", data) {
     return apiRequest(apiName, method, data);
   }
   else {
-    return apiRequest(apiName, method, data, "https://linguin.co");
+    return apiRequest(apiName, method, data, "https://www.linguin.co");
   }
 }
 

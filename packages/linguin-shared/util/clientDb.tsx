@@ -3,7 +3,7 @@
 import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
 import { LinguinUser, LinguinUserProfile } from "linguin-shared/model/user";
 import { Conversation, ConversationStatus } from "model/conversation";
-import { Message, StoryEntity, StoryQuestionData } from "model/translations";
+import { Message, StoryEntity } from "model/translations";
 import { Vocab } from "model/vocab";
 import {
   QueryClient,
@@ -317,48 +317,6 @@ export async function upsertUserReadStatistics(userId: string, targetLanguage: L
     .eq("userId", userId)
     .then(handle);
   await client.invalidateQueries(["userWordsSeen", userId]);
-  return response;
-}
-
-/**********************************/
-/**** STORIES Automatic Marked ****/
-/**********************************/
-
-export function useUserStoriesReadAutomatic(userId: string): UseQueryResult<Array<any>> {
-  return useQuery(
-    ["userStoriesReadAutomatic", { userId }],
-    () =>
-      supabase
-        .from("userStoriesReadAutomatic")
-        .select('storyId')
-        .eq("userId", userId)
-        .then(handle),
-    { enabled: !!userId }
-  );
-}
-
-export function useUserStoriesReadAutomaticLast7Days(userId: string): UseQueryResult<Array<any>> {
-  return useQuery(
-    ["userStoriesReadAutomaticLast7Days", { userId }],
-    () =>
-      supabase
-        .from("userStoriesReadAutomatic")
-        .select('storyId')
-        .eq("userId", userId)
-        .gte("createdAt", new Date(new Date().setDate(new Date().getDate() - 7)).toISOString())
-        .then(handle),
-    { enabled: !!userId }
-  );
-}
-
-export function markUserStoryReadAutomatic(storyId: string, userId: string) {
-  client.setQueryData(["userStoriesReadAutomatic", { storyId, userId }], [true]);
-  client.setQueryData(["userStoriesReadAutomaticLast7Days", { userId }], (oldData: any) => oldData ? [...oldData, { storyId }] : [{ storyId }]);
-  client.setQueryData(["userStoriesReadAutomatic", { userId }], (oldData: any) => oldData ? [...oldData, { storyId }] : [{ storyId }]);
-  const response = supabase
-    .from("userStoriesReadAutomatic")
-    .upsert([{ storyId, userId }])
-    .then(handle);
   return response;
 }
 

@@ -2,11 +2,12 @@ import StoryListElement from 'linguin-shared/components/story/StoryListElement';
 import UserStatistics from 'linguin-shared/components/user/UserStatistics';
 import { useFilteredStories } from 'linguin-shared/context/storyListFilterContext';
 import { useAuth } from 'linguin-shared/util/auth';
-import { useUserStoriesReadAutomatic, useVisibleStoriesInfinite } from 'linguin-shared/util/clientDb';
+import { useVisibleStoriesInfinite } from 'linguin-shared/util/clientDb';
 import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import StoryListFilterMenu from './StoryListFilterMenu';
 import { FeedbackModal } from './FeedbackModal';
 import { useUserProfileContext } from 'linguin-shared/context/userProfileContext';
+import { useLanguageContext } from 'linguin-shared/context/languageContext';
 
 export interface Filter {
     id: string;
@@ -40,10 +41,9 @@ export default function StoryList({ navigation }) {
         hasNextPage,
     } = useVisibleStoriesInfinite(userProfile.targetLanguage);
     const filteredStories = useFilteredStories(stories?.pages?.flat() ?? []);
-    const { data: userStoriesRead, isSuccess: userStoriesReadLoaded } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
 
     if (isLoading) {
-        if (auth?.user && !userStoriesReadLoaded) {
+        if (auth?.user) {
             return <ActivityIndicator size="large" color="#0000ff" />;
         }
     }
@@ -52,7 +52,7 @@ export default function StoryList({ navigation }) {
             <StoryListFilterMenu navigation={navigation} />
             {!isLoading &&
                 <>
-                    {auth?.user && <UserStatistics />}
+                    {auth?.user && <UserStatistics language={userProfile.targetLanguage} />}
                     <FlatList
                         data={filteredStories}
                         renderItem={({ item: storyListEntity, separators }) => {

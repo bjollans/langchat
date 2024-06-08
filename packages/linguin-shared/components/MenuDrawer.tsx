@@ -18,11 +18,6 @@ const MenuDrawer = ({ isOpen, setIsOpen, children }) => {
     outputRange: [-250, 0], // Drawer width is 250
   });
 
-  const drawerOpacity = drawerAnimation.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, 0.5], // Opacity is 0.5
-  });
-
   return (
     <>
       {isOpen && <View style={{
@@ -33,21 +28,23 @@ const MenuDrawer = ({ isOpen, setIsOpen, children }) => {
         height: "100%",
         zIndex: 1,
       }} onTouchStart={() => setIsOpen(false)} />}
-      <Animated.View className="absolute z-50 h-full flex-wrap p-4"
+      <Animated.View
         style={[{
+          position: 'absolute',
+          zIndex: 50,
+          height: '100%',
+          padding: 16, // equivalent to p-4
           right: -250,
           top: 0,
           bottom: 0,
           width: 250,
-          justifyContent: 'center',
-          zIndex: 2,
+          justifyContent: 'center', // equivalent to justifyContent-center
           backgroundColor: 'white',
           alignItems: 'center',
         },
         {
           transform: [{ translateX: drawerWidth }],
-        },
-        ]}
+        }]}
       >
         {children}
       </Animated.View>
@@ -56,4 +53,3 @@ const MenuDrawer = ({ isOpen, setIsOpen, children }) => {
 };
 
 export default MenuDrawer;
-

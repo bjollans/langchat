@@ -2,11 +2,10 @@ import { useUserProfileContext } from 'linguin-shared/context/userProfileContext
 import React, { useMemo } from 'react';
 import { FlatList, Modal, Text, TouchableOpacity, View } from 'react-native';
 
-
 export default function LanguageChooseModal({ visible, close }) {
     const { availableLanguagesMap, updateUserProfile } = useUserProfileContext();
     const items = useMemo(() => {
-        let items : any[] = [];
+        let items: any[] = [];
         for (const [key, value] of Object.entries(availableLanguagesMap)) {
             items.push({ label: value, value: key });
         }
@@ -20,22 +19,54 @@ export default function LanguageChooseModal({ visible, close }) {
             transparent={true}
             onRequestClose={() => close()}
         >
-            <View className="w-full h-full" style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}>
-                <TouchableOpacity className='h-full w-full' onPress={() => close()}>
-                    <View className='mx-auto my-auto bg-slate-50 p-4 w-5/6 rounded-lg shadow'>
-                        <Text className='text-xl text-center font-bold'>Choose a Language</Text>
-                            <FlatList
-                                className='h-3/5 px-6 py-2 border border-slate-700 rounded-lg m-4'
-                                data={items}
-                                renderItem={({ item }) => (
-                                    <TouchableOpacity onPress={() => {
-                                        updateUserProfile({targetLanguage: item.value});
-                                        close();
-                                    }} className='border-b my-1 p-2 border-slate-400'>
-                                        <Text className='text-2xl font-bold tracking-tight'>{item.label}</Text>
-                                    </TouchableOpacity>
-                                )}
-                            />
+            <View style={{ width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.7)' }}>
+                <TouchableOpacity style={{ height: '100%', width: '100%' }} onPress={() => close()}>
+                    <View style={{
+                        marginHorizontal: 'auto',
+                        marginVertical: 'auto',
+                        backgroundColor: '#F8FAFC',
+                        padding: 16,
+                        width: '83.333333%',
+                        borderRadius: 8,
+                        shadowColor: '#000',
+                        shadowOffset: { width: 0, height: 2 },
+                        shadowOpacity: 0.3,
+                        shadowRadius: 3
+                    }}>
+                        <Text style={{
+                            fontSize: 20,
+                            textAlign: 'center',
+                            fontWeight: 'bold'
+                        }}>Choose a Language</Text>
+                        <FlatList
+                            style={{
+                                height: '60%',
+                                paddingHorizontal: 24,
+                                paddingVertical: 8,
+                                borderWidth: 1,
+                                borderColor: '#374151',
+                                borderRadius: 8,
+                                margin: 16
+                            }}
+                            data={items}
+                            renderItem={({ item }) => (
+                                <TouchableOpacity onPress={() => {
+                                    updateUserProfile({ targetLanguage: item.value });
+                                    close();
+                                }} style={{
+                                    borderBottomWidth: 1,
+                                    marginVertical: 4,
+                                    padding: 8,
+                                    borderBottomColor: '#9CA3AF'
+                                }}>
+                                    <Text style={{
+                                        fontSize: 24,
+                                        fontWeight: 'bold',
+                                        letterSpacing: -0.8
+                                    }}>{item.label}</Text>
+                                </TouchableOpacity>
+                            )}
+                        />
                     </View>
                 </TouchableOpacity>
             </View>

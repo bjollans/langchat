@@ -34,12 +34,31 @@ export default function SuggestedStories({navigation}) {
     };
 
     return (
-        <Div className="flex flex-col gap-y-4 items-center my-12 mb-24" onClick={captureClick}>
-            <H2 className="text-2xl font-bold">Read this next</H2>
+        <Div 
+            style={{
+                display: 'flex', 
+                flexDirection: 'column', 
+                gap: '1rem', // approximately "gap-y-4" in Tailwind
+                alignItems: 'center', 
+                marginTop: '3rem', // "my-12" equivalent
+                marginBottom: '6rem' // "mb-24" equivalent
+            }} 
+            onClick={captureClick}
+        >
+            <H2 
+                style={{
+                    fontSize: '1.5rem', // "text-2xl" in Tailwind
+                    fontWeight: 'bold' // "font-bold" in Tailwind
+                }}
+            >
+                Read this next
+            </H2>
             {stories && stories.map((storyListEntity) => (
-                <StoryListElement key={"suggested-story-" + storyListEntity.title} storyListEntity={storyListEntity} />
+                <StoryListElement
+                    key={"suggested-story-" + storyListEntity.title}
+                    storyListEntity={storyListEntity}
+                />
             ))}
         </Div>
     );
-
 }

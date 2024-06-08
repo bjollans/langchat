@@ -99,15 +99,13 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
                     i = termAtThisPosition[0].position + termAtThisPosition[0].text.length - 1;
                 }
                 else {
-                    translatedWords.push(<Span className={`relative mx-0.5 text-2xl ${isHighlighted ? "text-cyan-600" : "text-black"}`}>{props.translatedText.content[i]}</Span>);
+                    translatedWords.push(<Span style={{ position: 'relative', margin: '0 2px', fontSize: '1.5rem', color: isHighlighted ? "#0891b2" : "#000000" }}>{props.translatedText.content[i]}</Span>);
                 }
             }
         }
         return translatedWords;
     };
     const translatedWords = useMemo(() => getTranslatedWords(), [props.translatedText.content, isHighlighted]);
-
-
 
     const handleTranslateClick = () => {
         addToResetterFunctions(() => setShowWholeTranslation(false));
@@ -118,46 +116,98 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
     }
 
     return (<>
-
-        <Div className="relative cursor-pointer w-full"
-            onMouseLeave={() => setShowWholeTranslation(false)}>
-            <Div className={showWholeTranslation ? "cursor-text absolute bottom-0 left-0 z-50" : "hidden"} style={{ maxWidth: "80%" }}>
-                <Div className="bg-black text-white rounded-lg p-2 mb-6 w-96 max-w-full mx-auto">
-                    <P className="flex text-white items-start">
+        <Div
+            style={{ position: 'relative', cursor: 'pointer', width: '100%' }}
+            onMouseLeave={() => setShowWholeTranslation(false)}
+        >
+            <Div 
+                style={{ 
+                    display: showWholeTranslation ? 'block' : 'none', 
+                    cursor: 'text', 
+                    position: 'absolute', 
+                    bottom: 0, 
+                    left: 0, 
+                    zIndex: 50, 
+                    maxWidth: '80%' 
+                }}
+            >
+                <Div
+                    style={{ 
+                        backgroundColor: '#000', 
+                        color: '#fff', 
+                        borderRadius: '0.5rem', 
+                        padding: '0.5rem', 
+                        marginBottom: '1.5rem', 
+                        width: '24rem', 
+                        maxWidth: '100%', 
+                        margin: 'auto' 
+                    }}>
+                    <P style={{ display: 'flex', color: '#fff', alignItems: 'flex-start' }}>
                         {props.translatedText.translationJson?.wholeSentence?.translation}
                     </P>
                     {props.translatedText.translationJson?.wholeSentence?.transliteration &&
-                        <P className="text-sm flex italic items-start text-white">
+                        <P 
+                            style={{ 
+                                fontSize: '0.875rem', 
+                                display: 'flex', 
+                                fontStyle: 'italic', 
+                                alignItems: 'flex-start', 
+                                color: '#fff' 
+                            }}
+                        >
                             {props.translatedText.translationJson?.wholeSentence?.transliteration}
                         </P>
                     }
                 </Div>
             </Div>
-            <Div className={`relative flex flex-row flex-wrap text-2xl items-center ${isHighlighted ? "text-cyan-600" : "text-black"}`}>
-                <Div className="absolute left-0">
+            <Div 
+                style={{ 
+                    position: 'relative', 
+                    display: 'flex', 
+                    flexDirection: 'row', 
+                    flexWrap: 'wrap', 
+                    fontSize: '1.5rem', 
+                    alignItems: 'center', 
+                    color: isHighlighted ? "#0891b2" : '#000000' 
+                }}
+            >
+                <Div style={{ position: 'absolute', left: 0 }}>
                     {props.hasAudio &&
                         (isHighlighted
                             && (
-                                Platform.OS == "web"
-                                && <EqualizerIconWeb isAnimated={isPlayingAudio} onClick={onTogglePlayAudio} />
-                                || <EqualizerIconRn isAnimated={isPlayingAudio} onClick={onTogglePlayAudio} />
+                                Platform.OS === 'web'
+                                ? <EqualizerIconWeb isAnimated={isPlayingAudio} onClick={onTogglePlayAudio} />
+                                : <EqualizerIconRn isAnimated={isPlayingAudio} onClick={onTogglePlayAudio} />
                             )
                             || <Btn onClick={onPlayAudio}><PlayIcon /></Btn>)
                     }
                 </Div>
-                <Div className="mx-8 flex flex-row items-center justify-between">
+                <Div style={{ margin: '0 2rem', display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Span>{translatedWords}</Span>
-                    <Btn className="hover:bg-slate-200 text-black font-bold rounded" onClick={handleTranslateClick}>
+                    <Btn 
+                        style={{
+                            backgroundColor: 'transparent',
+                            transition: 'background-color 0.2s', 
+                            color: '#000', 
+                            fontWeight: 'bold', 
+                            borderRadius: '0.375rem',
+                            ':hover': {
+                                backgroundColor: '#e0e7ff'
+                            }
+                        }}
+                        onClick={handleTranslateClick}
+                    >
                         <TranslateIcon />
                     </Btn>
                 </Div>
             </Div>
-            <InView onChange={(inView: boolean) => reactToVisible(inView)} ><Span style={{ fontSize: 1 }}> </Span></InView>
+            <InView onChange={(inView: boolean) => reactToVisible(inView)} >
+                <Span style={{ fontSize: 1 }}> </Span>
+            </InView>
         </Div >
     </>
     );
 }
-
 
 function InView({ onChange, children }: { onChange: (inView: boolean) => void, children: JSX.Element }) {
     if (Platform.OS === 'web') {

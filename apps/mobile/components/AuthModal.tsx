@@ -133,12 +133,12 @@ export default function AuthForm({ visible, navigation }) {
             animationType="slide"
             transparent={true}
             visible={visible}>
-            <View className="w-full h-full" style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}>
-                <View className="p-4 bg-white border rounded-md m-12 my-auto w-[80%] opacity-1">
+            <View style={{ width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.7)' }}>
+                <View style={{ padding: 16, backgroundColor: 'white', borderWidth: 1, borderRadius: 8, margin: 48, alignSelf: 'center', width: '80%', opacity: 1 }}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={{ alignSelf: 'flex-end' }}>
                         <Svg height="24" viewBox="0 -960 960 960" width="24"><Path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" /></Svg>
                     </TouchableOpacity>
-                    <Text className="text-xl font-bold text-center mb-4">Login To Continue</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center', marginBottom: 16 }}>Login To Continue</Text>
                     <View style={[styles.verticallySpaced, styles.mt20]}>
                         <Input
                             label="Email"
@@ -170,9 +170,9 @@ export default function AuthForm({ visible, navigation }) {
                                 <Button title="Sign up" disabled={loading} onPress={() => signUpWithEmail()} buttonStyle={{ backgroundColor: "#38bdf8" }} />
                             </View>
                             <View style={styles.verticallySpaced}>
-                                <Button className='my-2 mt-3' title={<>
+                                <Button title={<>
                                     <FontAwesomeIcon icon={faGoogle} size={15} color="#000000" />
-                                    <Text className="text-black ml-1.5 py-1" style={{ fontSize: 18, fontWeight: 500 }}>Sign in with Google</Text>
+                                    <Text style={{ color: 'black', marginLeft: 6, paddingTop: 4, paddingBottom: 4 }}>Sign in with Google</Text>
                                 </>} disabled={loading} onPress={() => authGoogle()}
                                     buttonStyle={{ backgroundColor: "#ffffff", borderWidth: 1, borderColor: "#838383", borderRadius: 6 }} />
                             </View>
@@ -182,7 +182,7 @@ export default function AuthForm({ visible, navigation }) {
                                     buttonType={AppleButton.Type.SIGN_IN}
                                     style={{
                                         width: '100%', // You must specify a width
-                                        height: 45, // You must specify a hei
+                                        height: 45, // You must specify a height
                                     }}
                                     onPress={authAppleOniOS}
                                 />

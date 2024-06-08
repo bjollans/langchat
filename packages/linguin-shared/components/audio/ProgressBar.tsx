@@ -56,12 +56,14 @@ export default function ProgressBar(props: ProgressBarProps) {
 
     return (
         <SingleLayerBtn
-            className='h-2 bg-gray-200 cursor-pointer w-full items-start flex'
+            style={{ height: 8, backgroundColor: '#e5e7eb', cursor: 'pointer', width: '100%', justifyContent: 'flex-start', display: 'flex' }}
             onClick={handleProgressBarClick}
             onLayout={(e) => setRnProgressBarWidth(e.nativeEvent.layout.width)}
         >
-            <SingleLayerBtn className='bg-cyan-600 shadow-lg h-2' style={{ width: progressBarWidth }}
-                onClick={handleProgressBarClick} />
+            <SingleLayerBtn
+                style={{ backgroundColor: '#0891b2', shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.2, shadowRadius: 1.41, height: 8, width: progressBarWidth }}
+                onClick={handleProgressBarClick}
+            />
         </SingleLayerBtn>
-    )
+    );
 }

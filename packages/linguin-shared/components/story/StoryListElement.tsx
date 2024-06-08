@@ -39,49 +39,63 @@ export default function StoryListElement(props: StoryListElementProps) {
     }, []);
 
     const difficultyColor = {
-        "easy": "ring-green-600/20 bg-green-50 text-green-700",
-        "intermediate": "ring-blue-700/10 bg-blue-50 text-blue-700",
-        "hard": "ring-purple-700/10 bg-purple-50 text-purple-700",
+        "easy": { backgroundColor: '#e7f5e5', color: '#065f46', borderColor: 'rgba(22, 200, 115, 0.2)' },
+        "intermediate": { backgroundColor: '#ebf5ff', color: '#2563eb', borderColor: 'rgba(59, 130, 246, 0.1)' },
+        "hard": { backgroundColor: '#f3effb', color: '#7e22ce', borderColor: 'rgba(139, 92, 246, 0.1)' },
     }
 
     const storyFilterChangeCalls: StoryFilterChangeCalls | undefined = useContext(StoryListFilterContext);
 
     return (
-        <Div key={props.storyListEntity.title} className="flex flex-row px-4 gap-x-4 py-5 hover:bg-slate-100 items-center" ref={visibilityRef} onClick={() => trackStat(props.storyListEntity.id, "clicks")} style={{ backgroundColor: 'transparent', overflow: 'hidden' }}>
+        <Div key={props.storyListEntity.title} style={{ display: 'flex', flexDirection: 'row', padding: '20px', gap: '16px', alignItems: 'center', cursor: 'pointer' }} ref={visibilityRef} onClick={() => trackStat(props.storyListEntity.id, "clicks")}>
             {Platform.OS === 'web' &&
-                <Img className="w-24 h-24 object-cover rounded-full overflow-hidden" src={props.storyListEntity.previewImageUrl} alt="" />
-                || <Div className="rounded-full overflow-hidden">
-                    <Img className="w-24 h-24 object-cover rounded-full" src={props.storyListEntity.previewImageUrl} alt="" />
+                <Img style={{ width: '96px', height: '96px', objectFit: 'cover', borderRadius: '9999px', overflow: 'hidden' }} src={props.storyListEntity.previewImageUrl} alt="" />
+                || <Div style={{ borderRadius: '9999px', overflow: 'hidden' }}>
+                    <Img style={{ width: '96px', height: '96px', objectFit: 'cover', borderRadius: '9999px' }} src={props.storyListEntity.previewImageUrl} alt="" />
                 </Div>
             }
             <Div style={{ flex: 1 }}>
-                <Div className="min-w-0">
-                    <Div className="flex flex-row space-x-2">
-                        <P className="text-lg font-semibold leading-6 text-gray-900">{props.storyListEntity.title}</P>
-                        {isNew && <Span className="inline-flex items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                <Div style={{ minWidth: 0 }}>
+                    <Div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
+                        <P style={{ fontSize: '1.125rem', fontWeight: '600', lineHeight: '1.5rem', color: '#1f2937' }}>{props.storyListEntity.title}</P>
+                        {isNew && <Span style={{ display: 'inline-flex', alignItems: 'center', borderRadius: '9999px', backgroundColor: '#e7f5e5', paddingLeft: '6px', paddingRight: '6px', paddingTop: '2px', paddingBottom: '2px', fontSize: '0.75rem', fontWeight: '500', color: '#065f46', borderColor: 'rgba(22, 200, 115, 0.2)', borderStyle: 'solid', borderWidth: '1px' }}>
                             New
                         </Span>}
                     </Div>
-                    <Div className="sm:flex flex-row items-end justify-space-evenly gap-x-8">
+                    <Div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', gap: '32px' }}>
                         <Div>
-                            <Div className="flex flex-row space-x-2">
-                                <P className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">
+                            <Div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
+                                <P style={{ margin: '4px', fontSize: '0.75rem', lineHeight: '1rem', fontWeight: 'bold', color: '#6b7280' }}>
                                     Words:
-                                    <Span className="mt-1 truncate text-xs leading-5 text-gray-400"> {props.storyListEntity.wordCount}</Span>
+                                    <Span style={{ margin: '4px', fontSize: '0.75rem', lineHeight: '1rem', color: '#9ca3af' }}> {props.storyListEntity.wordCount}</Span>
                                 </P>
-                                {!userStoryStatistics.hasRead && <P className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">
+                                {!userStoryStatistics.hasRead && <P style={{ margin: '4px', fontSize: '0.75rem', lineHeight: '1rem', fontWeight: 'bold', color: '#6b7280' }}>
                                     New:
-                                    <Span className="mt-1 truncate text-xs leading-5 text-gray-400"> {userStoryStatistics.newWords} ({userStoryStatistics.newWordsPercentage}%)</Span>
+                                    <Span style={{ margin: '4px', fontSize: '0.75rem', lineHeight: '1rem', color: '#9ca3af' }}> {userStoryStatistics.newWords} ({userStoryStatistics.newWordsPercentage}%)</Span>
                                 </P>}
                             </Div>
-                            <P className="mt-1 truncate italic text-xs leading-5 text-gray-400">{props.storyListEntity.content?.slice(0, 30) + '....'}</P>
+                            <P style={{ margin: '4px', fontStyle: 'italic', fontSize: '0.75rem', lineHeight: '1rem', color: '#9ca3af' }}>{props.storyListEntity.content?.slice(0, 30) + '....'}</P>
                         </Div>
                         <StoryCompletedCheckMark storyId={props.storyListEntity.id} />
                     </Div>
                 </Div>
-                <Div className="flex flex-row mt-4 text-sm leading-5 text-gray-500 rounded-full overflow-hidden">
-                    <Btn key={`${props.storyListEntity.id}-difficulty`}
-                        className={`rounded-full mr-2 inline-flex flex-row items-center  px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset ${difficultyColor[props.storyListEntity?.difficulty?.toLowerCase()]}`}
+                <Div style={{ display: 'flex', flexDirection: 'row', marginTop: '16px', fontSize: '0.875rem', lineHeight: '1.25rem', color: '#6b7280', borderRadius: '9999px', overflow: 'hidden' }}>
+                    <Btn
+                        key={`${props.storyListEntity.id}-difficulty`}
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            padding: '4px 8px',
+                            fontSize: '0.75rem',
+                            fontWeight: '500',
+                            borderRadius: '9999px',
+                            borderColor: difficultyColor[props.storyListEntity?.difficulty?.toLowerCase()].borderColor,
+                            backgroundColor: difficultyColor[props.storyListEntity?.difficulty?.toLowerCase()].backgroundColor,
+                            color: difficultyColor[props.storyListEntity?.difficulty?.toLowerCase()].color,
+                            marginRight: '8px',
+                            borderWidth: '1px',
+                            borderStyle: 'solid'
+                        }}
                         onClick={(e) => {
                             if (!storyFilterChangeCalls) return;
                             e.preventDefault();
@@ -95,7 +109,20 @@ export default function StoryListElement(props: StoryListElementProps) {
                         {props.storyListEntity.difficulty}
                     </Btn>
                     {props.storyListEntity.collections?.map((collectionName: any) => <Btn key={props.storyListEntity.title + collectionName}
-                        className="mr-2 inline-flex flex-row items-center rounded-full bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-500 ring-1 ring-inset ring-gray-500/10"
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            padding: '4px 8px',
+                            fontSize: '0.75rem',
+                            fontWeight: '500',
+                            borderRadius: '9999px',
+                            backgroundColor: '#f8fafc',
+                            color: '#6b7280',
+                            borderColor: 'rgba(107, 114, 128, 0.1)',
+                            marginRight: '8px',
+                            borderWidth: '1px',
+                            borderStyle: 'solid',
+                        }}
                         onClick={(e) => {
                             e.preventDefault();
                             if (storyFilterChangeCalls!.collectionNames.includes(collectionName)) {
@@ -103,7 +130,8 @@ export default function StoryListElement(props: StoryListElementProps) {
                                 return;
                             }
                             storyFilterChangeCalls!.onCollectionAdd(collectionName);
-                        }}>
+                        }}
+                    >
                         {collectionName}
                     </Btn>)}
                 </Div>

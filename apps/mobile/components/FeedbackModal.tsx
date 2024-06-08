@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useEffect, useState } from 'react';
-import { Alert, Modal, StyleSheet, Text, Pressable, View, TouchableWithoutFeedback } from 'react-native'
+import { Alert, Modal, StyleSheet, Text, Pressable, View, TouchableWithoutFeedback } from 'react-native';
 import InAppReview from 'react-native-in-app-review';
 import usePostHog from 'linguin-shared/util/usePostHog';
 
@@ -22,8 +22,7 @@ export function FeedbackModal() {
             if (Date.now() - firstInstallTime > AMOUNT_OF_DAYS * 24 * 60 * 60 * 1000) {
                 setInstalledForEnoughDays(true);
             }
-        }
-        );
+        });
     }, []);
 
     useEffect(() => {
@@ -31,8 +30,7 @@ export function FeedbackModal() {
             if (value === 'true') {
                 setHasReviewed(true);
             }
-        }
-        );
+        });
     }, []);
 
     useEffect(() => {
@@ -46,8 +44,7 @@ export function FeedbackModal() {
             } else {
                 setLastAskedForReview(0);
             }
-        }
-        );
+        });
     }, []);
 
     const handleReview = async (rating) => {
@@ -59,7 +56,7 @@ export function FeedbackModal() {
         setShowThanksModal(true);
         posthog.capture('reviewed_app', {
             rating: rating,
-        });   
+        });
     }
 
     const hasAskedForReviewRecently = Date.now() - lastAskedForReview < 7 * 24 * 60 * 60 * 1000;
@@ -79,12 +76,30 @@ export function FeedbackModal() {
                     {showThanksModal
                         && (<View style={styles.centeredView}>
                             <View style={styles.modalView}>
-                                <Text style={styles.modalText} className="font-semibold text-lg tracking-tight">Thank you for your review!</Text>
+                                <Text
+                                    style={{
+                                        ...styles.modalText,
+                                        fontWeight: '600',
+                                        fontSize: 18,
+                                        letterSpacing: -0.5
+                                    }}
+                                >
+                                    Thank you for your review!
+                                </Text>
                             </View>
                         </View>)
                         || (<View style={styles.centeredView}>
                             <View style={styles.modalView}>
-                                <Text style={styles.modalText} className="font-semibold text-lg tracking-tight">Are you enjoying Linguin?</Text>
+                                <Text
+                                    style={{
+                                        ...styles.modalText,
+                                        fontWeight: '600',
+                                        fontSize: 18,
+                                        letterSpacing: -0.5
+                                    }}
+                                >
+                                    Are you enjoying Linguin?
+                                </Text>
                                 <StarRating
                                     rating={3}
                                     onChange={handleReview}

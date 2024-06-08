@@ -16,7 +16,10 @@ export interface StoryListElementWebProps {
 
 export default function StoryListElementWeb(props: StoryListElementWebProps) {
     return (
-        <a href={`/story/${props.language}/${props.storyListEntity.storyTranslationId}`} className="w-full h-full">
+        <a 
+            href={`/story/${props.language}/${props.storyListEntity.storyTranslationId}`} 
+            style={{ width: '100%', height: '100%' }}
+        >
             <StoryListElement storyListEntity={props.storyListEntity} />
         </a>
     );

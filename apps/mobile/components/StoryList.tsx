@@ -3,7 +3,7 @@ import UserStatistics from 'linguin-shared/components/user/UserStatistics';
 import { useFilteredStories } from 'linguin-shared/context/storyListFilterContext';
 import { useAuth } from 'linguin-shared/util/auth';
 import { useVisibleStoriesInfinite } from 'linguin-shared/util/clientDb';
-import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import StoryListFilterMenu from './StoryListFilterMenu';
 import { FeedbackModal } from './FeedbackModal';
 import { useUserProfileContext } from 'linguin-shared/context/userProfileContext';
@@ -29,6 +29,13 @@ export interface FilterOption {
     label: string;
 }
 
+const styles = StyleSheet.create({
+    touchable: {
+        backgroundColor: 'white',
+        borderBottomWidth: 1,
+        borderBottomColor: '#E5E7EB',
+    }
+});
 
 export default function StoryList({ navigation }) {
     const auth = useAuth();
@@ -57,7 +64,7 @@ export default function StoryList({ navigation }) {
                         data={filteredStories}
                         renderItem={({ item: storyListEntity, separators }) => {
                             if (!storyListEntity) return null;
-                            return <TouchableOpacity className="bg-white border-b border-gray-200"
+                            return <TouchableOpacity style={styles.touchable}
                                 onPress={() => {
                                     navigation.navigate("Story", { storyTranslationId: storyListEntity.storyTranslationId, storyTitle: storyListEntity.title });
                                 }}>

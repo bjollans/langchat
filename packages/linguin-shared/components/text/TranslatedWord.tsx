@@ -70,14 +70,25 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
         <SingleLayerBtn
             onClick={handleClick}
             onMouseLeave={() => setShowTranslation(false)}
-            className="cursor-pointer relative hover:text-indigo-500 cursor-pointer">
-            {hasFurigana && <P style={{ fontSize: 12, position: "absolute", top:0, overflow: "visible", whiteSpace: "nowrap" }}>{replaceLastOccurrence(removePunctuation(props.termTranslation.transliteration!), removeNonKana(props.termTranslation.text), "")}</P>}
+            style={{
+                cursor: "pointer",
+                position: "relative",
+                color: isPlayingStoryAudio ? "#4F46E5" : "initial",
+            }}
+        >
+            {hasFurigana && <P style={{ fontSize: 12, position: "absolute", top: 0, overflow: "visible", whiteSpace: "nowrap" }}>{replaceLastOccurrence(removePunctuation(props.termTranslation.transliteration!), removeNonKana(props.termTranslation.text), "")}</P>}
             {showTranslation && <TranslatedWordHoverBox termTranslation={props.termTranslation} />}
-            <P className="text-2xl underline decoration-dotted mx-0.5" style={{color: props.isHighlighted? "#0891b2":"#000000", marginTop: hasFurigana? 12:0, marginBottom: hasFurigana? 12:0}}>
+            <P style={{
+                fontSize: "1.5rem",
+                textDecoration: "underline dotted",
+                margin: "0 0.125rem",
+                color: props.isHighlighted ? "#0891b2" : "#000000",
+                marginTop: hasFurigana ? "0.75rem" : 0,
+                marginBottom: hasFurigana ? "0.75rem" : 0,
+            }}>
                 {props.termTranslation.text}
             </P>
         </SingleLayerBtn>
-
     );
 }
 

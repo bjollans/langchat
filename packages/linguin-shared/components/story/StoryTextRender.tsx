@@ -17,7 +17,7 @@ export default function StoryTextRender(props: StoryTextRenderProps): JSX.Elemen
 
     return (
         <DailyReadStatContextProvider>
-            <Div className="max-w-4xl mx-auto">{renderedLines}</Div>
+            <Div style={{ maxWidth: '64rem', margin: '0 auto' }}>{renderedLines}</Div>
         </DailyReadStatContextProvider>
     );
 }

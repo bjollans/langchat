@@ -17,9 +17,20 @@ export default function UserStatistics({language}) {
     const { data: storiesRead } = useUserStoriesRead(auth?.user?.uid);
     const wordsSeen = wordsSeenJson?.length > 0 && wordsSeenJson[0] ? wordsSeenJson[0]?.wordsSeen : [];
 
-    return <Div className="mt-1 mb-2">
-        <P className="mx-auto text-center text-md italic leading-6 font-medium text-gray-900">
-            {wordsSeen?.length} Words Seen for {availableLanguagesMap[language]}.
-        </P>
-    </Div>;
+    return (
+        <Div style={{ marginTop: '0.25rem', marginBottom: '0.5rem' }}>
+            <P style={{
+                marginLeft: 'auto', 
+                marginRight: 'auto', 
+                textAlign: 'center', 
+                fontSize: '1rem', 
+                fontStyle: 'italic', 
+                lineHeight: '1.5rem', 
+                fontWeight: '500', 
+                color: '#1F2937'  // Tailwind gray-900
+            }}>
+                {wordsSeen?.length} Words Seen for {availableLanguagesMap[language]}.
+            </P>
+        </Div>
+    );
 }

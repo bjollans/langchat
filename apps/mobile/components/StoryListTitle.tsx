@@ -6,15 +6,12 @@ export default function StoryListTitle() {
     const { userProfile, availableLanguagesMap, setLanguageChooseModalVisible } = useUserProfileContext();
 
     return (<>
-        <TouchableOpacity className='flex flex-row items-center' onPress={() => setLanguageChooseModalVisible(true)}>
+        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => setLanguageChooseModalVisible(true)}>
             <_ExpandIcon />
-            <Text className='text-lg font-bold'>{availableLanguagesMap[userProfile.targetLanguage]} Stories</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{availableLanguagesMap[userProfile.targetLanguage]} Stories</Text>
         </TouchableOpacity>
     </>);
 }
-
-
-
 
 function _ExpandIcon() {
     return (

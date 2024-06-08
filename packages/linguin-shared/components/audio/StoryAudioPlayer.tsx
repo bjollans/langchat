@@ -163,7 +163,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     };
 
     return (
-        <Div className='bg-white fixed bottom-0 left-0 right-0 drop-shadow-xl border'>
+        <Div style={{ backgroundColor: 'white', position: 'fixed', bottom: 0, left: 0, right: 0, boxShadow: '0px 10px 15px -3px rgba(0, 0, 0, 0.1)', border: '1px solid' }}>
             <ProgressBar duration={Platform.OS == "web" ? audioRef?.current?.duration || 0 : duration} />
             {Platform.OS === 'web' &&
                 <audio
@@ -175,19 +175,25 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
                     <source src={props.src} type="audio/mpeg" />
                     Your browser does not support the audio element.
                 </audio>}
-            <SingleLayerBtn className='flex my-1 rounded-full mx-auto' onClick={togglePlayPause}>
+            <SingleLayerBtn style={{ display: 'flex', margin: '0.25rem', borderRadius: '9999px', marginLeft: 'auto', marginRight: 'auto' }} onClick={togglePlayPause}>
                 {_PlayButton(isPlayingAudio)}
             </SingleLayerBtn>
         </Div>
     )
 }
 
-
 function _PlayButton(isPlayingAudio): JSX.Element {
     if (Platform.OS === 'web') {
+        const style = {
+            borderRadius: '9999px',
+            border: '4px solid #64748b',
+            color: '#64748b',
+            width: '3rem',
+            height: '3rem'
+        }
         return isPlayingAudio
-            ? <PauseIcon className='rounded-full border-4 border-slate-600 text-slate-600 w-12 h-12' />
-            : <PlayIcon className='rounded-full border-4 pl-1 border-slate-600 text-slate-600 w-12 h-12' />;
+            ? <PauseIcon style={{ ...style }} />
+            : <PlayIcon style={{ ...style, paddingLeft: '0.25rem' }} />;
     }
     return isPlayingAudio
         ? <PauseCircleIcon />

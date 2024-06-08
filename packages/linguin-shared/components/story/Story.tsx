@@ -41,24 +41,59 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
                 {language == "hi" && Platform.OS === 'web' &&
                     <link rel="preload" href="/fonts/Poppins-Regular.ttf" as="font" type="font/poppins" />
                 }
-                <Img className="h-96 lg:w-2/5 w-[90%] md:w-1/2 sm:w-2/3 mx-auto object-cover rounded-lg shadow-sm shadow-black flex-none" src={story?.imageUrl} alt="" />
-                <Div className="border-b border-gray-200 pb-5 my-8 flex items-left">
+                <Img style={{
+                    height: '24rem',
+                    width: '90%',
+                    maxWidth: '40%',
+                    objectFit: 'cover',
+                    borderRadius: 3,
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+                    margin: '0 auto',
+                    display: 'flex'
+                }} src={story?.imageUrl} alt="" />
+                <Div style={{
+                    borderBottom: '1px solid #e5e7eb',
+                    paddingBottom: '1.25rem',
+                    margin: '2rem 0',
+                    display: 'flex',
+                    alignItems: 'flex-start'
+                }}>
                     {Platform.OS == "web" &&
-                        <H3 className="mx-6 text-base text-4xl py-3 mx-auto font-semibold leading-6 text-gray-900">{story?.title}</H3>
+                        <H3 style={{
+                            margin: '0 1.5rem',
+                            fontSize: '2.25rem',
+                            padding: '0.75rem 0',
+                            fontWeight: '600',
+                            lineHeight: '1.5',
+                            color: '#1f2937'
+                        }}>{story?.title}</H3>
                     }
-                    {language == "ja" && Platform.OS != "web" && <CheckBox className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
+                    {language == "ja" && Platform.OS != "web" && <CheckBox style={{
+                        height: '1rem',
+                        width: '1rem',
+                        borderColor: '#d1d5db',
+                        borderRadius: 3,
+                        color: '#4f46e5',
+                        focusRingColor: '#6366f1'
+                    }}
                         checked={hasFurigana} onPress={() => setHasFurigana(!hasFurigana)} checkedColor="indigo"
                         title={"Furigana"}
                     />}
                 </Div>
 
                 {language == "ja" && Platform.OS == "web"
-                    && <Div className="flex"><input
+                    && <Div style={{ display: 'flex' }}><input
                         type="checkbox"
                         defaultChecked={hasFurigana}
                         onChange={(e) => setHasFurigana(e.target.checked)}
-                        className="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
-                    /><P className="text-lg leading-8 text-gray-600">Furigana</P></Div>
+                        style={{
+                            height: '1rem',
+                            width: '1rem',
+                            borderColor: '#d1d5db',
+                            borderRadius: 3,
+                            color: '#4f46e5',
+                        }}
+                    /><P style={{ fontSize: '1.125rem', lineHeight: '2rem', color: '#4b5563' }}>Furigana</P></Div>
                 }
 
 

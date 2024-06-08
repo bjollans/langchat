@@ -18,14 +18,14 @@ export default function UserStatistics({language}) {
     const wordsSeen = wordsSeenJson?.length > 0 && wordsSeenJson[0] ? wordsSeenJson[0]?.wordsSeen : [];
 
     return (
-        <Div style={{ marginTop: '0.25rem', marginBottom: '0.5rem' }}>
+        <Div style={{ marginTop: 4, marginBottom: 8 }}>
             <P style={{
                 marginLeft: 'auto', 
                 marginRight: 'auto', 
                 textAlign: 'center', 
-                fontSize: '1rem', 
+                fontSize: 16, 
                 fontStyle: 'italic', 
-                lineHeight: '1.5rem', 
+                lineHeight: 24, 
                 fontWeight: '500', 
                 color: '#1F2937'  // Tailwind gray-900
             }}>

@@ -37,8 +37,8 @@ export default function EqualizerIconWeb(props: EqualizerIconWebProps) {
   // Styles for the equalizer bars
   const barStyle = (delay) => ({
     display: 'inline-block',
-    width: '3px',
-    height: props.isAnimated ? '15px' : `${(30 + (delay * 50)) / 2}px`, // Assign different heights when not animated
+    width: 3,
+    height: props.isAnimated ? 15 : `${(30 + (delay * 50)) / 2}px`, // Assign different heights when not animated
     backgroundColor: '#0891b2',
     margin: '0 1px',
     animation: props.isAnimated ? 'equalize 0.6s infinite alternate' : 'none',

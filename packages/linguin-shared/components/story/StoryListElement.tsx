@@ -47,53 +47,53 @@ export default function StoryListElement(props: StoryListElementProps) {
     const storyFilterChangeCalls: StoryFilterChangeCalls | undefined = useContext(StoryListFilterContext);
 
     return (
-        <Div key={props.storyListEntity.title} style={{ display: 'flex', flexDirection: 'row', padding: '20px', gap: '16px', alignItems: 'center', cursor: 'pointer' }} ref={visibilityRef} onClick={() => trackStat(props.storyListEntity.id, "clicks")}>
+        <Div key={props.storyListEntity.title} style={{ display: 'flex', flexDirection: 'row', padding: 20, gap: 16, alignItems: 'center', cursor: 'pointer' }} ref={visibilityRef} onClick={() => trackStat(props.storyListEntity.id, "clicks")}>
             {Platform.OS === 'web' &&
-                <Img style={{ width: '96px', height: '96px', objectFit: 'cover', borderRadius: '9999px', overflow: 'hidden' }} src={props.storyListEntity.previewImageUrl} alt="" />
-                || <Div style={{ borderRadius: '9999px', overflow: 'hidden' }}>
-                    <Img style={{ width: '96px', height: '96px', objectFit: 'cover', borderRadius: '9999px' }} src={props.storyListEntity.previewImageUrl} alt="" />
+                <Img style={{ width: 96, height: 96, objectFit: 'cover', borderRadius: 9999, overflow: 'hidden' }} src={props.storyListEntity.previewImageUrl} alt="" />
+                || <Div style={{ borderRadius: 9999, overflow: 'hidden' }}>
+                    <Img style={{ width: 96, height: 96, objectFit: 'cover', borderRadius: 9999 }} src={props.storyListEntity.previewImageUrl} alt="" />
                 </Div>
             }
             <Div style={{ flex: 1 }}>
                 <Div style={{ minWidth: 0 }}>
-                    <Div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
-                        <P style={{ fontSize: '1.125rem', fontWeight: '600', lineHeight: '1.5rem', color: '#1f2937' }}>{props.storyListEntity.title}</P>
-                        {isNew && <Span style={{ display: 'inline-flex', alignItems: 'center', borderRadius: '9999px', backgroundColor: '#e7f5e5', paddingLeft: '6px', paddingRight: '6px', paddingTop: '2px', paddingBottom: '2px', fontSize: '0.75rem', fontWeight: '500', color: '#065f46', borderColor: 'rgba(22, 200, 115, 0.2)', borderStyle: 'solid', borderWidth: '1px' }}>
+                    <Div style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
+                        <P style={{ fontSize: 18, fontWeight: '600', lineHeight: 24, color: '#1f2937' }}>{props.storyListEntity.title}</P>
+                        {isNew && <Span style={{ display: 'inline-flex', alignItems: 'center', borderRadius: 9999, backgroundColor: '#e7f5e5', paddingLeft: 6, paddingRight: 6, paddingTop: 2, paddingBottom: 2, fontSize: 12, fontWeight: '500', color: '#065f46', borderColor: 'rgba(22, 200, 115, 0.2)', borderStyle: 'solid', borderWidth: 1 }}>
                             New
                         </Span>}
                     </Div>
-                    <Div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', gap: '32px' }}>
+                    <Div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', gap: 32 }}>
                         <Div>
-                            <Div style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}>
-                                <P style={{ margin: '4px', fontSize: '0.75rem', lineHeight: '1rem', fontWeight: 'bold', color: '#6b7280' }}>
+                            <Div style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
+                                <P style={{ margin: 4, fontSize: 12, lineHeight: 16, fontWeight: 'bold', color: '#6b7280' }}>
                                     Words:
-                                    <Span style={{ margin: '4px', fontSize: '0.75rem', lineHeight: '1rem', color: '#9ca3af' }}> {props.storyListEntity.wordCount}</Span>
+                                    <Span style={{ margin: 4, fontSize: 12, lineHeight: 16, color: '#9ca3af' }}> {props.storyListEntity.wordCount}</Span>
                                 </P>
-                                {!userStoryStatistics.hasRead && <P style={{ margin: '4px', fontSize: '0.75rem', lineHeight: '1rem', fontWeight: 'bold', color: '#6b7280' }}>
+                                {!userStoryStatistics.hasRead && <P style={{ margin: 4, fontSize: 12, lineHeight: 16, fontWeight: 'bold', color: '#6b7280' }}>
                                     New:
-                                    <Span style={{ margin: '4px', fontSize: '0.75rem', lineHeight: '1rem', color: '#9ca3af' }}> {userStoryStatistics.newWords} ({userStoryStatistics.newWordsPercentage}%)</Span>
+                                    <Span style={{ margin: 4, fontSize: 12, lineHeight: 16, color: '#9ca3af' }}> {userStoryStatistics.newWords} ({userStoryStatistics.newWordsPercentage}%)</Span>
                                 </P>}
                             </Div>
-                            <P style={{ margin: '4px', fontStyle: 'italic', fontSize: '0.75rem', lineHeight: '1rem', color: '#9ca3af' }}>{props.storyListEntity.content?.slice(0, 30) + '....'}</P>
+                            <P style={{ margin: 4, fontStyle: 'italic', fontSize: 12, lineHeight: 16, color: '#9ca3af' }}>{props.storyListEntity.content?.slice(0, 30) + '....'}</P>
                         </Div>
                         <StoryCompletedCheckMark storyId={props.storyListEntity.id} />
                     </Div>
                 </Div>
-                <Div style={{ display: 'flex', flexDirection: 'row', marginTop: '16px', fontSize: '0.875rem', lineHeight: '1.25rem', color: '#6b7280', borderRadius: '9999px', overflow: 'hidden' }}>
+                <Div style={{ display: 'flex', flexDirection: 'row', marginTop: 16, fontSize: 14, lineHeight: 20, color: '#6b7280', borderRadius: 9999, overflow: 'hidden' }}>
                     <Btn
                         key={`${props.storyListEntity.id}-difficulty`}
                         style={{
                             display: 'inline-flex',
                             alignItems: 'center',
                             padding: '4px 8px',
-                            fontSize: '0.75rem',
+                            fontSize: 12,
                             fontWeight: '500',
-                            borderRadius: '9999px',
+                            borderRadius: 9999,
                             borderColor: difficultyColor[props.storyListEntity?.difficulty?.toLowerCase()].borderColor,
                             backgroundColor: difficultyColor[props.storyListEntity?.difficulty?.toLowerCase()].backgroundColor,
                             color: difficultyColor[props.storyListEntity?.difficulty?.toLowerCase()].color,
-                            marginRight: '8px',
-                            borderWidth: '1px',
+                            marginRight: 8,
+                            borderWidth: 1,
                             borderStyle: 'solid'
                         }}
                         onClick={(e) => {
@@ -113,14 +113,14 @@ export default function StoryListElement(props: StoryListElementProps) {
                             display: 'inline-flex',
                             alignItems: 'center',
                             padding: '4px 8px',
-                            fontSize: '0.75rem',
+                            fontSize: 12,
                             fontWeight: '500',
-                            borderRadius: '9999px',
+                            borderRadius: 9999,
                             backgroundColor: '#f8fafc',
                             color: '#6b7280',
                             borderColor: 'rgba(107, 114, 128, 0.1)',
-                            marginRight: '8px',
-                            borderWidth: '1px',
+                            marginRight: 8,
+                            borderWidth: 1,
                             borderStyle: 'solid',
                         }}
                         onClick={(e) => {

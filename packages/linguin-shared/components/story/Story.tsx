@@ -53,7 +53,7 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
                 }} src={story?.imageUrl} alt="" />
                 <Div style={{
                     borderBottom: '1px solid #e5e7eb',
-                    paddingBottom: '1.25rem',
+                    paddingBottom: 20,
                     margin: '2rem 0',
                     display: 'flex',
                     alignItems: 'flex-start'
@@ -61,7 +61,7 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
                     {Platform.OS == "web" &&
                         <H3 style={{
                             margin: '0 1.5rem',
-                            fontSize: '2.25rem',
+                            fontSize: 36,
                             padding: '0.75rem 0',
                             fontWeight: '600',
                             lineHeight: '1.5',
@@ -69,8 +69,8 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
                         }}>{story?.title}</H3>
                     }
                     {language == "ja" && Platform.OS != "web" && <CheckBox style={{
-                        height: '1rem',
-                        width: '1rem',
+                        height: 16,
+                        width: 16,
                         borderColor: '#d1d5db',
                         borderRadius: 3,
                         color: '#4f46e5',
@@ -87,13 +87,13 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
                         defaultChecked={hasFurigana}
                         onChange={(e) => setHasFurigana(e.target.checked)}
                         style={{
-                            height: '1rem',
-                            width: '1rem',
+                            height: 16,
+                            width: 16,
                             borderColor: '#d1d5db',
                             borderRadius: 3,
                             color: '#4f46e5',
                         }}
-                    /><P style={{ fontSize: '1.125rem', lineHeight: '2rem', color: '#4b5563' }}>Furigana</P></Div>
+                    /><P style={{ fontSize: 18, lineHeight: 32, color: '#4b5563' }}>Furigana</P></Div>
                 }
 
 

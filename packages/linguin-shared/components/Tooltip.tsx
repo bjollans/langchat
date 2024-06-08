@@ -19,7 +19,7 @@ export default function Tooltip(props: TooltipProps) {
         paddingRight: "0.5rem", // px-2
         paddingTop: "0.25rem", // py-1
         paddingBottom: "0.25rem", // py-1
-        fontSize: "0.75rem", // text-xs
+        fontSize: 12, // text-xs
         fontWeight: "500", // font-medium
         color: "#4b5563", // text-gray-600
         boxShadow: "0 0 0 1px rgba(107, 114, 128, 0.1)", // ring-1 ring-inset ring-gray-500/10

@@ -99,7 +99,7 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
                     i = termAtThisPosition[0].position + termAtThisPosition[0].text.length - 1;
                 }
                 else {
-                    translatedWords.push(<Span style={{ position: 'relative', margin: '0 2px', fontSize: '1.5rem', color: isHighlighted ? "#0891b2" : "#000000" }}>{props.translatedText.content[i]}</Span>);
+                    translatedWords.push(<Span style={{ position: 'relative', margin: '0 2px', fontSize: 24, color: isHighlighted ? "#0891b2" : "#000000" }}>{props.translatedText.content[i]}</Span>);
                 }
             }
         }
@@ -135,9 +135,9 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
                     style={{ 
                         backgroundColor: '#000', 
                         color: '#fff', 
-                        borderRadius: '0.5rem', 
-                        padding: '0.5rem', 
-                        marginBottom: '1.5rem', 
+                        borderRadius: 8, 
+                        padding: 8, 
+                        marginBottom: 24, 
                         width: '24rem', 
                         maxWidth: '100%', 
                         margin: 'auto' 
@@ -148,7 +148,7 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
                     {props.translatedText.translationJson?.wholeSentence?.transliteration &&
                         <P 
                             style={{ 
-                                fontSize: '0.875rem', 
+                                fontSize: 14, 
                                 display: 'flex', 
                                 fontStyle: 'italic', 
                                 alignItems: 'flex-start', 
@@ -166,7 +166,7 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
                     display: 'flex', 
                     flexDirection: 'row', 
                     flexWrap: 'wrap', 
-                    fontSize: '1.5rem', 
+                    fontSize: 24, 
                     alignItems: 'center', 
                     color: isHighlighted ? "#0891b2" : '#000000' 
                 }}
@@ -190,7 +190,7 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
                             transition: 'background-color 0.2s', 
                             color: '#000', 
                             fontWeight: 'bold', 
-                            borderRadius: '0.375rem',
+                            borderRadius: 6,
                             ':hover': {
                                 backgroundColor: '#e0e7ff'
                             }

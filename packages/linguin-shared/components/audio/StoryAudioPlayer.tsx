@@ -175,7 +175,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
                     <source src={props.src} type="audio/mpeg" />
                     Your browser does not support the audio element.
                 </audio>}
-            <SingleLayerBtn style={{ display: 'flex', margin: '0.25rem', borderRadius: '9999px', marginLeft: 'auto', marginRight: 'auto' }} onClick={togglePlayPause}>
+            <SingleLayerBtn style={{ display: 'flex', margin: 4, borderRadius: 9999, marginLeft: 'auto', marginRight: 'auto' }} onClick={togglePlayPause}>
                 {_PlayButton(isPlayingAudio)}
             </SingleLayerBtn>
         </Div>
@@ -185,15 +185,15 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
 function _PlayButton(isPlayingAudio): JSX.Element {
     if (Platform.OS === 'web') {
         const style = {
-            borderRadius: '9999px',
+            borderRadius: 9999,
             border: '4px solid #64748b',
             color: '#64748b',
-            width: '3rem',
-            height: '3rem'
+            width: 48,
+            height: 48
         }
         return isPlayingAudio
             ? <PauseIcon style={{ ...style }} />
-            : <PlayIcon style={{ ...style, paddingLeft: '0.25rem' }} />;
+            : <PlayIcon style={{ ...style, paddingLeft: 4 }} />;
     }
     return isPlayingAudio
         ? <PauseCircleIcon />

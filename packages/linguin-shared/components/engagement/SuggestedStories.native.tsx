@@ -38,12 +38,12 @@ export default function SuggestedStories({ navigation }) {
     };
 
     return (
-        <View style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center', marginTop: '3rem', marginBottom: '6rem' }} onTouchStart={captureClick}>
-            <H2 style={{ fontSize: '1.5rem', fontWeight: 'bold' }}>Read this next</H2>
+        <View style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', marginTop: 48, marginBottom: 96 }} onTouchStart={captureClick}>
+            <H2 style={{ fontSize: 24, fontWeight: 'bold' }}>Read this next</H2>
             {stories && stories.map((storyListEntity) => (
                 <TouchableOpacity
                     key={"suggested-story-" + storyListEntity.title}
-                    style={{ backgroundColor: 'white', borderBottomWidth: '1px', borderColor: '#E5E7EB', width: '100%' }}
+                    style={{ backgroundColor: 'white', borderBottomWidth: 1, borderColor: '#E5E7EB', width: '100%' }}
                     onPress={() => {
                         navigation.navigate("Story", { storyId: storyListEntity.id, storyTitle: storyListEntity.title });
                     }}

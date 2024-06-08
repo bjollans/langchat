@@ -38,16 +38,16 @@ export default function SuggestedStories({navigation}) {
             style={{
                 display: 'flex', 
                 flexDirection: 'column', 
-                gap: '1rem', // approximately "gap-y-4" in Tailwind
+                gap: 16, // approximately "gap-y-4" in Tailwind
                 alignItems: 'center', 
-                marginTop: '3rem', // "my-12" equivalent
-                marginBottom: '6rem' // "mb-24" equivalent
+                marginTop: 48, // "my-12" equivalent
+                marginBottom: 96 // "mb-24" equivalent
             }} 
             onClick={captureClick}
         >
             <H2 
                 style={{
-                    fontSize: '1.5rem', // "text-2xl" in Tailwind
+                    fontSize: 24, // "text-2xl" in Tailwind
                     fontWeight: 'bold' // "font-bold" in Tailwind
                 }}
             >

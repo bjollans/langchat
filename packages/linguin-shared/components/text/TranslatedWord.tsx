@@ -79,12 +79,12 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
             {hasFurigana && <P style={{ fontSize: 12, position: "absolute", top: 0, overflow: "visible", whiteSpace: "nowrap" }}>{replaceLastOccurrence(removePunctuation(props.termTranslation.transliteration!), removeNonKana(props.termTranslation.text), "")}</P>}
             {showTranslation && <TranslatedWordHoverBox termTranslation={props.termTranslation} />}
             <P style={{
-                fontSize: "1.5rem",
+                fontSize: 24,
                 textDecoration: "underline dotted",
                 margin: "0 0.125rem",
                 color: props.isHighlighted ? "#0891b2" : "#000000",
-                marginTop: hasFurigana ? "0.75rem" : 0,
-                marginBottom: hasFurigana ? "0.75rem" : 0,
+                marginTop: hasFurigana ? 12 : 0,
+                marginBottom: hasFurigana ? 12 : 0,
             }}>
                 {props.termTranslation.text}
             </P>

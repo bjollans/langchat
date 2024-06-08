@@ -133,7 +133,7 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
                     }
                 </Div>
             </Div>
-            <Div className={`relative flex flex-row flex-wrap text-2xl items-start ${isHighlighted ? "text-cyan-600" : "text-black"}`}>
+            <Div className={`relative flex flex-row flex-wrap text-2xl items-center ${isHighlighted ? "text-cyan-600" : "text-black"}`}>
                 <Div className="absolute left-0">
                     {props.hasAudio &&
                         (isHighlighted

@@ -1,4 +1,5 @@
 import { Image, Platform, Text, TouchableOpacity, View } from 'react-native';
+import { CheckBox as CheckBoxRn } from 'react-native-elements';
 
 
 interface DefaultProps {
@@ -101,7 +102,7 @@ export function SingleLayerBtn(props: DefaultProps): JSX.Element {
 }
 
 export function P(props: DefaultProps): JSX.Element {
-    const webElement = <p className={props.className}>{props.children}</p>;
+    const webElement = <p className={props.className} style={props.style}>{props.children}</p>;
     return _multiplatformTextElement(webElement, props);
 }
 

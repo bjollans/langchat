@@ -1,4 +1,4 @@
-import { Btn, Span } from "linguin-shared/components/RnTwComponents";
+import { Btn, Div, P, SingleLayerBtn, Span } from "linguin-shared/components/RnTwComponents";
 import { useDailyReadStatContext } from "linguin-shared/context/dailyReadStatContext";
 import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
 import { useRnTouchableContext } from "linguin-shared/context/rnTouchableContext";
@@ -9,6 +9,7 @@ import usePostHog from 'linguin-shared/util/usePostHog';
 import { useContext, useEffect, useState } from "react";
 import TranslatedWordHoverBox from "./TranslatedWordHoverBox";
 import { useLanguageContext } from "linguin-shared/context/languageContext";
+import { useFuriganaContext } from "linguin-shared/context/furiganaContext";
 
 export interface TranslatedTermProps {
     termTranslation: TermTranslation;
@@ -24,6 +25,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     const { addToResetterFunctions } = useRnTouchableContext();
     const { recordStatUpdate } = useDailyReadStatContext();
     const { language } = useLanguageContext();
+    const { hasFurigana } = useFuriganaContext();
 
     const {
         addIsPlayingAudioUpdateFunction,
@@ -36,7 +38,7 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     }, []);
 
     const playRnAudio = () => {
-        if (!RnSound || isPlayingStoryAudio) return;
+        if (isPlayingStoryAudio) return;
         let fileName = language + "-";
         for (let i = 0; i < props.termTranslation.text.length; i++) {
             fileName += props.termTranslation.text.charCodeAt(i) + (i < props.termTranslation.text.length - 1 ? "-" : "");
@@ -65,15 +67,32 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
     }
 
     return (
-        <Btn
+        <SingleLayerBtn
             onClick={handleClick}
             onMouseLeave={() => setShowTranslation(false)}
-            className="cursor-pointer relative mx-0.5 text-2xl underline decoration-dotted hover:text-indigo-500 cursor-pointer">
+            className="cursor-pointer relative hover:text-indigo-500 cursor-pointer">
+            {hasFurigana && <P style={{ fontSize: 12, position: "absolute", top:0, overflow: "visible", whiteSpace: "nowrap" }}>{replaceLastOccurrence(removePunctuation(props.termTranslation.transliteration!), removeNonKana(props.termTranslation.text), "")}</P>}
             {showTranslation && <TranslatedWordHoverBox termTranslation={props.termTranslation} />}
-            <Span className={props.isHighlighted ? "text-cyan-600" : "text-black"}>
+            <P className="text-2xl underline decoration-dotted mx-0.5" style={{color: props.isHighlighted? "#0891b2":"#000000", marginTop: hasFurigana? 12:0, marginBottom: hasFurigana? 12:0}}>
                 {props.termTranslation.text}
-            </Span>
-        </Btn>
+            </P>
+        </SingleLayerBtn>
 
     );
+}
+
+function removeNonKana(text: string) {
+    return text.replace(/[^ぁ-ん]/g, "");
+}
+
+function removePunctuation(text: string) {
+    return text.replaceAll(/[。、，．？！]/g, "");
+}
+
+function replaceLastOccurrence(text: string, search: string, replace: string) {
+    const lastIndex = text.lastIndexOf(search);
+    if (lastIndex !== -1) {
+        return text.substring(0, lastIndex) + replace + text.substring(lastIndex + search.length);
+    }
+    return text;
 }

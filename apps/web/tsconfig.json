@@ -1,5 +1,3 @@
-/// <reference types="nativewind/types" />
-
 {
   "compilerOptions": {
     "baseUrl": ".",

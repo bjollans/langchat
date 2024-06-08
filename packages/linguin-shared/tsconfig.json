@@ -15,7 +15,6 @@
       "model": ["model/*"]
     },
     "include": [
-      "nativewind-env.d.ts",
       "components/**/*.ts*",
       "context/**/*.ts*",
       "types/**/*.ts*",

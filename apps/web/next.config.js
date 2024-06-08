@@ -6,7 +6,6 @@ module.exports = withExpo({
   transpilePackages: [
     'react-native',
     'expo',
-    'nativewind',
     "react-native-css-interop",
     // Add more React Native/Expo packages here...
   ],

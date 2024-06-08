@@ -4,11 +4,13 @@ import { ActivityIndicator, Linking, SafeAreaView, Text, TouchableOpacity, View 
 import Purchases from "react-native-purchases";
 import UserStatistics from "linguin-shared/components/user/UserStatistics";
 import AuthModal from "../components/AuthModal";
+import { useUserProfileContext } from "linguin-shared/context/userProfileContext";
 
 export default function AccountScreen({ navigation }) {
     const auth = useAuth();
     const [customerInfo, setCustomerInfo] = useState(null);
     const [loading, setLoading] = useState(false);
+    const { userProfile } = useUserProfileContext();
 
     useEffect(() => {
         const fetchCustomerInfo = async () => {
@@ -20,7 +22,7 @@ export default function AccountScreen({ navigation }) {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F8FAFC' }}>
-            <UserStatistics />
+            <UserStatistics language={userProfile.targetLanguage} />
             <View style={{ paddingHorizontal: 48, marginBottom: 48, spaceBetween: 8 }}>
                 <View>
                     <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Email:</Text>

@@ -8,24 +8,26 @@ interface DefaultProps {
     onMouseLeave?: () => void;
     onClick?: (e: any) => void;
     onLayout?: (e: any) => void;
-    ref?: any;
+    innerRef?: any;
     style?: any;
+    innerKey?: string;
 }
 
 export function Div(props: DefaultProps): JSX.Element {
     if (Platform.OS === 'web') {
         return (
             <div className={props.className}
+                key={props.innerKey}
                 onMouseLeave={props.onMouseLeave}
                 onClick={props.onClick}
-                ref={props.ref}
+                ref={props.innerRef}
                 style={props.style}>
                 {props.children}
             </div>
         );
     }
     return (
-        <View style={props.style} ref={props.ref}>
+        <View key={props.innerKey} style={props.style} ref={props.innerRef}>
             {props.children}
         </View>
     );

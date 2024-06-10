@@ -80,7 +80,6 @@ export default function TranslatedTerm(props: TranslatedTermProps): JSX.Element 
             {showTranslation && <TranslatedWordHoverBox termTranslation={props.termTranslation} />}
             <P style={{
                 fontSize: 24,
-                textDecoration: "underline dotted",
                 margin: "0 0.125rem",
                 color: props.isHighlighted ? "#0891b2" : "#000000",
                 marginTop: hasFurigana ? 12 : 0,

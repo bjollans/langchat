@@ -187,13 +187,9 @@ export default function SentenceRender(props: SentenceRenderProps): JSX.Element 
                     <Btn 
                         style={{
                             backgroundColor: 'transparent',
-                            transition: 'background-color 0.2s', 
                             color: '#000', 
                             fontWeight: 'bold', 
                             borderRadius: 6,
-                            ':hover': {
-                                backgroundColor: '#e0e7ff'
-                            }
                         }}
                         onClick={handleTranslateClick}
                     >

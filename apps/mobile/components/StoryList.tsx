@@ -7,7 +7,6 @@ import { ActivityIndicator, FlatList, TouchableOpacity, StyleSheet } from 'react
 import StoryListFilterMenu from './StoryListFilterMenu';
 import { FeedbackModal } from './FeedbackModal';
 import { useUserProfileContext } from 'linguin-shared/context/userProfileContext';
-import { useLanguageContext } from 'linguin-shared/context/languageContext';
 
 export interface Filter {
     id: string;
@@ -54,6 +53,7 @@ export default function StoryList({ navigation }) {
             return <ActivityIndicator size="large" color="#0000ff" />;
         }
     }
+
     return (
         <>
             <StoryListFilterMenu navigation={navigation} />
@@ -71,7 +71,7 @@ export default function StoryList({ navigation }) {
                                 <StoryListElement storyListEntity={storyListEntity} />
                             </TouchableOpacity>
                         }}
-                        keyExtractor={item => item?.id}
+                        keyExtractor={item => item?.id ?? Math.random().toString(36).substring(2)}
                         onEndReached={() => {
                             if (hasNextPage) fetchNextPage();
                         }}

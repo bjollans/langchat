@@ -47,7 +47,7 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
                     maxWidth: '40%',
                     objectFit: 'cover',
                     borderRadius: 3,
-                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+                    //boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
                     margin: '0 auto',
                     display: 'flex'
                 }} src={story?.imageUrl} alt="" />

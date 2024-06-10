@@ -47,7 +47,7 @@ export default function StoryListElement(props: StoryListElementProps) {
     const storyFilterChangeCalls: StoryFilterChangeCalls | undefined = useContext(StoryListFilterContext);
 
     return (
-        <Div key={props.storyListEntity.title} style={{ display: 'flex', flexDirection: 'row', padding: 20, gap: 16, alignItems: 'center', cursor: 'pointer' }} ref={visibilityRef} onClick={() => trackStat(props.storyListEntity.id, "clicks")}>
+        <Div innerKey={props.storyListEntity.title} style={{ display: 'flex', flexDirection: 'row', padding: 20, gap: 16, alignItems: 'center', cursor: 'pointer' }} innerRef={Platform.OS === 'web' ? visibilityRef : undefined} onClick={() => trackStat(props.storyListEntity.id, "clicks")}>
             {Platform.OS === 'web' &&
                 <Img style={{ width: 96, height: 96, objectFit: 'cover', borderRadius: 9999, overflow: 'hidden' }} src={props.storyListEntity.previewImageUrl} alt="" />
                 || <Div style={{ borderRadius: 9999, overflow: 'hidden' }}>
@@ -58,7 +58,7 @@ export default function StoryListElement(props: StoryListElementProps) {
                 <Div style={{ minWidth: 0 }}>
                     <Div style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
                         <P style={{ fontSize: 18, fontWeight: '600', lineHeight: 24, color: '#1f2937' }}>{props.storyListEntity.title}</P>
-                        {isNew && <Span style={{ display: 'inline-flex', alignItems: 'center', borderRadius: 9999, backgroundColor: '#e7f5e5', paddingLeft: 6, paddingRight: 6, paddingTop: 2, paddingBottom: 2, fontSize: 12, fontWeight: '500', color: '#065f46', borderColor: 'rgba(22, 200, 115, 0.2)', borderStyle: 'solid', borderWidth: 1 }}>
+                        {isNew && <Span style={{ display: 'flex', alignItems: 'center', borderRadius: 9999, backgroundColor: '#e7f5e5', paddingLeft: 6, paddingRight: 6, paddingTop: 2, paddingBottom: 2, fontSize: 12, fontWeight: '500', color: '#065f46', borderColor: 'rgba(22, 200, 115, 0.2)', borderStyle: 'solid', borderWidth: 1 }}>
                             New
                         </Span>}
                     </Div>
@@ -83,7 +83,7 @@ export default function StoryListElement(props: StoryListElementProps) {
                     <Btn
                         key={`${props.storyListEntity.id}-difficulty`}
                         style={{
-                            display: 'inline-flex',
+                            display: 'flex',
                             alignItems: 'center',
                             padding: '4px 8px',
                             fontSize: 12,
@@ -110,7 +110,7 @@ export default function StoryListElement(props: StoryListElementProps) {
                     </Btn>
                     {props.storyListEntity.collections?.map((collectionName: any) => <Btn key={props.storyListEntity.title + collectionName}
                         style={{
-                            display: 'inline-flex',
+                            display: 'flex',
                             alignItems: 'center',
                             padding: '4px 8px',
                             fontSize: 12,

@@ -64,7 +64,7 @@ export default function StoryList({ navigation }) {
                         data={filteredStories}
                         renderItem={({ item: storyListEntity, separators }) => {
                             if (!storyListEntity) return null;
-                            return <TouchableOpacity style={styles.touchable}
+                            return <TouchableOpacity key={storyListEntity.id} style={styles.touchable}
                                 onPress={() => {
                                     navigation.navigate("Story", { storyTranslationId: storyListEntity.storyTranslationId, storyTitle: storyListEntity.title });
                                 }}>

@@ -1,16 +1,19 @@
 "use client";
 
-import { useAuth } from "linguin-shared/util/auth";
-import { getUserProfile, updateUserProfileDb } from "linguin-shared/util/clientDb";
+import LanguageChooseModal from "linguin-shared/components/LanguageChooseModal";
 import usePostHog from 'linguin-shared/util/usePostHog';
 import { LinguinUserProfile } from "model/user";
 import { createContext, useContext, useEffect, useState } from "react";
+import { useAuth } from "linguin-shared/util/auth";
+import { getUserProfile, updateUserProfileDb } from "linguin-shared/util/clientDb";
+import { Platform } from 'react-native';
 
 
 export interface UserProfileContextType {
-    availableLanguagesMap: Record<string, any>;
+    availableLanguagesMap: Record<string,any>;
     userProfile: LinguinUserProfile;
     updateUserProfile: (userProfile: any) => void;
+    setLanguageChooseModalVisible: (visible: boolean) => void;
 }
 
 export const UserProfileContext = createContext<UserProfileContextType | null>(null);
@@ -33,6 +36,7 @@ export default function UserProfileContextProvider({ children }: UserProfileCont
             updateUserProfileDb(auth.user.id, newUserProfile);
         }
     }
+    const [languageChooseModalVisible, setLanguageChooseModalVisible] = useState<boolean>(false);
     const languageToLanguageString = {
         'hi': '🇮🇳 Hindi',
         'ja': '🇯🇵 Japanese',
@@ -55,8 +59,15 @@ export default function UserProfileContextProvider({ children }: UserProfileCont
         <UserProfileContext.Provider value={{
             availableLanguagesMap: languageToLanguageString,
             userProfile: userProfile,
+            setLanguageChooseModalVisible: setLanguageChooseModalVisible,
             updateUserProfile: updateUserProfile,
         }}>
+            {Platform.OS !== 'web' &&  <LanguageChooseModal
+                visible={languageChooseModalVisible}
+                close={() => {
+                    setLanguageChooseModalVisible(false);
+                }}
+            />}
             {children}
         </UserProfileContext.Provider>
     );

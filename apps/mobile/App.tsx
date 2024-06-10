@@ -9,7 +9,6 @@ import supabase from 'linguin-shared/util/supabase';
 import { PostHogProvider } from 'posthog-react-native';
 import { useEffect, useState } from 'react';
 import { Platform, TouchableOpacity } from 'react-native';
-import mobileAds, { MaxAdContentRating } from 'react-native-google-mobile-ads';
 import Purchases from 'react-native-purchases';
 import Svg, { Path } from 'react-native-svg';
 import 'react-native-url-polyfill/auto';
@@ -54,24 +53,6 @@ function App() {
   }, [session?.user]);
 
   useEffect(() => {
-    mobileAds()
-      .setRequestConfiguration({
-        // Update all future requests suitable for parental guidance
-        maxAdContentRating: MaxAdContentRating.PG,
-
-        // Indicates that you want the ad request to be handled in a
-        // manner suitable for users under the age of consent.
-        tagForUnderAgeOfConsent: true,
-
-        // An array of test device IDs to allow.
-        testDeviceIdentifiers: ['EMULATOR'],
-      })
-      .then(() => {
-        // Request config successfully set!
-      });
-  }, []);
-
-  useEffect(() => {
     initNotifications();
     scheduleReminderNotification();
   }, []);
@@ -80,11 +61,11 @@ function App() {
     <QueryClientProvider>
       <AuthProvider>
         <SubscribedContextProvider>
-            <NavigationContainer>
-              <PostHogProvider apiKey={process.env.EXPO_PUBLIC_POSTHOG_KEY} options={{
-                host: `${process.env.EXPO_PUBLIC_POSTHOG_HOST}`,
-              }}>
-                <UserProfileContextProvider>
+          <NavigationContainer>
+            <PostHogProvider apiKey={process.env.EXPO_PUBLIC_POSTHOG_KEY} options={{
+              host: `${process.env.EXPO_PUBLIC_POSTHOG_HOST}`,
+            }}>
+              <UserProfileContextProvider>
                 <Stack.Navigator screenOptions={{
                   headerTitleStyle: {
                     fontWeight: '700',
@@ -109,9 +90,9 @@ function App() {
                       title: "Account"
                     })} />
                 </Stack.Navigator>
-                </UserProfileContextProvider>
-              </PostHogProvider>
-            </NavigationContainer>
+              </UserProfileContextProvider>
+            </PostHogProvider>
+          </NavigationContainer>
         </SubscribedContextProvider>
       </AuthProvider>
     </QueryClientProvider >

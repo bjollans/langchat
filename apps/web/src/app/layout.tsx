@@ -8,6 +8,7 @@ import ApplicationShell from "components/ApplicationShell";
 import Script from 'next/script';
 import OriginTracker from "components/tracking/OriginTracker";
 import UserProfileContextProvider from "@linguin-shared/context/userProfileContext";
+import UnistylesImporter from "components/UniStylesImporter";
 
 
 
@@ -21,6 +22,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>
+                <UnistylesImporter />
                 <PHProvider>
                     <QueryClientProvider>
                         <AuthProvider>

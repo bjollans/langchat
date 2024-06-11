@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "linguin-shared",
+    "slug": "linguin-shared",
+    "version": "1.0.0",
+    "description": "Components for Linguin shared between web and app",
+    "sdkVersion": "50.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ]
+  }
+}

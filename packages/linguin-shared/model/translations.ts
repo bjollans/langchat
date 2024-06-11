@@ -34,7 +34,7 @@ export interface StoryListEntity {
     previewImageUrl: string;
     createdAt: Date;
     collections: Array<string>;
-    difficulty: string;
+    difficulty: "Easy" | "Intermediate" | "Hard";
     wordCount: number;
     content: string;
 }

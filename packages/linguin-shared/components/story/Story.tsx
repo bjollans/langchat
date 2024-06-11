@@ -55,7 +55,7 @@ function Story({ story, storyTranslation, navigation }: StoryProps): JSX.Element
                 </Div>
 
                 {language == "ja" && Platform.OS == "web"
-                    && <Div style={{ display: 'flex' }}><input
+                    && <Div style={styles.webCheckBoxContainer}><input
                         type="checkbox"
                         defaultChecked={hasFurigana}
                         onChange={(e) => setHasFurigana(e.target.checked)}
@@ -129,14 +129,17 @@ const stylesheet = createStyleSheet((theme: any) => ({
         color: '#4f46e5',
         focusRingColor: '#6366f1'
     },
+    webCheckBoxContainer: { display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 16 },
     webCheckBox: {
+        display: 'flex',
+        alignSelf: 'center',
         height: 16,
         width: 16,
         borderColor: '#d1d5db',
         borderRadius: 3,
         color: '#4f46e5',
     },
-    checkBoxText: { fontSize: 18, lineHeight: 32, color: '#4b5563' },
+    checkBoxText: { fontSize: 18, color: '#4b5563' },
     text: {
         color: theme.colors.typography
     }

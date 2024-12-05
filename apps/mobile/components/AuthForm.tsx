@@ -65,10 +65,10 @@ export default function AuthForm() {
     }
 
     return (
-        <View className="bg-sky-300 h-full items-center">
+        <View style={{ backgroundColor: '#38bdf8', height: '100%', alignItems: 'center' }}>
             <Image source={require('../assets/logoWithTransparency.png')} style={{ height: "10%", resizeMode: 'contain', alignSelf: 'center', marginTop: "20%" }} />
-            <Text className="my-6 text-4xl font-bold tracking-tight">Welcome to Linguin!</Text>
-            <View className="p-4 bg-white border rounded-md m-12 mt-6 w-[80%]">
+            <Text style={{ marginVertical: 24, fontSize: 32, fontWeight: 'bold', letterSpacing: -0.5 }}>Welcome to Linguin!</Text>
+            <View style={{ padding: 16, backgroundColor: 'white', borderWidth: 1, borderColor: '#d1d5db', borderRadius: 6, margin: 48, marginTop: 24, width: '80%' }}>
                 <View style={[styles.verticallySpaced, styles.mt20]}>
                     <Input
                         label="Email"
@@ -99,7 +99,7 @@ export default function AuthForm() {
                 <View style={styles.verticallySpaced}>
                     <Button title={<>
                         <FontAwesomeIcon icon={faGoogle} size={20} color="#000000" />
-                        <Text className="text-black text-lg ml-2"> Sign in With Google</Text>
+                        <Text style={{ color: '#000000', fontSize: 18, marginLeft: 8 }}> Sign in With Google</Text>
                     </>} disabled={loading} onPress={() => authGoogle()} buttonStyle={{ backgroundColor: "#ffffff", borderWidth: 1, borderColor: "black" }} />
                 </View>
             </View>

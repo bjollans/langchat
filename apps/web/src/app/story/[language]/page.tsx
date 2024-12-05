@@ -7,9 +7,22 @@ import { StoryListEntity, StoryToCollection } from "model/translations";
 import { getAvailableStoryDifficultyLevels, getCollectionNames, getStoriesCollections, getStoryList } from "util/serverDb";
 import StoryListFilterContextProvider from "@linguin-shared/context/storyListFilterContext";
 import { Metadata } from "next/types";
+import { Language } from "@linguin-shared/types/language";
 
-async function getPropsForStoryIndexPage() {
-    const storyListEntities = await getStoryList("hi");
+
+export async function generateStaticParams() {
+    return [
+        { language: "hi" },
+        { language: "ja" },
+        { language: "zh" },
+        { language: "de" },
+        { language: "el" },
+    ];
+}
+
+
+async function getPropsForStoryIndexPage(language: Language) {
+    const storyListEntities = await getStoryList(language);
     const allDifficulties = await getAvailableStoryDifficultyLevels();
     const storyIds = storyListEntities.map((story: any) => story.id);
     const storyCollections = await getStoriesCollections(storyIds);
@@ -21,21 +34,23 @@ async function getPropsForStoryIndexPage() {
     const allCollectionNames = await getCollectionNames().then((collections: any) => collections.map((collection: any) => collection.name));
 
     return {
+        language,
         storyListEntities,
         allDifficulties,
         allCollectionNames,
     };
 }
 
-async function StoryIndexPage() {
-    const propsForStoryIndexPage = await getPropsForStoryIndexPage();
+async function StoryIndexPage({ params }) {
+    const { language } = params;
+    const propsForStoryIndexPage = await getPropsForStoryIndexPage(language);
     return (
         <>
             <PurchasedTracker />
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-3xl">
                     <BrandedWelcome />
-                    <UserStatistics />
+                    <UserStatistics language={language} />
                     <StoryListFilterContextProvider>
                         <StoryList {...propsForStoryIndexPage as StoryListProps} />
                     </StoryListFilterContextProvider>

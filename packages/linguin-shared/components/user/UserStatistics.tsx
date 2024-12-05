@@ -1,31 +1,44 @@
 "use client";
 
-import { StoriesAvailableContext, useStoriesAvailable } from "linguin-shared/context/rnStoriesAvailableContext";
-import { Br, Div, P } from "linguin-shared/components/RnTwComponents";
+import { useUserProfileContext } from "linguin-shared/context/userProfileContext";
+import { Div, P } from "linguin-shared/components/RnTwComponents";
 import { useAuth } from "linguin-shared/util/auth";
 import { useUserStoriesRead, userWordsSeen } from "linguin-shared/util/clientDb";
-import { SubscribedContext, useSubscribedContext } from "linguin-shared/context/subscribedContext";
-import { Platform } from "react-native";
-import { CheckIcon } from "linguin-shared/components/Icons";
-import { useContext } from "react";
+import { Language } from "linguin-shared/types/language";
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import {Platform} from 'react-native';
 
-export default function UserStatistics() {
-    const auth = useAuth();
-    const { data: wordsSeenJson } = userWordsSeen(auth?.user?.uid);
-    const { data: storiesRead } = useUserStoriesRead(auth?.user?.uid);
-    const storiesAvailableContext = useContext(StoriesAvailableContext);
-    const subscribedContext = useContext(SubscribedContext)
-    const wordsSeen = wordsSeenJson?.length > 0 && wordsSeenJson[0] ? wordsSeenJson[0]?.wordsSeen : [];
-
-    return <Div className="mt-1 mb-2">
-        <P className="mx-auto text-center text-md italic leading-6 font-medium text-gray-900">
-            {storiesRead?.length ?? 0} Stories Read. {wordsSeen?.length} Words Seen.
-        </P>
-        {Platform.OS !== "web" && !(subscribedContext!.subscribed) && storiesAvailableContext!.storiesAvailableLoaded && <P className="mx-auto text-center text-xs italic leading-6 font-medium text-gray-900">
-            {storiesAvailableContext!.storiesAvailable} Free Stories Left.
-        </P>}
-        {Platform.OS !== "web" && (subscribedContext!.subscribed) && <P className="mx-auto text-center text-xs italic leading-6 font-medium text-gray-900">
-            <CheckIcon/> Unlimited Stories Available
-        </P>}
-    </Div>;
+export interface UserStatisticsProps {
+    language: Language;
 }
+
+export default function UserStatistics({language}) {
+    const auth = useAuth();
+    const { userProfile, availableLanguagesMap } = useUserProfileContext();
+    const { data: wordsSeenJson } = userWordsSeen(auth?.user?.uid, language);
+    const { data: storiesRead } = useUserStoriesRead(auth?.user?.uid);
+    const wordsSeen = wordsSeenJson?.length > 0 && wordsSeenJson[0] ? wordsSeenJson[0]?.wordsSeen : [];
+    const { styles } = useStyles(stylesheet);
+
+    return (
+        <Div style={styles.container}>
+            <P style={styles.text}>
+                {wordsSeen?.length} Words Seen for {availableLanguagesMap[language]}.
+            </P>
+        </Div>
+    );
+}
+
+const stylesheet = createStyleSheet((theme: any) => ({
+    container: { marginTop: 4, marginBottom: 8 },
+    text: {
+        marginLeft: 'auto', 
+        marginRight: 'auto', 
+        textAlign: 'center', 
+        fontSize: 16, 
+        fontStyle: 'italic', 
+        lineHeight: Platform.OS == "web" ? 2 : 24, 
+        fontWeight: '500', 
+        color: '#1F2937'  // Tailwind gray-900
+    },
+}));

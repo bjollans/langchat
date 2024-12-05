@@ -1,10 +1,9 @@
 import { PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
 import { Div, SingleLayerBtn } from 'linguin-shared/components/RnTwComponents';
 import { useStoryAudioContext } from 'linguin-shared/context/storyAudioContext';
-import { useReadUsageContext } from 'linguin-shared/context/trackReadContext';
 import { RnSoundContext } from "linguin-shared/context/rnSoundContext";
 import { useEffect, useRef, useState, useContext } from 'react';
-import { Platform, Text } from 'react-native';
+import { Platform } from 'react-native';
 import { PlayCircleIcon, PauseCircleIcon } from 'linguin-shared/components/Icons';
 import ProgressBar from './ProgressBar';
 import usePostHog from 'linguin-shared/util/usePostHog';
@@ -19,7 +18,6 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     const [currentAudioTime, setCurrentAudioTime] = useState(0);
     const [isPlayingAudio, setIsPlayingAudio] = useState(false);
     const audioRef = useRef<HTMLAudioElement>(null);
-    const { registerReadUsageEvent } = useReadUsageContext();
     const RnSound = useContext(RnSoundContext);
     const posthogClient = usePostHog();
 
@@ -68,12 +66,10 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
             if (audioRef.current) {
                 audioRef.current.play();
                 updateIsPlayingAudio(true);
-                registerReadUsageEvent();
             }
         } else {
             playRnAudio();
             updateIsPlayingAudio(true);
-            registerReadUsageEvent();
         }
     };
 
@@ -167,7 +163,7 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
     };
 
     return (
-        <Div className='bg-white fixed bottom-0 left-0 right-0 drop-shadow-xl border'>
+        <Div style={{ backgroundColor: 'white', position: 'fixed', bottom: 0, left: 0, right: 0, boxShadow: '0px 10px 15px -3px rgba(0, 0, 0, 0.1)', border: '1px solid' }}>
             <ProgressBar duration={Platform.OS == "web" ? audioRef?.current?.duration || 0 : duration} />
             {Platform.OS === 'web' &&
                 <audio
@@ -179,19 +175,25 @@ export default function StoryAudioPlayer(props: StoryAudioPlayerProps) {
                     <source src={props.src} type="audio/mpeg" />
                     Your browser does not support the audio element.
                 </audio>}
-            <SingleLayerBtn className='flex my-1 rounded-full mx-auto' onClick={togglePlayPause}>
+            <SingleLayerBtn style={{ display: 'flex', margin: 4, borderRadius: 9999, marginLeft: 'auto', marginRight: 'auto' }} onClick={togglePlayPause}>
                 {_PlayButton(isPlayingAudio)}
             </SingleLayerBtn>
         </Div>
     )
 }
 
-
 function _PlayButton(isPlayingAudio): JSX.Element {
     if (Platform.OS === 'web') {
+        const style = {
+            borderRadius: 9999,
+            border: '4px solid #64748b',
+            color: '#64748b',
+            width: 48,
+            height: 48
+        }
         return isPlayingAudio
-            ? <PauseIcon className='rounded-full border-4 border-slate-600 text-slate-600 w-12 h-12' />
-            : <PlayIcon className='rounded-full border-4 pl-1 border-slate-600 text-slate-600 w-12 h-12' />;
+            ? <PauseIcon style={{ ...style }} />
+            : <PlayIcon style={{ ...style, paddingLeft: 4 }} />;
     }
     return isPlayingAudio
         ? <PauseCircleIcon />

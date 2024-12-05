@@ -1,14 +1,12 @@
 import StoryListElement from 'linguin-shared/components/story/StoryListElement';
 import UserStatistics from 'linguin-shared/components/user/UserStatistics';
-import { useStoriesAvailable } from 'linguin-shared/context/rnStoriesAvailableContext';
 import { useFilteredStories } from 'linguin-shared/context/storyListFilterContext';
-import { useSubscribedContext } from 'linguin-shared/context/subscribedContext';
 import { useAuth } from 'linguin-shared/util/auth';
-import { useUserStoriesReadAutomatic, useVisibleStoriesInfinite } from 'linguin-shared/util/clientDb';
-import { ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
+import { useVisibleStoriesInfinite } from 'linguin-shared/util/clientDb';
+import { ActivityIndicator, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import StoryListFilterMenu from './StoryListFilterMenu';
 import { FeedbackModal } from './FeedbackModal';
-import { useTargetLanguageContext } from 'linguin-shared/context/targetLanguageContext';
+import { useUserProfileContext } from 'linguin-shared/context/userProfileContext';
 
 export interface Filter {
     id: string;
@@ -30,47 +28,50 @@ export interface FilterOption {
     label: string;
 }
 
+const styles = StyleSheet.create({
+    touchable: {
+        backgroundColor: 'white',
+        borderBottomWidth: 1,
+        borderBottomColor: '#E5E7EB',
+    }
+});
 
 export default function StoryList({ navigation }) {
     const auth = useAuth();
-    const { targetLanguage } = useTargetLanguageContext();
+    const { userProfile } = useUserProfileContext();
     const {
         data: stories,
         isLoading,
         isError,
         fetchNextPage,
         hasNextPage,
-    } = useVisibleStoriesInfinite(targetLanguage);
+    } = useVisibleStoriesInfinite(userProfile.targetLanguage);
     const filteredStories = useFilteredStories(stories?.pages?.flat() ?? []);
-    const { subscribed, subscribedLoaded } = useSubscribedContext();
-    const { storiesAvailable, storiesAvailableLoaded } = useStoriesAvailable();
-    const { data: userStoriesRead, isSuccess: userStoriesReadLoaded } = useUserStoriesReadAutomatic(auth?.user?.uid ?? null);
-    const hasStories = storiesAvailable > 0 || subscribed;
 
     if (isLoading) {
-        if (auth?.user && (!subscribedLoaded || !storiesAvailableLoaded || !userStoriesReadLoaded)) {
+        if (auth?.user) {
             return <ActivityIndicator size="large" color="#0000ff" />;
         }
     }
+
     return (
         <>
             <StoryListFilterMenu navigation={navigation} />
             {!isLoading &&
                 <>
-                    {auth?.user && <UserStatistics />}
+                    {auth?.user && <UserStatistics language={userProfile.targetLanguage} />}
                     <FlatList
                         data={filteredStories}
                         renderItem={({ item: storyListEntity, separators }) => {
                             if (!storyListEntity) return null;
-                            const hasAlreadyReadStory = userStoriesRead?.map(x => x.storyId).includes(storyListEntity.id);
-                            return <TouchableOpacity className="bg-white border-b border-gray-200"
+                            return <TouchableOpacity key={storyListEntity.id} style={styles.touchable}
                                 onPress={() => {
-                                    navigation.navigate(hasStories || hasAlreadyReadStory ? "Story" : "StoryPaywall", { storyTranslationId: storyListEntity.storyTranslationId, storyTitle: storyListEntity.title });
+                                    navigation.navigate("Story", { storyTranslationId: storyListEntity.storyTranslationId, storyTitle: storyListEntity.title });
                                 }}>
                                 <StoryListElement storyListEntity={storyListEntity} />
                             </TouchableOpacity>
                         }}
-                        keyExtractor={item => item?.id}
+                        keyExtractor={item => item?.id ?? Math.random().toString(36).substring(2)}
                         onEndReached={() => {
                             if (hasNextPage) fetchNextPage();
                         }}

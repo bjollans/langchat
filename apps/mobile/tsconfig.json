@@ -1,5 +1,3 @@
-/// <reference types="nativewind/types" />
-
 {
   "compilerOptions": {},
   "extends": "expo/tsconfig.base",

@@ -13,34 +13,34 @@ export const subscriptionDetails =
     ]
 };
 
-function classNames(...classes) {
-    return classes.filter(Boolean).join(' ')
-}
-
 export default function PricingSection() {
     return (
-        <div className="mx-auto mt-8 items-center max-w-sm">
+        <div style={{ margin: '2rem auto', display: 'flex', alignItems: 'center', maxWidth: '24rem' }}>
             <div
                 key={"subscriptionDetails"}
-                className={classNames(
-                    'relative bg-white shadow-2xl',
-                    'rounded-3xl ring-1 ring-gray-900/10 p-10'
-                )}
+                style={{
+                    position: 'relative',
+                    backgroundColor: 'white',
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                    borderRadius: 24,
+                    border: '1px solid rgba(0, 0, 0, 0.1)',
+                    padding: 40
+                }}
             >
-                <p className="mt-4 flex items-baseline gap-x-2">
-                    <span className="text-5xl font-bold tracking-tight text-gray-900">{subscriptionDetails.priceMonthly}</span>
-                    <span className="text-base text-gray-500">/month</span>
+                <p style={{ marginTop: 16, display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                    <span style={{ fontSize: 48, fontWeight: 'bold', tracking: 'tight', color: 'rgb(17, 24, 39)' }}>{subscriptionDetails.priceMonthly}</span>
+                    <span style={{ fontSize: 16, color: 'rgb(107, 114, 128)' }}>/month</span>
                 </p>
-                <p className="mt-6 text-base leading-7 text-gray-600">
+                <p style={{ marginTop: 24, fontSize: 16, lineHeight: 28, color: 'rgb(75, 85, 99)' }}>
                     Get access to all stories and articles.
                 </p>
-                <p className="text-lg leading-7 text-gray-600">
+                <p style={{ fontSize: 20, lineHeight: 28, color: 'rgb(75, 85, 99)' }}>
                     We add <b>new content every week</b>.
                 </p>
-                <ul role="list" className="space-y-3 text-sm leading-6 text-gray-600 mt-10">
+                <ul role="list" style={{ marginTop: 40, display: 'block', gap: 12, fontSize: 14, lineHeight: 24, color: 'rgb(75, 85, 99)' }}>
                     {subscriptionDetails.features.map((feature) => (
-                        <li key={feature} className="flex gap-x-3">
-                            <CheckIcon className="h-6 w-5 flex-none text-cyan-600" aria-hidden="true" />
+                        <li key={feature} style={{ display: 'flex', gap: 12 }}>
+                            <CheckIcon style={{ height: 24, width: 20, flex: 'none', color: 'rgb(2, 132, 199)' }} aria-hidden="true" />
                             {feature}
                         </li>
                     ))}
@@ -48,16 +48,26 @@ export default function PricingSection() {
                 <a
                     href={subscriptionDetails.href}
                     aria-describedby={"subscriptionDetails"}
-                    onClick={() => posthog.capture('buy_click')
-                    }
-                    className={classNames(
-                        'bg-cyan-600/90 text-white shadow hover:bg-cyan-500',
-                        'mt-10 block rounded-md py-2.5 px-3.5 text-center text-sm font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-600'
-                    )}
+                    onClick={() => posthog.capture('buy_click')}
+                    style={{
+                        backgroundColor: 'rgba(6, 182, 212, 0.9)',
+                        color: 'white',
+                        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+                        display: 'block',
+                        marginTop: 40,
+                        borderRadius: 10,
+                        padding: '0.625rem 1rem',
+                        textAlign: 'center',
+                        fontSize: 14,
+                        fontWeight: '600',
+                        cursor: 'pointer'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'rgb(2, 132, 199)'}
+                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'rgba(6, 182, 212, 0.9)'}
                 >
                     Get Full Access (7 days free)
                 </a>
-                <p className="mt-6 text-xs italic leading-tight text-gray-600">
+                <p style={{ marginTop: 24, fontSize: 12, fontStyle: 'italic', lineHeight: 'tight', color: 'rgb(75, 85, 99)' }}>
                     You will only be charged after 7 days. Before then you can cancel your subscription at any time. After that you can cancel to the end of every month.
                 </p>
             </div>

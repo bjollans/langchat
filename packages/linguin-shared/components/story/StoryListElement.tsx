@@ -1,13 +1,14 @@
+import { Btn, Div, Img, P, Span } from "linguin-shared/components/RnTwComponents";
 import { StoryFilterChangeCalls, StoryListFilterContext } from "linguin-shared/context/storyListFilterContext";
 import { StoryListEntity } from "linguin-shared/model/translations";
-import { useContext, useEffect } from "react";
 import { useAuth } from "linguin-shared/util/auth";
-import { UserStoryStatistics, useUserStoryStatistics } from "linguin-shared/util/userStatistics";
-import StoryCompletedCheckMark from "./StoryCompletedCheckMark";
-import { useInView } from 'react-intersection-observer';
 import { trackStat } from "linguin-shared/util/storyStatistics";
-import { Div, Span, P, Btn, Img } from "linguin-shared/components/RnTwComponents";
+import { UserStoryStatistics, useUserStoryStatistics } from "linguin-shared/util/userStatistics";
+import { useContext, useEffect } from "react";
+import { useInView } from 'react-intersection-observer';
 import { Platform } from "react-native";
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import StoryCompletedCheckMark from "./StoryCompletedCheckMark";
 
 export interface StoryListElementProps {
     storyListEntity: StoryListEntity;
@@ -19,6 +20,7 @@ export default function StoryListElement(props: StoryListElementProps) {
     const ageMs = new Date().getTime() - (new Date(props.storyListEntity.createdAt).getTime());
     const ageDays = Math.floor(ageMs / (1000 * 60 * 60 * 24));
     const isNew: boolean = ageDays < 7;
+    const { styles } = useStyles(stylesheet, { difficulty: props.storyListEntity.difficulty })
 
     const [visibilityRef, hasBeenSeen] = useInView({
         threshold: 0.5,
@@ -38,50 +40,43 @@ export default function StoryListElement(props: StoryListElementProps) {
         }
     }, []);
 
-    const difficultyColor = {
-        "easy": "ring-green-600/20 bg-green-50 text-green-700",
-        "intermediate": "ring-blue-700/10 bg-blue-50 text-blue-700",
-        "hard": "ring-purple-700/10 bg-purple-50 text-purple-700",
-    }
-
     const storyFilterChangeCalls: StoryFilterChangeCalls | undefined = useContext(StoryListFilterContext);
 
     return (
-        <Div key={props.storyListEntity.title} className="flex flex-row px-4 gap-x-4 py-5 hover:bg-slate-100 items-center" ref={visibilityRef} onClick={() => trackStat(props.storyListEntity.id, "clicks")} style={{ backgroundColor: 'transparent', overflow: 'hidden' }}>
-            {Platform.OS === 'web' &&
-                <Img className="w-24 h-24 object-cover rounded-full overflow-hidden" src={props.storyListEntity.previewImageUrl} alt="" />
-                || <Div className="rounded-full overflow-hidden">
-                    <Img className="w-24 h-24 object-cover rounded-full" src={props.storyListEntity.previewImageUrl} alt="" />
+        <Div innerKey={props.storyListEntity.title}
+            style={styles.container}
+            innerRef={Platform.OS === 'web' ? visibilityRef : undefined}
+            onClick={() => trackStat(props.storyListEntity.id, "clicks")}>
+            <Div style={styles.listImage}>
+                <Img style={styles.listImage} src={props.storyListEntity.previewImageUrl} alt="" />
+            </Div>
+            <Div>
+                <Div style={styles.titleContainer}>
+                    <P style={styles.titleText}>{props.storyListEntity.title}</P>
+                    {isNew && <Span style={styles.isNewText}>
+                        New
+                    </Span>}
                 </Div>
-            }
-            <Div style={{ flex: 1 }}>
-                <Div className="min-w-0">
-                    <Div className="flex flex-row space-x-2">
-                        <P className="text-lg font-semibold leading-6 text-gray-900">{props.storyListEntity.title}</P>
-                        {isNew && <Span className="inline-flex items-center rounded-full bg-green-50 px-1.5 py-0.5 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                            New
-                        </Span>}
-                    </Div>
-                    <Div className="sm:flex flex-row items-end justify-space-evenly gap-x-8">
-                        <Div>
-                            <Div className="flex flex-row space-x-2">
-                                <P className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">
-                                    Words:
-                                    <Span className="mt-1 truncate text-xs leading-5 text-gray-400"> {props.storyListEntity.wordCount}</Span>
-                                </P>
-                                {!userStoryStatistics.hasRead && <P className="mt-1 mr-1 truncate text-xs leading-5 bold text-gray-500">
-                                    New:
-                                    <Span className="mt-1 truncate text-xs leading-5 text-gray-400"> {userStoryStatistics.newWords} ({userStoryStatistics.newWordsPercentage}%)</Span>
-                                </P>}
-                            </Div>
-                            <P className="mt-1 truncate italic text-xs leading-5 text-gray-400">{props.storyListEntity.content?.slice(0, 30) + '....'}</P>
+                <Div style={styles.informationContainer}>
+                    <Div>
+                        <Div style={styles.wordCountContainer}>
+                            <P style={styles.wordCountHeadingText}>
+                                Words:
+                                <Span style={styles.wordCountContentText}> {props.storyListEntity.wordCount}</Span>
+                            </P>
+                            {!userStoryStatistics.hasRead && <P style={styles.wordCountHeadingText}>
+                                New:
+                                <Span style={styles.wordCountContentText}> {userStoryStatistics.newWords} ({userStoryStatistics.newWordsPercentage}%)</Span>
+                            </P>}
                         </Div>
-                        <StoryCompletedCheckMark storyId={props.storyListEntity.id} />
+                        <P style={styles.previewText}>{props.storyListEntity.content?.slice(0, 24) + '....'}</P>
                     </Div>
                 </Div>
-                <Div className="flex flex-row mt-4 text-sm leading-5 text-gray-500 rounded-full overflow-hidden">
-                    <Btn key={`${props.storyListEntity.id}-difficulty`}
-                        className={`rounded-full mr-2 inline-flex flex-row items-center  px-1.5 py-0.5 text-xs font-medium ring-1 ring-inset ${difficultyColor[props.storyListEntity?.difficulty?.toLowerCase()]}`}
+
+                <Div style={styles.filterButtonContainer}>
+                    <Btn
+                        key={`${props.storyListEntity.id}-difficulty`}
+                        style={styles.difficultyButton}
                         onClick={(e) => {
                             if (!storyFilterChangeCalls) return;
                             e.preventDefault();
@@ -95,7 +90,7 @@ export default function StoryListElement(props: StoryListElementProps) {
                         {props.storyListEntity.difficulty}
                     </Btn>
                     {props.storyListEntity.collections?.map((collectionName: any) => <Btn key={props.storyListEntity.title + collectionName}
-                        className="mr-2 inline-flex flex-row items-center rounded-full bg-gray-50 px-1.5 py-0.5 text-xs font-medium text-gray-500 ring-1 ring-inset ring-gray-500/10"
+                        style={styles.collectionFilterButton}
                         onClick={(e) => {
                             e.preventDefault();
                             if (storyFilterChangeCalls!.collectionNames.includes(collectionName)) {
@@ -103,7 +98,8 @@ export default function StoryListElement(props: StoryListElementProps) {
                                 return;
                             }
                             storyFilterChangeCalls!.onCollectionAdd(collectionName);
-                        }}>
+                        }}
+                    >
                         {collectionName}
                     </Btn>)}
                 </Div>
@@ -111,3 +107,110 @@ export default function StoryListElement(props: StoryListElementProps) {
         </Div>
     );
 }
+
+const stylesheet = createStyleSheet((theme: any) => ({
+    container: { display: 'flex', flexDirection: 'row', padding: 20, gap: 16, alignItems: 'center', cursor: 'pointer' },
+    informationContainer: { display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', gap: 32 },
+    listImage: { width: 96, height: 96, objectFit: 'cover', borderRadius: 9999, overflow: 'hidden' },
+    difficultyButton: {
+        display: 'flex',
+        alignItems: 'center',
+        paddingTop: 4,
+        paddingBottom: 4,
+        paddingRight: 8,
+        paddingLeft: 8,
+        fontSize: 12,
+        fontWeight: '500',
+        borderRadius: 9999,
+        marginRight: 8,
+        borderWidth: 1,
+        borderStyle: 'solid',
+        variants: {
+            difficulty: {
+                Easy: { backgroundColor: '#e7f5e5', color: '#065f46', borderColor: 'rgba(22, 200, 115, 0.2)' },
+                Intermediate: { backgroundColor: '#ebf5ff', color: '#2563eb', borderColor: 'rgba(59, 130, 246, 0.1)' },
+                Hard: { backgroundColor: '#f3effb', color: '#7e22ce', borderColor: 'rgba(139, 92, 246, 0.1)' },
+            }
+        }
+    },
+    wordCountContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 8
+    },
+    wordCountHeadingText: {
+        margin: 4,
+        fontSize: 12,
+        lineHeight: Platform.OS == "web" ? 1 : 16,
+        fontWeight: 'bold',
+        color: '#6b7280'
+    },
+    wordCountContentText: {
+        margin: 4,
+        fontSize: 12,
+        lineHeight: Platform.OS == "web" ? 1 : 16,
+        color: '#9ca3af'
+    },
+    titleContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 8
+    },
+    titleText: {
+        fontSize: 18,
+        fontWeight: '600',
+        lineHeight: Platform.OS == "web" ? 2 : 24,
+        color: '#1f2937'
+    },
+    previewText: {
+        maxWidth: '80%',
+        margin: 4,
+        fontStyle: 'italic',
+        fontSize: 12,
+        lineHeight: Platform.OS == "web" ? 1 : 16,
+        color: '#9ca3af'
+    },
+    isNewText: {
+        display: 'flex',
+        alignItems: 'center',
+        borderRadius: 9999,
+        backgroundColor: '#e7f5e5',
+        paddingLeft: 6,
+        paddingRight: 6,
+        paddingTop: 2,
+        paddingBottom: 2,
+        fontSize: 12,
+        fontWeight: '500',
+        color: '#065f46',
+        borderColor: 'rgba(22, 200, 115, 0.2)',
+        borderStyle: 'solid',
+        borderWidth: 1
+    },
+    filterButtonContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        marginTop: 16,
+        fontSize: 14,
+        lineHeight: Platform.OS == "web" ? 1 : 16,
+        color: '#6b7280',
+        borderRadius: 9999,
+        overflow: 'hidden'
+    },
+    collectionFilterButton: {
+        display: 'flex',
+        alignItems: 'center',
+        paddingTop: 4,
+        paddingBottom: 4,
+        paddingRight: 8,
+        paddingLeft: 8,
+        fontSize: 12,
+        fontWeight: '500',
+        borderRadius: 9999,
+        backgroundColor: '#f8fafc',
+        color: '#6b7280',
+        borderColor: 'rgba(107, 114, 128, 0.1)',
+        marginRight: 8,
+        borderWidth: 1,
+        borderStyle: 'solid',
+    }
+}));

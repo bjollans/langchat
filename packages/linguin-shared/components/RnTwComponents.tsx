@@ -1,4 +1,5 @@
 import { Image, Platform, Text, TouchableOpacity, View } from 'react-native';
+import { CheckBox as CheckBoxRn } from 'react-native-elements';
 
 
 interface DefaultProps {
@@ -7,26 +8,43 @@ interface DefaultProps {
     onMouseLeave?: () => void;
     onClick?: (e: any) => void;
     onLayout?: (e: any) => void;
-    ref?: any;
+    innerRef?: any;
     style?: any;
+    innerKey?: string;
 }
 
 export function Div(props: DefaultProps): JSX.Element {
     if (Platform.OS === 'web') {
         return (
             <div className={props.className}
+                key={props.innerKey}
                 onMouseLeave={props.onMouseLeave}
                 onClick={props.onClick}
-                ref={props.ref}
+                ref={props.innerRef}
                 style={props.style}>
                 {props.children}
             </div>
         );
     }
     return (
-        <View style={props.style} ref={props.ref}>
+        <View key={props.innerKey} style={props.style} ref={props.innerRef}>
             {props.children}
         </View>
+    );
+}
+
+export function RnOnlyDiv(props: DefaultProps): JSX.Element {
+    if (Platform.OS === 'web') {
+        return (
+            <>
+                {props.children}
+                </>
+        );
+    }
+    return (
+        <Div innerKey={props.innerKey} style={props.style} innerRef={props.innerRef}>
+            {props.children}
+        </Div>
     );
 }
 
@@ -101,7 +119,7 @@ export function SingleLayerBtn(props: DefaultProps): JSX.Element {
 }
 
 export function P(props: DefaultProps): JSX.Element {
-    const webElement = <p className={props.className}>{props.children}</p>;
+    const webElement = <p className={props.className} style={props.style}>{props.children}</p>;
     return _multiplatformTextElement(webElement, props);
 }
 
@@ -115,7 +133,7 @@ interface ImgProps {
 export function Img(props: ImgProps): JSX.Element {
     if (Platform.OS === 'web') {
         return (
-            <img className={props.className} src={props.src} alt={props.alt} />
+            <img className={props.className} src={props.src} alt={props.alt} style={props.style} />
         );
     }
 
@@ -129,17 +147,17 @@ export function Br(): JSX.Element {
 }
 
 export function H1(props: DefaultProps): JSX.Element {
-    const webElement = <h1 className={props.className}>{props.children}</h1>;
+    const webElement = <h1 className={props.className} style={props.style}>{props.children}</h1>;
     return _multiplatformTextElement(webElement, props);
 }
 
 export function H2(props: DefaultProps): JSX.Element {
-    const webElement = <h2 className={props.className}>{props.children}</h2>;
+    const webElement = <h2 className={props.className} style={props.style}>{props.children}</h2>;
     return _multiplatformTextElement(webElement, props);
 }
 
 export function H3(props: DefaultProps): JSX.Element {
-    const webElement = <h3 className={props.className}>{props.children}</h3>;
+    const webElement = <h3 className={props.className} style={props.style}>{props.children}</h3>;
     return _multiplatformTextElement(webElement, props);
 }
 
@@ -147,6 +165,7 @@ export function Span(props: DefaultProps): JSX.Element {
     const webElement = <span
         className={props.className}
         onMouseLeave={props.onMouseLeave}
+        style={props.style}
         onClick={props.onClick}>
         {props.children}
     </span>;

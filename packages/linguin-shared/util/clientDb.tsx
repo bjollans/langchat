@@ -1,9 +1,9 @@
 "use client";
 
 import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
-import { LinguinUser } from "linguin-shared/model/user";
+import { LinguinUser, LinguinUserProfile } from "linguin-shared/model/user";
 import { Conversation, ConversationStatus } from "model/conversation";
-import { Message, StoryEntity, StoryQuestionData } from "model/translations";
+import { Message, StoryEntity } from "model/translations";
 import { Vocab } from "model/vocab";
 import {
   QueryClient,
@@ -48,6 +48,33 @@ export async function updateUser(uid: string, data: LinguinUser) {
     .then(handle);
   // Invalidate and refetch queries that could have old data
   await client.invalidateQueries(["user", { uid }]);
+  return response;
+}
+
+export async function useUserProfile(uid: string) {
+  return useQuery(
+    ["userProfile", { uid }],
+    () =>
+      getUserProfile(uid),
+    { enabled: !!uid }
+  );
+}
+
+export async function getUserProfile(uid: string) {
+  return supabase
+    .from("userProfile")
+    .select()
+    .eq("id", uid)
+    .single()
+    .then(handle);
+}
+
+export async function updateUserProfileDb(uid: string, data: LinguinUserProfile) {
+  const response = await supabase
+    .from("userProfile")
+    .upsert([{ id: uid, ...data }])
+    .then(handle);
+  await client.invalidateQueries(["userProfile", { uid }]);
   return response;
 }
 
@@ -150,7 +177,7 @@ function getFetchVisibleStoriesPageFunction(language: Language) {
 }
 
 export function useVisibleStoriesInfinite(language: Language) {
-  return useInfiniteQuery(['visibleStories'+language], getFetchVisibleStoriesPageFunction(language), {
+  return useInfiniteQuery(['visibleStories' + language], getFetchVisibleStoriesPageFunction(language), {
     getNextPageParam: (lastPage, pages) => {
       if (!lastPage || lastPage.length === 0) return undefined; // No more pages
       return pages.length * PAGE_LENGTH; // Adjust according to your pagination logic
@@ -269,7 +296,7 @@ export function unmarkUserStoryRead(storyId: string, userId: string) {
   return response;
 }
 
-export function userWordsSeen(userId: string) {
+export function userWordsSeen(userId: string, targetLanguage: Language) {
   return useQuery(
     ["userWordsSeen", { userId }],
     () =>
@@ -277,76 +304,21 @@ export function userWordsSeen(userId: string) {
         .from("userReadStatistics")
         .select("wordsSeen")
         .eq("userId", userId)
+        .eq("targetLanguage", targetLanguage)
         .then(handle),
     { enabled: !!userId }
   );
 }
 
-export async function upsertUserReadStatistics(userId: string, data: UserReadStatistics) {
+export async function upsertUserReadStatistics(userId: string, targetLanguage: Language, data: UserReadStatistics) {
   const response = supabase
     .from("userReadStatistics")
-    .upsert({ userId, ...data })
+    .upsert({ userId, targetLanguage, ...data })
     .eq("userId", userId)
     .then(handle);
   await client.invalidateQueries(["userWordsSeen", userId]);
   return response;
 }
-
-/**********************************/
-/**** STORIES Automatic Marked ****/
-/**********************************/
-
-export function useUserStoriesReadAutomatic(userId: string): UseQueryResult<Array<any>> {
-  return useQuery(
-    ["userStoriesReadAutomatic", { userId }],
-    () =>
-      supabase
-        .from("userStoriesReadAutomatic")
-        .select('storyId')
-        .eq("userId", userId)
-        .then(handle),
-    { enabled: !!userId }
-  );
-}
-
-export function useUserStoriesReadAutomaticLast7Days(userId: string): UseQueryResult<Array<any>> {
-  return useQuery(
-    ["userStoriesReadAutomaticLast7Days", { userId }],
-    () =>
-      supabase
-        .from("userStoriesReadAutomatic")
-        .select('storyId')
-        .eq("userId", userId)
-        .gte("createdAt", new Date(new Date().setDate(new Date().getDate() - 7)).toISOString())
-        .then(handle),
-    { enabled: !!userId }
-  );
-}
-
-export function markUserStoryReadAutomatic(storyId: string, userId: string) {
-  client.setQueryData(["userStoriesReadAutomatic", { storyId, userId }], [true]);
-  client.setQueryData(["userStoriesReadAutomaticLast7Days", { userId }], (oldData: any) => oldData ? [...oldData, { storyId }] : [{ storyId }]);
-  client.setQueryData(["userStoriesReadAutomatic", { userId }], (oldData: any) => oldData ? [...oldData, { storyId }] : [{ storyId }]);
-  const response = supabase
-    .from("userStoriesReadAutomatic")
-    .upsert([{ storyId, userId }])
-    .then(handle);
-  return response;
-}
-
-export function useStoryQuestions(storyId: string): UseQueryResult<Array<StoryQuestionData>> {
-  return useQuery(
-    ["storyQuestions", { storyId }],
-    () =>
-      supabase
-        .from("storyQuestions")
-        .select()
-        .eq("storyId", storyId)
-        .then(handle),
-    { enabled: !!storyId }
-  );
-}
-
 
 
 /**********************************/

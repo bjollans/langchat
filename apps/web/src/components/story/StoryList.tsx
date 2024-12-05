@@ -1,23 +1,20 @@
 "use client";
 
+import { Language } from "@linguin-shared/types/language";
 import StoryFilters from "components/StoryFilters";
 import { useFilteredStories, useStoryFilterContext } from "context/storyListFilterContext";
 import StoryListElementWeb from "linguin-shared/components/story/StoryListElementWeb";
 import { StoryListEntity } from "model/translations";
 import { useEffect } from "react";
-import { useTargetLanguageContext } from "@linguin-shared/context/targetLanguageContext";
 
 export interface StoryListProps {
+    language: Language;
     storyListEntities: StoryListEntity[];
     allDifficulties: string[];
     allCollectionNames: string[];
 }
 
 export default function StoryList(props: StoryListProps) {
-    const { setTargetLanguage } = useTargetLanguageContext();
-    useEffect(() => {
-        setTargetLanguage("hi");
-    }, []);
     const storyListEntities = useFilteredStories(props.storyListEntities);
     const { setAllCollectionNames, setAllDifficulties } = useStoryFilterContext();
 
@@ -31,7 +28,7 @@ export default function StoryList(props: StoryListProps) {
             <StoryFilters />
             <div className="flex flex-col">
                 <ul role="list" className="divide-y divide-gray-100">
-                    {storyListEntities.map((storyListEntity: any) => <StoryListElementWeb key={storyListEntity.id} storyListEntity={storyListEntity} />)}
+                    {storyListEntities.map((storyListEntity: any) => <StoryListElementWeb key={storyListEntity.id} storyListEntity={storyListEntity} language={props.language} />)}
                 </ul>
             </div>
         </>

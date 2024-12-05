@@ -1,5 +1,6 @@
 import { PostgrestResponse, PostgrestSingleResponse } from "@supabase/supabase-js";
 import supabase from "./supabase";
+import { Language } from "types/language";
   
   // Fetch user data (non-hook)
   // Useful if you need to fetch data from outside of a component
@@ -12,11 +13,10 @@ import supabase from "./supabase";
       .then(handle);
   }
   
-  export function getVisibleStoryIds() {
+  export function getVisibleStoryIds(language: Language) {
     return supabase
-      .from("stories")
+      .from("stories_list_" + language)
       .select("id")
-      .eq("visible", true)
       .then(handle)
   }
   

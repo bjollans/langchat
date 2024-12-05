@@ -103,7 +103,7 @@ export default function StoryListFilterMenu({ navigation }) {
                 {allDifficulties && allCollectionNames &&
                     <>
                         <FlatList
-                            className="grow-0 w-full"
+                            style={{ flexGrow: 0, width: '100%' }}
                             data={booleanFilters}
                             renderItem={({ item }) => (
                                 <CheckBox
@@ -117,13 +117,13 @@ export default function StoryListFilterMenu({ navigation }) {
                             keyExtractor={item => item.id}
                         />
                         <SectionList
-                            className="w-full"
+                            style={{ width: '100%' }}
                             sections={sections}
                             renderItem={({ item, section }) => (
                                 <FilterCheckboxItem filter={filters.find((f) => f.name == section.title)} item={item} />
                             )}
                             renderSectionHeader={({ section: { title } }) => (
-                                <Text className="text-lg text-slate-600 font-semibold mx-2">
+                                <Text style={{ fontSize: 18, color: '#1e293b', fontWeight: '600', marginHorizontal: 8 }}>
                                     {title}</Text>
                             )}
                             keyExtractor={(item, index) => item.label + index}

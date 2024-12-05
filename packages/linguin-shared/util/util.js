@@ -1,14 +1,23 @@
 import { useRef, useEffect } from "react";
 import supabase from "linguin-shared/util/supabase";
+import { Platform } from 'react-native';
 
-// Make an API request to `/api/{path}`
-export async function apiRequest(path, method = "GET", data) {
+export async function apiRequestMultiPlatform(apiName, method = "GET", data) {
+  if (Platform.OS === 'web') {
+    return apiRequest(apiName, method, data);
+  }
+  else {
+    return apiRequest(apiName, method, data, "https://www.linguin.co");
+  }
+}
+
+export async function apiRequest(path, method = "GET", data, baseUrl = "") {
   const {
     data: { session },
   } = await supabase.auth.getSession();
   const accessToken = session ? session.access_token : undefined;
 
-  return fetch(`/api/${path}`, {
+  return fetch(`${baseUrl}/api/${path}`, {
     method: method,
     headers: {
       "Content-Type": "application/json",

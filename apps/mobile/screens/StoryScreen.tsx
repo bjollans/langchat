@@ -3,11 +3,11 @@ import Story from 'linguin-shared/components/story/Story';
 import { RnSoundContext } from 'linguin-shared/context/rnSoundContext';
 import RnTouchableContextProvider from 'linguin-shared/context/rnTouchableContext';
 import StoryAudioContextProvider from 'linguin-shared/context/storyAudioContext';
-import ReadUsageContextProvider from 'linguin-shared/context/trackReadContext';
 import { useStory, useStoryTranslation } from 'linguin-shared/util/clientDb';
 import { ActivityIndicator, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import Sound from 'react-native-sound';
 import RequireAuth from '../components/RequireAuth';
+import { IOScrollView, InView } from 'react-native-intersection-observer'
 
 export default function StoryScreen({ route, navigation }) {
   const { storyTranslationId } = route.params;
@@ -16,21 +16,19 @@ export default function StoryScreen({ route, navigation }) {
   const loaded = storyTranslationLoaded && storyLoaded;
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }} >
       <RequireAuth navigation={navigation}>
         <RnSoundContext.Provider value={Sound}>
           {loaded &&
-            <ReadUsageContextProvider storyTranslation={storyTranslation}>
               <StoryAudioContextProvider>
-                <ScrollView contentContainerStyle={styles.container}>
+                <IOScrollView contentContainerStyle={styles.container}>
                   <RnTouchableContextProvider>
                     {loaded && <Story story={story} storyTranslation={storyTranslation} navigation={navigation} />}
                   </RnTouchableContextProvider>
-                </ScrollView>
+                </IOScrollView>
                 {loaded &&
                   <StoryAudioPlayer src={storyTranslation.audioUrl} />}
               </StoryAudioContextProvider>
-            </ReadUsageContextProvider>
             ||
             <ActivityIndicator size="large" color="#0000ff" />
           }

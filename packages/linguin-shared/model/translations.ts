@@ -34,7 +34,7 @@ export interface StoryListEntity {
     previewImageUrl: string;
     createdAt: Date;
     collections: Array<string>;
-    difficulty: string;
+    difficulty: "Easy" | "Intermediate" | "Hard";
     wordCount: number;
     content: string;
 }
@@ -65,13 +65,6 @@ export interface StoryToCollection {
     storyId: string;
     collectionName: string;
 }
-
-export interface StoryQuestionData {
-    question: string;
-    correctAnswer: string;
-    otherOptions: Array<string>;
-}
-    
 
 export interface AudioSentenceTime {
     start: number;

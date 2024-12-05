@@ -1,5 +1,3 @@
-/// <reference types="nativewind/types" />
-
 {
   "compilerOptions": {
     "baseUrl": ".",
@@ -47,6 +45,6 @@
   "include": [
     "src/**/*.ts*",
     "src/types/language.ts",
-    ".next/types/**/*.ts", "../../packages/linguin-shared/components/story/StoryPayWall.tsx", "../../packages/linguin-shared/components/story/StoryQuestion.tsx", "../../packages/linguin-shared/components/story/StoryQuestionsSection.tsx", "../../packages/linguin-shared/components/story/Story.tsx" ],
+    ".next/types/**/*.ts", "../../packages/linguin-shared/components/story/StoryQuestion.tsx", "../../packages/linguin-shared/components/story/StoryQuestionsSection.tsx", "../../packages/linguin-shared/components/story/Story.tsx" ],
   "extends": "@tsconfig/next/tsconfig.json"
 }

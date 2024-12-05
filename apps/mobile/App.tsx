@@ -1,26 +1,24 @@
+import 'linguin-shared/unistyles';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Session } from '@supabase/supabase-js';
-import StoriesAvailableContextProvider from 'linguin-shared/context/rnStoriesAvailableContext';
 import SubscribedContextProvider from 'linguin-shared/context/subscribedContext';
-import TargetLanguageContextProvider from 'linguin-shared/context/targetLanguageContext';
+import UserProfileContextProvider from 'linguin-shared/context/userProfileContext';
 import { AuthProvider } from 'linguin-shared/util/auth';
 import { QueryClientProvider } from 'linguin-shared/util/clientDb';
 import supabase from 'linguin-shared/util/supabase';
 import { PostHogProvider } from 'posthog-react-native';
 import { useEffect, useState } from 'react';
 import { Platform, TouchableOpacity } from 'react-native';
-import mobileAds, { MaxAdContentRating } from 'react-native-google-mobile-ads';
 import Purchases from 'react-native-purchases';
 import Svg, { Path } from 'react-native-svg';
 import 'react-native-url-polyfill/auto';
-import StoryListTitle from './components/StoryListTitle';
 import AccountScreen from './screens/AccountScreen';
 import StoryListScreen from './screens/StoryListScreen';
-import StoryPaywallScreen from './screens/StoryPaywallScreen';
 import Story from './screens/StoryScreen';
 import { initNotifications, scheduleReminderNotification } from './util/notifications';
 import * as Sentry from '@sentry/react-native';
+import StoryListTitle from './components/StoryListTitle';
 
 Sentry.init({
   dsn: 'https://4a146848a62a8271f335ecdcc6ea9c5a@o4505409086095360.ingest.us.sentry.io/4506970903805952',
@@ -56,24 +54,6 @@ function App() {
   }, [session?.user]);
 
   useEffect(() => {
-    mobileAds()
-      .setRequestConfiguration({
-        // Update all future requests suitable for parental guidance
-        maxAdContentRating: MaxAdContentRating.PG,
-
-        // Indicates that you want the ad request to be handled in a
-        // manner suitable for users under the age of consent.
-        tagForUnderAgeOfConsent: true,
-
-        // An array of test device IDs to allow.
-        testDeviceIdentifiers: ['EMULATOR'],
-      })
-      .then(() => {
-        // Request config successfully set!
-      });
-  }, []);
-
-  useEffect(() => {
     initNotifications();
     scheduleReminderNotification();
   }, []);
@@ -82,12 +62,11 @@ function App() {
     <QueryClientProvider>
       <AuthProvider>
         <SubscribedContextProvider>
-          <StoriesAvailableContextProvider>
-            <NavigationContainer>
-              <PostHogProvider apiKey={process.env.EXPO_PUBLIC_POSTHOG_KEY} options={{
-                host: `${process.env.EXPO_PUBLIC_POSTHOG_HOST}`,
-              }}>
-                <TargetLanguageContextProvider>
+          <NavigationContainer>
+            <PostHogProvider apiKey={process.env.EXPO_PUBLIC_POSTHOG_KEY} options={{
+              host: `${process.env.EXPO_PUBLIC_POSTHOG_HOST}`,
+            }}>
+              <UserProfileContextProvider>
                 <Stack.Navigator screenOptions={{
                   headerTitleStyle: {
                     fontWeight: '700',
@@ -96,16 +75,11 @@ function App() {
                 }}>
                   <Stack.Screen name="StoryList" component={StoryListScreen}
                     options={({ route, navigation }) => ({
-                      //title: "🇮🇳 Hindi Stories",
+                      title: "🇮🇳 Hindi Stories",
                       headerTitle: () => <StoryListTitle />,
                       headerTitleAlign: 'center',
                       headerRight: (route.params as any)?.filterButton,
                       headerLeft: () => <TouchableOpacity onPress={() => navigation.navigate('Account')}><_AccountIcon /></TouchableOpacity>
-                    })} />
-                  <Stack.Screen name="StoryPaywall" component={StoryPaywallScreen}
-                    options={({ route }) => ({
-                      title: "No Stories Left",
-                      headerBackTitle: "Back"
                     })} />
                   <Stack.Screen name="Story" component={Story}
                     options={({ route }) => ({
@@ -117,10 +91,9 @@ function App() {
                       title: "Account"
                     })} />
                 </Stack.Navigator>
-                </TargetLanguageContextProvider>
-              </PostHogProvider>
-            </NavigationContainer>
-          </StoriesAvailableContextProvider>
+              </UserProfileContextProvider>
+            </PostHogProvider>
+          </NavigationContainer>
         </SubscribedContextProvider>
       </AuthProvider>
     </QueryClientProvider >

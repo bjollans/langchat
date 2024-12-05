@@ -7,7 +7,8 @@ import { QueryClientProvider } from "util/clientDb";
 import ApplicationShell from "components/ApplicationShell";
 import Script from 'next/script';
 import OriginTracker from "components/tracking/OriginTracker";
-import TargetLanguageContextProvider from "@linguin-shared/context/targetLanguageContext";
+import UserProfileContextProvider from "@linguin-shared/context/userProfileContext";
+import UnistylesImporter from "components/UniStylesImporter";
 
 
 
@@ -21,10 +22,11 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>
+                <UnistylesImporter />
                 <PHProvider>
                     <QueryClientProvider>
                         <AuthProvider>
-                            <TargetLanguageContextProvider>
+                            <UserProfileContextProvider>
                                 <OriginTracker />
                                 <Script strategy="afterInteractive" src={"https://www.googletagmanager.com/gtag/js?id=" + process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID} />
                                 <Script id="google-analytics" strategy="afterInteractive">
@@ -37,7 +39,7 @@ export default function RootLayout({
                                 <ApplicationShell>
                                     {children}
                                 </ApplicationShell>
-                            </TargetLanguageContextProvider>
+                            </UserProfileContextProvider>
                         </AuthProvider>
                     </QueryClientProvider>
                 </PHProvider>

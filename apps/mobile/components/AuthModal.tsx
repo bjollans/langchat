@@ -10,10 +10,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Svg, { Path } from 'react-native-svg';
 import usePostHog from 'linguin-shared/util/usePostHog';
 
+import { AppleButton } from '@invertase/react-native-apple-authentication';
+import * as AppleAuthentication from 'expo-apple-authentication'
+
 export default function AuthForm({ visible, navigation }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [wasVisible, setWasVisible] = useState(false);
     const posthog = usePostHog();
 
     async function authGoogle() {
@@ -36,12 +40,52 @@ export default function AuthForm({ visible, navigation }) {
                 provider: 'google',
                 token: authState.idToken,
             });
-            posthog?.capture("auth_completed",);
+            if (!error) {
+                posthog?.capture("auth_completed",);
+                posthog?.capture("auth_completed_google",);
+            }
+            else {
+                posthog?.capture("auth_error_supabase_google",);
+            }
         } catch (error) {
             Alert.alert('Something went wrong, please try again later');
+            posthog?.capture("auth_error_google",);
         }
         setLoading(false);
     }
+
+    async function authAppleOniOS() {
+        try {
+            const credential = await AppleAuthentication.signInAsync({
+                requestedScopes: [
+                    AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                    AppleAuthentication.AppleAuthenticationScope.EMAIL,
+                ],
+            })
+            // Sign in via Supabase Auth.
+            if (credential.identityToken) {
+                const {
+                    error,
+                    data: { user },
+                } = await supabase.auth.signInWithIdToken({
+                    provider: 'apple',
+                    token: credential.identityToken,
+                })
+
+                if (!error) {
+                    posthog?.capture("auth_completed",);
+                    posthog?.capture("auth_completed_apple_ios",);
+                }
+                else {
+                    posthog?.capture("auth_error_supabase_apple_ios",);
+                }
+            }
+        } catch (error) {
+            Alert.alert('Something went wrong, please try again later');
+            posthog?.capture("auth_error_apple_ios",);
+        }
+    }
+
 
     async function signInWithEmail() {
         setLoading(true)
@@ -72,20 +116,29 @@ export default function AuthForm({ visible, navigation }) {
     }
 
     useEffect(() => {
-        if (visible) posthog?.capture("auth_modal_opened");
+        if (visible) {
+            setWasVisible(true);
+            posthog?.capture("auth_modal_opened");
+        }
     }, [posthog]);
+
+    useEffect(() => {
+        if (wasVisible && !visible) {
+            posthog?.capture("auth_modal_closed");
+        }
+    }, [visible]);
 
     return (
         <Modal
             animationType="slide"
             transparent={true}
             visible={visible}>
-            <View className="w-full h-full" style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}>
-                <View className="p-4 bg-white border rounded-md m-12 my-auto w-[80%] opacity-1">
+            <View style={{ width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.7)' }}>
+                <View style={{ padding: 16, backgroundColor: 'white', borderWidth: 1, borderRadius: 8, margin: 48, alignSelf: 'center', width: '80%', opacity: 1 }}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={{ alignSelf: 'flex-end' }}>
                         <Svg height="24" viewBox="0 -960 960 960" width="24"><Path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" /></Svg>
                     </TouchableOpacity>
-                    <Text className="text-xl font-bold text-center mb-4">Login To Continue</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center', marginBottom: 16 }}>Login To Continue</Text>
                     <View style={[styles.verticallySpaced, styles.mt20]}>
                         <Input
                             label="Email"
@@ -118,10 +171,22 @@ export default function AuthForm({ visible, navigation }) {
                             </View>
                             <View style={styles.verticallySpaced}>
                                 <Button title={<>
-                                    <FontAwesomeIcon icon={faGoogle} size={20} color="#000000" />
-                                    <Text className="text-black text-lg ml-2"> Sign in With Google</Text>
-                                </>} disabled={loading} onPress={() => authGoogle()} buttonStyle={{ backgroundColor: "#ffffff", borderWidth: 1, borderColor: "black" }} />
+                                    <FontAwesomeIcon icon={faGoogle} size={15} color="#000000" />
+                                    <Text style={{ color: 'black', marginLeft: 6, paddingTop: 4, paddingBottom: 4 }}>Sign in with Google</Text>
+                                </>} disabled={loading} onPress={() => authGoogle()}
+                                    buttonStyle={{ backgroundColor: "#ffffff", borderWidth: 1, borderColor: "#838383", borderRadius: 6 }} />
                             </View>
+                            {Platform.OS == "ios" && <View>
+                                <AppleButton
+                                    buttonStyle={AppleButton.Style.WHITE_OUTLINE}
+                                    buttonType={AppleButton.Type.SIGN_IN}
+                                    style={{
+                                        width: '100%', // You must specify a width
+                                        height: 45, // You must specify a height
+                                    }}
+                                    onPress={authAppleOniOS}
+                                />
+                            </View>}
                         </>}
                 </View>
             </View>

@@ -1,24 +1,17 @@
-import { useTargetLanguageContext } from "linguin-shared/context/targetLanguageContext";
-import { useState } from "react";
-import { TouchableOpacity, Text } from "react-native";
-import LanguageChooseModal from "./LanguageChooseModal";
+import { useUserProfileContext } from "linguin-shared/context/userProfileContext";
+import { Text, TouchableOpacity } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
 export default function StoryListTitle() {
-    const { targetLanguage, languageToLanguageString } = useTargetLanguageContext();
-    const [languageModalVisible, setLanguageModalVisible] = useState(targetLanguage === "");
+    const { userProfile, availableLanguagesMap, setLanguageChooseModalVisible } = useUserProfileContext();
 
     return (<>
-        <LanguageChooseModal visible={languageModalVisible} close={() => setLanguageModalVisible(false)} />
-        <TouchableOpacity className='flex flex-row items-center' onPress={() => setLanguageModalVisible(true)}>
+        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }} onPress={() => setLanguageChooseModalVisible(true)}>
             <_ExpandIcon />
-            <Text className='text-lg font-bold'>{languageToLanguageString[targetLanguage]} Stories</Text>
+            <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{availableLanguagesMap[userProfile.targetLanguage]} Stories</Text>
         </TouchableOpacity>
     </>);
 }
-
-
-
 
 function _ExpandIcon() {
     return (

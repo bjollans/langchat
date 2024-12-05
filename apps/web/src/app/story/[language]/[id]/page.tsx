@@ -1,13 +1,19 @@
 import Meta from "components/Meta";
 import { getStory, getStoryCollections, getStoryTranslation, getVisibleStoryIds } from "util/serverDb";
 import StoryAudioContextProvider from "linguin-shared/context/storyAudioContext";
-import ReadUsageContextProvider from "linguin-shared/context/trackReadContext";
 import WebStory from "components/WebStory";
+import { Language } from "@linguin-shared/types/language";
 
-export async function generateStaticParams() {
-    const storyIdObjects = await getVisibleStoryIds();
+export async function generateStaticParams(
+    {
+        params: { language },
+      }: {
+        params: { language: Language }
+      }
+) {
+    const storyIdObjects = await getVisibleStoryIds(language);
     const params = storyIdObjects.map((storyIdObj) => (
-        { id: storyIdObj.id }
+        { id: storyIdObj.storyTranslationId }
     ));
     return params;
 }
@@ -30,11 +36,9 @@ async function StoryPage({ params }) {
 
                 <div className="relative flex z-0">
                     <div className={`p-4 my-4 mb-36 rounded-lg border-1 border-black w-full`}>
-                        <ReadUsageContextProvider storyTranslation={storyTranslation}>
-                            <StoryAudioContextProvider>
-                                <WebStory story={story} storyTranslation={storyTranslation} />
-                            </StoryAudioContextProvider>
-                        </ReadUsageContextProvider>
+                        <StoryAudioContextProvider>
+                            <WebStory story={story} storyTranslation={storyTranslation} />
+                        </StoryAudioContextProvider>
                     </div>
                 </div>
             </div>
